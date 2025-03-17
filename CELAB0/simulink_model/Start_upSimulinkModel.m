@@ -9,3 +9,4 @@ T_l = 0.001;
 
 
 mld.tausf = 3.98e-4; %total static friction (estimated by maxi)
+mld.tausf = 0.0056; %total static friction (estimated by maxi)
