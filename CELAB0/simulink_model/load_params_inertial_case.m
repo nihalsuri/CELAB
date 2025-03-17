@@ -71,7 +71,7 @@ drv.C1 = 100e-9; % op−amp input capacitor
 drv.outmax = 12; % op−amp max output voltage
 
 % voltage driver dc−gain
- drv.dcgain = drv.R2/(drv.R1+drv.R2) * (1 + drv.R3/drv.R4);
+drv.dcgain = drv.R2/(drv.R1+drv.R2) * (1 + drv.R3/drv.R4);
 
 % voltage driver time constant
 drv.Tc = drv.C1 * drv.R1*drv.R2/(drv.R1+drv.R2);

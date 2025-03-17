@@ -25,7 +25,7 @@ gains = computePIDGains(8, 0.15, 0.1, Ps, "PID");
  sys_cl = feedback(C * Ps, 1);
 
 % Plot the step response with annotated characteristics
- figure;
- step(sys_cl);
+%figure;
+%step(sys_cl);
 
 
