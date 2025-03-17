@@ -47,6 +47,9 @@ delta = (log(1/M_p)) / (sqrt((pi^2) + (log(1/M_p)^2)));
 
 % calculation of gain cut-off frequency from settling time 5% (eqn 35) [rad/s]
 omega_gc = 3/(delta*t_s);
+% found online 
+% omega_gc = 4/(t_s);
+
 
 % phase margin calculation from damping ratio (eqn 41)
 phase_margin = atan( (2*delta) / (sqrt(sqrt(1 + (4*(delta^4))) - (2*(delta^2)))));
@@ -57,7 +60,7 @@ mag = mag(:);
 phase = phase(:);
 
 % Required change of phase and gain, lead or lag
-delta_K = 20*log(1./mag); % absolute units ? confirm this, if we want in dB then 20log(1./mag)
+delta_K = (1./mag); % absolute units ? confirm this, if we want in dB then 20log(1./mag)
 delta_phi = -pi + phase_margin - (deg2rad(phase)); 
 
 % Initialize gains
@@ -65,6 +68,7 @@ Kp = 0;
 Ki = 0;
 Kd = 0;
 Tl = 5/(2*omega_gc); % eqn 53 
+
 
 % Compute gains based on controller type
 switch controllerType

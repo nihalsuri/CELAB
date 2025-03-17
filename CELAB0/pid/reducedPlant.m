@@ -18,7 +18,7 @@ Tm = (R_eq*J_eq)/((R_eq*B_eq_user) + (k_t*k_e)); % for plant denominator: NTms^2
 Ps = tf(km, [(N*Tm) N 0]); 
 
 % computation of PID gains
-gains = computePIDGains(4, 0.15, 0.1, Ps, "PID"); 
+gains = computePIDGains(8, 0.15, 0.1, Ps, "PID"); 
 
 % test on the plant
  C = pid(gains.Kp, gains.Ki, gains.Kd);
