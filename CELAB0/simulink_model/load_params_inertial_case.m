@@ -26,6 +26,7 @@ mot.tauN = mot.Kt*mot.IN; % nominal torque
 mot.taus = 2.42 * ozin2Nm; % stall torque
 mot.w0 = 7200 * rpm2rads; % no−load speed
 
+
 %% Gearbox nominal parameters
 
 % planetary gearbox Micromotor SA 23/1
@@ -54,6 +55,11 @@ mld.BD = 0.0; % load viscous coeff (n.a.)
 mld.J = mld.JD + gbox.J; % total inertia
 mld.B = 2.5e-4; % total viscous fric coeff (estimated)
 mld.tausf = 1.0e-2; % total static friction (estimated)
+mld.tausf = 3.98e-4; %total static friction (estimated by maxi)
+
+mld.Jeq = mot.J+(mld.J/gbox.N1^2); %Sum of inertia 
+mld.Beq = mot.B+mld.B/(gbox.N1^2); %Sum of viscous friction coeff 
+
 
 %% Voltage driver nominal parameters
 
@@ -75,6 +81,8 @@ drv.Tc = drv.C1 * drv.R1*drv.R2/(drv.R1+drv.R2);
 
 % shunt resistor
 sens.curr.Rs = 0.5;
+
+mot.Req = mot.R +sens.curr.Rs; %Total restiance
 
 % Hewlett−Packard HEDS−5540#A06 optical encoder
 sens.enc.ppr = 500*4; % pulses per rotation
@@ -106,7 +114,7 @@ daq.adc.q = 2*daq.adc.fs/(2^daq.adc.bits-1); % quantization
 
 
 % PID 
-%k_p = 1; 
-%k_i = 0;
-%k_d = 0; 
-%T_l = 0.001;
+k_p = 3; 
+k_i = 0;
+k_d = 0; 
+T_l = 0.001;
