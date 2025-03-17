@@ -113,16 +113,14 @@ plt.tau_n = plt.Phi_n*ls.est_n;
 plot(plt.Phi_n(:,1), plt.tau_n, "Color", "#D95319")
 
 % Stacking reduced Phi matrices from negative and positive
-% (reordered in ascending order of omegas)
+% (reordered in
 plt.Phi_ = [plt.Phi_n(end,:);
             plt.Phi_n(1,:);
             plt.Phi_p];
-% Calculate torque with averaged estiamtes
 plt.tau_ = plt.Phi_*[ls.Beq; ls.tau_sf];
-% Plot averaged torque for positive and negaticve values
 plot(plt.Phi_(:,1), plt.tau_)
 
-% additional plot configs
+
 xlim([plt.Phi_n(end,1),plt.Phi_p(end,1)])
 xlabel("\omega_m [krpm]")
 ylabel("\tau_m = \tau_d' [A]")
