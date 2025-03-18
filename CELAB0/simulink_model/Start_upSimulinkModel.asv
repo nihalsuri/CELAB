@@ -9,7 +9,7 @@ load_params_inertial_case
 
 %% Input of friction parameters
 mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-mld.tausf = 0.0056;     % [Nm]
+mld.tausf = 0.0056;     % 
 
 
 %% Definition of PID reduced plant
