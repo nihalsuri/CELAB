@@ -8,8 +8,8 @@ load_params_inertial_case
 
 
 %% Input of friction parameters
-mld.Beq = 0.0;
-mld.tausf = 0.0056;
+mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
+mld.tausf = 0.0056;     % [Nm]
 
 
 %% Definition of PID reduced plant
@@ -20,19 +20,16 @@ plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]);
 
 
 %% PID gains
-gains = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
-k_p = gains.Kp;
-k_i = gains.Ki;
-k_d = gains.Kd;
-T_l = gains.Tl;
-%change simulink so that the gains dont need to be reassigned?
-%i.e. reference the struct in simulink
+PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID"); %Compute the PID parameters 
+PID.i_saturation = 5000;  %Min and max value for the I 
 
-i_saturation = 5;
-%{
-k_p = 10; 
-k_i = 2; 
-k_d = 0; 
-T_l = 0.001;
-%}
+% Manual PID tuning 
+PID.Kp = 8.7; 
+PID.Ki = 77.9; 
+PID.Kd = 0.12; 
+
+
+
+
+
 
