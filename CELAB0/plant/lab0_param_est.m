@@ -1,6 +1,7 @@
 % This script is used to perform the estimation of friction and inertia
 % values for the Quanser SRV-02 + NI DAQ. 
-% It is to be run after the simulation of "lab0_model_blackbox.slx"
+% It is to be run after the simulation on the blackbox model or the real
+% model
 
 
 
@@ -80,7 +81,13 @@ ls.est_n = ls.LS(mot.omeg_means, 2);
 ls.Beq = sum([ls.est_p(1), ls.est_n(1)])/2;         %[Nm/krpm]
 ls.tau_sf = sum(abs([ls.est_p(2), ls.est_n(2)]))/2; %[Nm]
 
-% Output of the estimated parameters in
+% Output of the estimated parameters in correct unit
+disp("Estimated viscous friction parameter in [Nm/(rad/s)]:")
+disp(ls.Beq/1000/rpm2rads)
+disp(" ")
+disp("Estimated static friction parameter in [Nm]:")
+disp(ls.tau_sf)
+
 
 
 %% Plotting

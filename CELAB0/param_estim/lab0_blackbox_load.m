@@ -3,6 +3,8 @@
 % and estimate friction and inertia values.
 % It includes hardware and filter parameters input definitions
 clear
+
+%% Load Predefined Parameters
 load_params_inertial_case
 
 
