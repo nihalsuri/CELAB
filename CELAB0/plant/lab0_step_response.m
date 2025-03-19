@@ -16,8 +16,8 @@ tstp.ends = tstp.starts+sIn.length_steps;
 sOut.step_resp = struct();
 for i=1:sIn.num_resp
     % Indices corresponding to the i-th step
-    idx.steps = ( out.thi_l.Time <= tstp.ends(i) && ...
-                  out.thi_l.Time >= tstp.starts(i) );
+    idx.steps = (out.thi_l.Time <= tstp.ends(i)) .* ...
+                  (out.thi_l.Time >= tstp.starts(i) );
     
     % dynamically grow the struct and assign the steps to different fields
     idx.field = sprintf('f%d',i);
