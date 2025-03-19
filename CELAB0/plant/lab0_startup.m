@@ -15,8 +15,12 @@ load_params_inertial_case
 
 % PID-Tuning -> Step Input
 % magnitude of reference step in [deg]
-sIn.mag_step = 5;
-% use step input? -> [y=1] / [n=0] (only effect on sim. time => y->10s)
+%sIn.mag_steps = [10, 30, 50, 90, 180, 360];
+sIn.mag_steps = 10;
+sIn.length_steps = 10;
+% use step input? -> [y=1] / [n=0]
+% (only effect on sim. time
+% if y -> length_steps per setpoint + buffer between each)
 sIn.pid = 1;
 
 
@@ -85,13 +89,20 @@ filt.low.den = [1, 2*filt.low.delta_i*filt.low.omega_ci, filt.low.omega_ci^2];
 
 
 %% Simulation Parameters from User Input
-% total simulation time
-%sIn.t_sim = sIn.step_time*sIn.step_number;      %only positive trai
-sIn.t_sim = sIn.step_time*(sIn.step_number*2+1); %pos and neg trail
+% total simulation time for parameter estimation
+sIn.t_est = sIn.step_time*(sIn.step_number*2+1); %pos and neg trail
 
 % staircase of reference velocities
 sIn.omega_l = (1:sIn.step_number)*sIn.step_omega;   %only positive trail
 sIn.omega_l = [sIn.omega_l, 0, -1*sIn.omega_l];     %pos and neg trail 
 
+
+% total simulation time and reference values for step response
+sIn.num_resp = length(sIn.mag_steps)*2-1; %number of steps
+sIn.resp = zeros(1,sIn.num_resp);
+sIn.resp(1:2:end) = sIn.mag_steps;        %zeros between references
+sIn.t_resp = sIn.length_steps*sIn.num_resp;            %sim. time
+
+
 % check if pid or param_est
-sIn.t_sim = 10*sIn.pid + sIn.t_sim*(1-sIn.pid);
+sIn.t_sim = sIn.t_resp*sIn.pid + sIn.t_est*(1-sIn.pid);
