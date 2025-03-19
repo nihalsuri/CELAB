@@ -68,6 +68,8 @@ Kp = 0;
 Ki = 0;
 Kd = 0;
 Tl = 5/(2*omega_gc); % eqn 53 
+%Lecture notes Zampieri Td/10 < Tl < Td/3
+
 
 
 % Compute gains based on controller type
@@ -78,6 +80,7 @@ switch controllerType
         Ti = alpha*Td; 
         Kd = Kp*Td; 
         Ki = Kp/Ti;
+        Tl = Td/10;
 
     case 'PI' % eqn 52
         Kd = 0;
