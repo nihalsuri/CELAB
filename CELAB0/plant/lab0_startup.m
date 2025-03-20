@@ -15,8 +15,7 @@ load_params_inertial_case
 
 % PID-Tuning -> Step Input
 % magnitude of reference step in [deg]
-%sIn.mag_steps = [10, 30, 50, 90, 180, 360];
-sIn.mag_steps = 10;
+sIn.mag_steps = [30, 180, 360];
 sIn.length_steps = 10;
 % use step input? -> [y=1] / [n=0]
 % (only effect on sim. time
@@ -98,7 +97,7 @@ sIn.omega_l = [sIn.omega_l, 0, -1*sIn.omega_l];     %pos and neg trail
 
 
 % total simulation time and reference values for step response
-sIn.num_resp = length(sIn.mag_steps)*2-1; %number of steps
+sIn.num_resp = length(sIn.mag_steps)*2-1; %number of (steps + breaks)
 sIn.resp = zeros(1,sIn.num_resp);
 sIn.resp(1:2:end) = sIn.mag_steps;        %zeros between references
 sIn.t_resp = sIn.length_steps*sIn.num_resp;            %sim. time

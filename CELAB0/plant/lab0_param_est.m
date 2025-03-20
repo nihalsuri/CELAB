@@ -16,16 +16,16 @@ idx.staircase_n = (out.omega_motor.Time >= tstp.start_staircase_n);
 
 % Split the timeseries in positive and negative trails
 % Units: omega_motor - [deg/s]    i_a - [A]
-sOut.mot.omeg.p = getsamples(out.omega_motor, idx.staircase_p);
-sOut.mot.curr.p = getsamples(out.i_a, idx.staircase_p);
+sOut.omeg.p = getsamples(out.omega_motor, find(idx.staircase_p));
+sOut.curr.p = getsamples(out.i_a, find(idx.staircase_p));
 
-sOut.mot.omeg.n = getsamples(out.omega_motor, idx.staircase_n);
-sOut.mot.curr.n = getsamples(out.i_a, idx.staircase_n);
+sOut.omeg.n = getsamples(out.omega_motor, find(idx.staircase_n));
+sOut.curr.n = getsamples(out.i_a, find(idx.staircase_n));
 
 
 % Shift the time of the negative staircase to start at 0
-sOut.mot.omeg.n.Time = sOut.mot.omeg.n.Time - sOut.mot.omeg.n.Time(1);
-sOut.mot.curr.n.Time = sOut.mot.curr.n.Time - sOut.mot.curr.n.Time(1);
+sOut.omeg.n.Time = sOut.omeg.n.Time - sOut.omeg.n.Time(1);
+sOut.curr.n.Time = sOut.curr.n.Time - sOut.curr.n.Time(1);
 
 
 % Initialization of arrays for motor angular velocity, current and torque
@@ -54,8 +54,8 @@ for i=1:sIn.step_number
     lp.calc_mean = @(ts) ts_weighted_mean(ts, lp.t_start, lp.t_stop);
     
     % Calculating the means for both pos. and neg. trail at once
-    mot.omeg_means(i,:) = structfun(lp.calc_mean, sOut.mot.omeg)';
-    mot.curr_means(i,:) = structfun(lp.calc_mean, sOut.mot.curr)';
+    mot.omeg_means(i,:) = structfun(lp.calc_mean, sOut.omeg)';
+    mot.curr_means(i,:) = structfun(lp.calc_mean, sOut.curr)';
 
     % Motor torque [Nm]
     mot.tau_means(i,:) = mot.Kt.*mot.curr_means(i,:);
@@ -94,10 +94,10 @@ disp(ls.tau_sf)
 
 % Measurements with mean values over time
 %{
-plt.f1 = plot_meas(sOut.mot.omeg.p, mot.omeg_means(:,1), 1, sIn, plt, "\omega_m [krpm]");
-plt.f2 = plot_meas(sOut.mot.omeg.n, mot.omeg_means(:,2), 2, sIn, plt, "\omega_m [krpm]");
-plt.f3 = plot_meas(sOut.mot.curr.p, mot.curr_means(:,1), 3, sIn, plt, "i_a [A]");
-plt.f4 = plot_meas(sOut.mot.curr.n, mot.curr_means(:,2), 4, sIn, plt, "i_a [A]");
+plt.f1 = plot_meas(sOut.omeg.p, mot.omeg_means(:,1), 1, sIn, plt, "\omega_m [krpm]");
+plt.f2 = plot_meas(sOut.omeg.n, mot.omeg_means(:,2), 2, sIn, plt, "\omega_m [krpm]");
+plt.f3 = plot_meas(sOut.curr.p, mot.curr_means(:,1), 3, sIn, plt, "i_a [A]");
+plt.f4 = plot_meas(sOut.curr.n, mot.curr_means(:,2), 4, sIn, plt, "i_a [A]");
 %}
 
 % Friction torque over motor speed
