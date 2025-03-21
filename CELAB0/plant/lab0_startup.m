@@ -15,7 +15,7 @@ load_params_inertial_case
 
 % PID-Tuning -> Step Input
 % magnitude of reference step in [deg]
-sIn.mag_steps = [30, 180, 360];
+sIn.mag_steps = [30,180];
 sIn.length_steps = 10;
 % use step input? -> [y=1] / [n=0]
 % (only effect on sim. time
@@ -27,7 +27,7 @@ sIn.pid = 1;
 % time of steps/increments in seconds
 sIn.step_time = 5;
 % number of steps
-sIn.step_number = 9;
+sIn.step_number = 1;
 % load reference velocities in rpm
 sIn.step_omega = 50;
 

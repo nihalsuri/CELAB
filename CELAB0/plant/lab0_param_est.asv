@@ -16,15 +16,11 @@ idx.staircase_n = (out_omega_motor.time >= tstp.start_staircase_n);
 
 % Split the timeseries in positive and negative trails
 % Units: omega_motor - [deg/s]    i_a - [A]
-sOut.omeg.p = timeseries(out_omega_motor.signals.values(find(idx.staircase_p)),...
-                         out_omega_motor.time(find(idx.staircase_p)));
-sOut.curr.p = timeseries(out_i_a.signals.values(find(idx.staircase_p)),...
-                         out_i_a.time(find(idx.staircase_p)));
+sOut.omeg.p = timeseries(out_omega_motor.values.(find(idx.staircase_p));
+sOut.curr.p = getsamples(out.i_a, find(idx.staircase_p));
 
-sOut.omeg.n = timeseries(out_omega_motor.signals.values(find(idx.staircase_n)),...
-                         out_omega_motor.time(find(idx.staircase_n)));
-sOut.curr.n = timeseries(out_i_a.signals.values(find(idx.staircase_n)),...
-                         out_i_a.time(find(idx.staircase_n)));
+sOut.omeg.n = getsamples(out.omega_motor, find(idx.staircase_n));
+sOut.curr.n = getsamples(out.i_a, find(idx.staircase_n));
 
 
 % Shift the time of the negative staircase to start at 0
