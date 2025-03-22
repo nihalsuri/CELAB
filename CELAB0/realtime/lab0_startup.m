@@ -120,8 +120,8 @@ sIn.A(2:2:end) = -1;
 sIn.A = sIn.A*sIn.acceleration;
 
 % check if pid or param_est
-%sIn.t_sim = sIn.t_resp*sIn.pid + sIn.t_est*(1-sIn.pid);
+sIn.t_sim = sIn.t_resp*sIn.pid + sIn.t_est*(1-sIn.pid);
 
-sIn.t_sim = 20;
+%sIn.t_sim = 20;
 
 disp(sIn.t_sim*1000 + 1)

@@ -26,7 +26,7 @@ friction_est.del_omega = 45;
 % time for which each refference is applied [s]
 friction_est.time = 5;
 % number of increments
-friction_est.num = 9;
+friction_est.num = 3;
 
 
 % Inertia Estimation
