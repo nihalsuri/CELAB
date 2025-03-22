@@ -8,11 +8,11 @@
 %% Data Preparation
 
 % Define indices of positive and negative staircases
-tstp.end_staircase_p = friction_est.time*friction_est.num;
-tstp.start_staircase_n = tstp.end_staircase_p + friction_est.time;
+tstmp.end_staircase_p = friction_est.time*friction_est.num;
+tstmp.start_staircase_n = tstmp.end_staircase_p + friction_est.time;
 
-idx.staircase_p = (out_omega_motor.time <= tstp.end_staircase_p);
-idx.staircase_n = (out_omega_motor.time >= tstp.start_staircase_n);
+idx.staircase_p = (out_omega_motor.time <= tstmp.end_staircase_p);
+idx.staircase_n = (out_omega_motor.time >= tstmp.start_staircase_n);
 
 
 
@@ -55,10 +55,10 @@ plt.yfill = zeros(4*friction_est.num, 1);
 
 for i=1:friction_est.num
     % Start and stpo times of each intervall
-    lp.t_start = (i-1)*friction_est.time+1;
-    lp.t_stop = (i)*friction_est.time-1;
+    lp.int_start = (i-1)*friction_est.time+1;
+    lp.int_stop = (i)*friction_est.time-1;
     % Function handle to compute indices
-    lp.get_idx = @(times) (times >= lp.t_start) .* (times <= lp.t_stop);
+    lp.get_idx = @(time) (time >= lp.int_start) .* (time <= lp.int_stop);
     % Calculation of indices, lp.idx contains fields .p and .n
     lp.idx = structfun(lp.get_idx, sOut.time, 'UniformOutput',false);
     lp.idx.p = find(lp.idx.p);
@@ -74,15 +74,11 @@ for i=1:friction_est.num
                                        sOut.time.p(lp.idx.p));
     sOut.curr.means(i,2) = weighted_mean(sOut.curr.n(lp.idx.n),...
                                        sOut.time.n(lp.idx.n));
-
-    %mot.omeg_means(i,:) = structfun(lp.calc_mean, sOut.omeg)';
-    %mot.curr_means(i,:) = structfun(lp.calc_mean, sOut.curr)';
-
     % Motor torque [Nm]
     sOut.tau.means(i,:) = mot.Kt.*sOut.curr.means(i,:);
 
-    plt.xfill(lp.t_start:lp.t_stop) = [[1 1]*lp.t_start, [1 1]*lp.t_stop];
-    plt.yfill(lp.t_start:lp.t_stop) = [0,1,1,0];
+    plt.xfill((i-1)*4+1:i+4) = [[1 1]*lp.int_start, [1 1]*lp.int_stop];
+    plt.yfill(i:i+4) = [0,1,1,0];
 end
 
 
@@ -114,42 +110,53 @@ disp(ls.tau_sf)
 %% Plotting
 
 % Measurements with mean values over time
-%{
-plt.f1 = plot_meas(sOut.omeg.p, sOut.omeg.means(:,1), 1, friction_est, plt, "\omega_m [krpm]");
-plt.f2 = plot_meas(sOut.omeg.n, sOut.omeg.means(:,2), 2, friction_est, plt, "\omega_m [krpm]");
-plt.f3 = plot_meas(sOut.curr.p, sOut.curr.means(:,1), 3, friction_est, plt, "i_a [A]");
-plt.f4 = plot_meas(sOut.curr.n, sOut.curr.means(:,2), 4, friction_est, plt, "i_a [A]");
+
+plt.f1 = plot_meas(sOut.omeg.p, sOut.time.p, sOut.omeg.means(:,1), ...
+                   1, friction_est, plt, "\omega_m [krpm]");
+plt.f2 = plot_meas(sOut.omeg.n, sOut.time.n, sOut.omeg.means(:,2), ...
+                   2, friction_est, plt, "\omega_m [krpm]");
+plt.f3 = plot_meas(sOut.curr.p, sOut.time.p, sOut.curr.means(:,1), ...
+                   3, friction_est, plt, "i_a [A]");
+plt.f4 = plot_meas(sOut.curr.n, sOut.time.n, sOut.curr.means(:,2), ...
+                   4, friction_est, plt, "i_a [A]");
 
 
 % Friction torque over motor speed
-plt.f5 = figure(5);
-hold on
-scatter(sOut.omeg.means/1000, sOut.tau.means, "MarkerEdgeColor", "#0072BD")
 
-% Whole Phi matrix
-plt.Phi_p = ls.Phi(sOut.curr.means(:,1));
+% Whole Phi matrix (positive)
+plt.Phi_p = ls.Phi(sOut.omeg.means(:,1));
 % Extraxting the last element and "extrapolating to 0"
 plt.Phi_p = [0, plt.Phi_p(1,2);
              plt.Phi_p(end,:)];
 % Estimation of the torque
 plt.tau_p = plt.Phi_p*ls.est_p;
-plot(plt.Phi_p(:,1), plt.tau_p, "Color", "#D95319")
 
+% (negative)
 plt.Phi_n = ls.Phi(sOut.omeg.means(:,2));
 plt.Phi_n = [0, plt.Phi_n(1,2);
              plt.Phi_n(end,:)];
 plt.tau_n = plt.Phi_n*ls.est_n;
-plot(plt.Phi_n(:,1), plt.tau_n, "Color", "#D95319")
 
 % Stacking reduced Phi matrices from negative and positive
 % (reordered in ascending order of omegas)
-plt.Phi_ = [plt.Phi_n(end,:);
+plt.Phi_pn = [plt.Phi_n(end,:);
             plt.Phi_n(1,:);
             plt.Phi_p];
 % Calculate torque with averaged estiamtes
-plt.tau_ = plt.Phi_*[ls.Beq; ls.tau_sf];
-% Plot averaged torque for positive and negaticve values
-plot(plt.Phi_(:,1), plt.tau_)
+plt.tau_pn = plt.Phi_pn*[ls.Beq; ls.tau_sf];
+
+
+plt.f5 = figure(5);
+hold on
+% Measured tau [Nm] over omega [krpm]
+scatter(sOut.omeg.means/1000, sOut.tau.means, "MarkerEdgeColor", "#0072BD")
+% LS estimate positive
+plot(plt.Phi_p(:,1), plt.tau_p, "Color", "#D95319")
+% LS estimate negative
+plot(plt.Phi_n(:,1), plt.tau_n, "Color", "#D95319")
+% Average from LS estimate -> Deadzone
+plot(plt.Phi_pn(:,1), plt.tau_pn)
+hold off
 
 % additional plot configs
 xlim([plt.Phi_n(end,1),plt.Phi_p(end,1)])
@@ -157,6 +164,7 @@ xlabel("\omega_m [krpm]")
 ylabel("\tau_m = \tau_d' [A]")
 legend("Experimental Data", "", "LS Fitting")
 grid on
+
 
 
 
@@ -177,34 +185,38 @@ function [weighted_mean] = weighted_mean(data, time)
 end
 
 
-function [f] =  plot_meas(ts, means, fig, friction_est, plt, ylab)
 
+function [f] =  plot_meas(data, time, means, fig, friction_est, plt, ylab)
     % Plots the measured timeseries against the calculated means
-    % ts - measured timeseries; means - array of calculated means
-    % fig - index of the figure created
+    % data - measured data (array)
+    % time - timestamps of the measured data (array)
+    % means - array of calculated means (array)
+    % fig - index of the figure created (int)
     % friction_est - struct containing the time and number of steps with
-    %                field names step_number and step_time
+    %                field names step_number and step_time (struct)
     % plt - struct containing coordinates of averaging intervall to be 
-    %       highlighted, with field names xfill and yfill
-    % ylab - string with the y-axis label
+    %       highlighted, with field names xfill and yfill (struct)
+    % ylab - string with the y-axis label (string)
 
     % Check if positive or negative trail and assignment of the y-limit
     if (means(end)>0)
-        lim = max(ts.Data)/1000*1.1;
+        lim = max(data)/1000*1.1;
     else
-        lim = min(ts.Data)/1000*1.1;
+        lim = min(data)/1000*1.1;
     end
 
-    % Trail time
+    % Trail time steps
     sim_time = (0:friction_est.num)*friction_est.time;
 
     f = figure(fig);
     hold on
     % Highlighted areas
-    fill(plt.xfill, plt.yfill*lim, [0.9 0.9 0.9], 'EdgeColor', 'none', 'FaceAlpha', 0.5)
-    plot(ts/1000, 'LineWidth', 1)
+    fill(plt.xfill, plt.yfill*lim, [0.9 0.9 0.9],...
+        'EdgeColor', 'none', 'FaceAlpha', 0.5)
+    plot(time, data/1000, 'LineWidth', 1)
     stairs(sim_time, [means; means(end)]/1000,'LineWidth', 1)
     hold off
+
     legend("Averaging Interval", "Measured", "Averaged")
     xlabel("Time [s]")
     ylabel(ylab)

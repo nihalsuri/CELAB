@@ -15,7 +15,7 @@ load_params_inertial_case
 
 % PID-Tuning
 % magnitude of reference step in [deg]
-step_resp.mag = [30,180];
+step_resp.mag = [30,180,360,500];
 % time for which each refference is applied [s]
 step_resp.time = 5;
 
@@ -34,7 +34,7 @@ friction_est.num = 9;
 
 
 % Choice of Input => "Step"->0, "Beq"->1 or "Jeq"->3
-sIn.program = 1;
+sIn.program = 0;
 
 
 %% PID Parameters
