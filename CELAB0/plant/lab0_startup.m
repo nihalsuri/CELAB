@@ -22,19 +22,24 @@ step_resp.time = 5;
 
 % Friction Estimation
 % increment of steps for load angular velocity
-friction_est.del_omega = 45;
+frict_est.del_omega = 45;
 % time for which each refference is applied [s]
-friction_est.time = 5;
+frict_est.time = 5;
 % number of increments
-friction_est.num = 9;
+frict_est.num = 9;
 
 
 % Inertia Estimation
+% motor acceleration in [rpm/s]
+inert_est.acc = 450;
+% time for which acceleration is applied in one direction [s]
+inert_est.time = 1;
+% number of cycles (positive and negative acceleration)
+inert_est.num = 10;
 
 
-
-% Choice of Input => "Step"->0, "Beq"->1 or "Jeq"->3
-sIn.program = 0;
+% Choice of Input => "Step"->1, "Beq"->2 or "Jeq"->3
+sIn.program = 3;
 
 
 %% PID Parameters
@@ -98,22 +103,24 @@ step_resp.ref = zeros(1,step_resp.num);
 step_resp.ref(1:2:end) = step_resp.mag;    %zeros between setpoints
 
 % Friction Estimation
-friction_est.ref = (1:friction_est.num)*friction_est.del_omega;
-friction_est.ref = [friction_est.ref, 0, -1*friction_est.ref];
+frict_est.ref = (1:frict_est.num)*frict_est.del_omega;
+frict_est.ref = [frict_est.ref, 0, -1*frict_est.ref];
 
 % Inertia Estimation
-
+inert_est.ref = ones(2*inert_est.num,1);
+inert_est.ref(2:2:end) = -1;
+inert_est.ref = inert_est.ref*inert_est.acc/gbox.N;
 
 % Total Simulation time
 switch sIn.program
-    case 0  %"Step"
+    case 1  %"Step"
         sIn.time = step_resp.time * step_resp.num;
 
-    case 1  %"Beq"
-        sIn.time = friction_est.time * (friction_est.num*2+1);
+    case 2  %"Beq"
+        sIn.time = frict_est.time * (frict_est.num*2+1);
 
-    case 2  %"Jeq"
-        sIn.time = 0;
+    case 3  %"Jeq"
+        sIn.time = inert_est.time * inert_est.num*2;
 end
 
 

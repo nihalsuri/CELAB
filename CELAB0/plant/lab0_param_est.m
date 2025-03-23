@@ -8,28 +8,30 @@
 %% Data Preparation
 
 % Define indices of positive and negative staircases
-idx.t_end_staircase_p = friction_est.time*friction_est.num;
-idx.t_start_staircase_n = idx.t_end_staircase_p + friction_est.time;
-
+idx.t_end_staircase_p = frict_est.time*frict_est.num;
+idx.t_start_staircase_n = idx.t_end_staircase_p + frict_est.time;
+% indices as array of locical values
 idx.staircase_p = (out_omega_motor.time <= idx.t_end_staircase_p);
 idx.staircase_n = (out_omega_motor.time >= idx.t_start_staircase_n);
-
+% indices as array of indices
+idx.staircase_p = find(idx.staircase_p);
+idx.staircase_n = find(idx.staircase_n);
 
 
 % Extract the Data and Timestapms (one time array for pos and one for neg)
 % for fixed timesteps this could be ommited but for varaible not
-% Units: omega_motor - [deg/s]    i_a - [A]
+% Units: omega_motor - [rpm]    i_a - [A]
 % Times
-sOut.time.p = out_omega_motor.time(find(idx.staircase_p));
-sOut.time.n = out_omega_motor.time(find(idx.staircase_n));
+sOut.time.p = out_omega_motor.time(idx.staircase_p);
+sOut.time.n = out_omega_motor.time(idx.staircase_n);
 
 % Positive trail
-sOut.omeg.p = out_omega_motor.signals.values(find(idx.staircase_p));
-sOut.curr.p = out_i_a.signals.values(find(idx.staircase_p));
+sOut.omeg.p = out_omega_motor.signals.values(idx.staircase_p);
+sOut.curr.p = out_i_a.signals.values(idx.staircase_p);
 
 % Negative trail
-sOut.omeg.n = out_omega_motor.signals.values(find(idx.staircase_n));
-sOut.curr.n = out_i_a.signals.values(find(idx.staircase_n));
+sOut.omeg.n = out_omega_motor.signals.values(idx.staircase_n);
+sOut.curr.n = out_i_a.signals.values(idx.staircase_n);
 
 % Shift the time of the negative staircase to start at 0
 sOut.time.n = sOut.time.n - sOut.time.n(1);
@@ -38,14 +40,14 @@ sOut.time.n = sOut.time.n - sOut.time.n(1);
 
 % Initialization of arrays for motor angular velocity, current and torque
 % Different steps in rows, pos/neg trail in columns
-sOut.omeg.means = zeros(friction_est.num, 2);
-sOut.curr.means = zeros(friction_est.num, 2);
-sOut.tau.means  = zeros(friction_est.num, 2);
+sOut.omeg.means = zeros(frict_est.num, 2);
+sOut.curr.means = zeros(frict_est.num, 2);
+sOut.tau.means  = zeros(frict_est.num, 2);
 
 
 % Initialization for plotting
-plt.xfill = zeros(4*friction_est.num, 1);
-plt.yfill = zeros(4*friction_est.num, 1);
+plt.xfill = zeros(4*frict_est.num, 1);
+plt.yfill = zeros(4*frict_est.num, 1);
 
 
 
@@ -53,10 +55,10 @@ plt.yfill = zeros(4*friction_est.num, 1);
 % Computation of the means for each interval, truncated by one second at
 % the beginning and end to neglect transient effects
 
-for i=1:friction_est.num
+for i=1:frict_est.num
     % Start and stpo times of each intervall
-    lp.int_start = (i-1)*friction_est.time+1;
-    lp.int_stop = (i)*friction_est.time-1;
+    lp.int_start = (i-1)*frict_est.time+1;
+    lp.int_stop = (i)*frict_est.time-1;
     % Function handle to compute indices
     lp.get_idx = @(time) (time >= lp.int_start) .* (time <= lp.int_stop);
     % Calculation of indices, lp.idx contains fields .p and .n
@@ -64,7 +66,7 @@ for i=1:friction_est.num
     lp.idx.p = find(lp.idx.p);
     lp.idx.n = find(lp.idx.n);
 
-    % Calculating the means for both pos. and neg. trail 
+    % Calculating the means for both pos. and neg. trail [rpm] and [A]
     sOut.omeg.means (i,1) = weighted_mean(sOut.omeg.p(lp.idx.p),...
                                         sOut.time.p(lp.idx.p));
     sOut.omeg.means (i,2) = weighted_mean(sOut.omeg.n(lp.idx.n),...
@@ -76,7 +78,8 @@ for i=1:friction_est.num
                                        sOut.time.n(lp.idx.n));
     % Motor torque [Nm]
     sOut.tau.means(i,:) = mot.Kt.*sOut.curr.means(i,:);
-
+    
+    % Plot params
     plt.xfill((i-1)*4+1:i*4) = [[1 1]*lp.int_start, [1 1]*lp.int_stop];
     plt.yfill((i-1)*4+1:i*4) = [0,1,1,0];
 end
@@ -112,13 +115,13 @@ disp(ls.tau_sf)
 % Measurements with mean values over time
 
 plt.f1 = plot_meas(sOut.omeg.p, sOut.time.p, sOut.omeg.means(:,1), ...
-                   1, friction_est, plt, "\omega_m [krpm]");
+                   1, frict_est, plt, "\omega_m [krpm]");
 plt.f2 = plot_meas(sOut.omeg.n, sOut.time.n, sOut.omeg.means(:,2), ...
-                   2, friction_est, plt, "\omega_m [krpm]");
+                   2, frict_est, plt, "\omega_m [krpm]");
 plt.f3 = plot_meas(sOut.curr.p, sOut.time.p, sOut.curr.means(:,1), ...
-                   3, friction_est, plt, "i_a [A]");
+                   3, frict_est, plt, "i_a [A]");
 plt.f4 = plot_meas(sOut.curr.n, sOut.time.n, sOut.curr.means(:,2), ...
-                   4, friction_est, plt, "i_a [A]");
+                   4, frict_est, plt, "i_a [A]");
 
 
 % Friction torque over motor speed
@@ -186,14 +189,14 @@ end
 
 
 
-function [f] =  plot_meas(data, time, means, fig, friction_est, plt, ylab)
+function [f] =  plot_meas(data, time, means, fig, frict_est, plt, ylab)
     % Plots the measured timeseries against the calculated means
     % data - measured data (array)
     % time - timestamps of the measured data (array)
     % means - array of calculated means (array)
     % fig - index of the figure created (int)
-    % friction_est - struct containing the time and number of steps with
-    %                field names step_number and step_time (struct)
+    % frict_est - struct containing the time and number of steps with
+    %             field names step_number and step_time (struct)
     % plt - struct containing coordinates of averaging intervall to be 
     %       highlighted, with field names xfill and yfill (struct)
     % ylab - string with the y-axis label (string)
@@ -206,7 +209,7 @@ function [f] =  plot_meas(data, time, means, fig, friction_est, plt, ylab)
     end
 
     % Trail time steps
-    sim_time = (0:friction_est.num)*friction_est.time;
+    sim_time = (0:frict_est.num)*frict_est.time;
 
     f = figure(fig);
     hold on
