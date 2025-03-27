@@ -17,12 +17,13 @@ load_params_inertial_case
 % Nominal Parameters (estimated from Blackbox)
 mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
 mld.tausf = 0.0056;     % [Nm]
-mdl.J = mdl.J;          % [kg m^2]
+mdl.Jeq = mdl.Jeq;          % [kg m^2]
 
 % Actual Parameters (estimated from Motor 1)
 mdl.Beq = 2.5663e-6;    % [Nm/(rad/s)]
 mdl.tausf = 0.013;      % [Nm]
-mdl.J = 3.4640e-07;     % [kg m^2]
+mdl.Jeq = 3.4640e-07;     % [kg m^2]
+
 
 % PID-Tuning
 % magnitude of reference step in [deg]
