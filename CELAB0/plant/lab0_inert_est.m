@@ -78,6 +78,7 @@ Jeq = lp.Jeq_sum/10;
 
 disp("Estimated Moment of Inertia [kg m^2]:")
 disp(Jeq)
+%Jeq = 3.4640e-07
 
 
 
