@@ -17,13 +17,17 @@ load_params_inertial_case
 % Nominal Parameters (estimated from Blackbox)
 mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
 mld.tausf = 0.0056;     % [Nm]
-mdl.J = mdl.J;          % [kg m^2]
+mld.Jeq = mld.Jeq;      % [kg m^2]
 
-% Actual Parameters (
+% Actual Parameters (estimated from Motor 1)
+%mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
+%mld.tausf = 0.013;      % [Nm]
+%mld.Jeq = 3.4640e-07;   % [kg m^2]
+
 
 % PID-Tuning
 % magnitude of reference step in [deg]
-step_resp.mag = [30,180,360,500];
+step_resp.mag = 360;
 % time for which each refference is applied [s]
 step_resp.time = 5;
 
@@ -34,7 +38,7 @@ frict_est.del_omega = 45;
 % time for which each refference is applied [s]
 frict_est.time = 5;
 % number of increments
-frict_est.num = 9;
+frict_est.num = 3;
 
 
 % Inertia Estimation
@@ -46,8 +50,8 @@ inert_est.time = 1;
 inert_est.num = 10;
 
 
-% Choice of Input => "Step"->1, "Beq"->2 or "Jeq"->3
-sIn.program = 3;
+% Choice of Input => "Step"->1, "Friction"->2 or "Inertia"->3
+sIn.program = 1;
 
 
 %% PID Parameters
@@ -58,7 +62,7 @@ plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]); 
 
 % resulting gains from bode method
-PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
+%PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
 PID.i_saturation = 5000;  %saturation on integral part
 
 % Manual PID tuning Nihal
@@ -81,7 +85,10 @@ PID.i_saturation = 5000;  %saturation on integral part
 PID.Kp = 90; 
 PID.Ki = 60; 
 PID.Kd = 0.40; 
+PID.Tl = 9.725177736847896e-04; % From Td/10 (Bode Method, without tuning)
 
+PID.t_s5 = 0.15; % 5% settling time from lab0
+PID.Kw = 1/(PID.t_s5/5); % anit windup gain: 1/Tw, Tw=t_s5/5
 
 
 
