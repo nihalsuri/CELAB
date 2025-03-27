@@ -9,11 +9,6 @@
 load('C:\01 Daten\00 Uni Padova ConM\2. Semester\Control_Engineering_Lab\Git_gang\CELAB\CELAB0\plant\simout_inertia.mat')
 
 
-% Previously estimated friction parameters
-ls.Beq = 2.5663e-6;         % [Nm/(rad/s)]
-ls.tau_sf = 0.013;          % [Nm]
-
-
 % Unpacking simulation data
 sOut.time = out_omega_motor.time;                       % [s]
 sOut.omeg = out_omega_motor.signals.values*rpm2rads;    % [rad/s]
@@ -25,7 +20,7 @@ sOut.acc.data = out_a_motor.signals.values*rpm2rads;    % [rad/s^2]
 %% Calculating the Inertial Torque
 
 % Torque due to friction [Nm]
-sOut.tau_f = ls.Beq*sOut.omeg + ls.tau_sf/gbox.N *sign(sOut.omeg);
+sOut.tau_f = mdl.Beq*sOut.omeg + mdl.tausf/gbox.N *sign(sOut.omeg);
 % Torque due to inertia [Nm]
 sOut.tau_i.data = sOut.curr*mot.Kt - sOut.tau_f;
 
@@ -78,7 +73,6 @@ Jeq = lp.Jeq_sum/10;
 
 disp("Estimated Moment of Inertia [kg m^2]:")
 disp(Jeq)
-%Jeq = 3.4640e-07
 
 
 
