@@ -85,6 +85,7 @@ PID.i_saturation = 5000;  %saturation on integral part
 PID.Kp = 90; 
 PID.Ki = 60; 
 PID.Kd = 0.40; 
+PID.Tl = 9.725177736847896e-04;
 
 
 

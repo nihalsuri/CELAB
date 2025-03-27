@@ -20,7 +20,7 @@ sOut.acc.data = out_a_motor.signals.values*rpm2rads;    % [rad/s^2]
 %% Calculating the Inertial Torque
 
 % Torque due to friction [Nm]
-sOut.tau_f = mdl.Beq*sOut.omeg + mdl.tausf/gbox.N *sign(sOut.omeg);
+sOut.tau_f = mld.Beq*sOut.omeg + mld.tausf/gbox.N *sign(sOut.omeg);
 % Torque due to inertia [Nm]
 sOut.tau_i.data = sOut.curr*mot.Kt - sOut.tau_f;
 
