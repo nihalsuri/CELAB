@@ -14,12 +14,7 @@ load_params_inertial_case
 %% User Inputs
 
 % Motor Parameters
-% Nominal Parameters (estimated from Blackbox)
-%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-%mld.tausf = 0.0056;     % [Nm]
-%mld.Jeq = mld.Jeq;      % [kg m^2]
-
-% Actual Parameters (estimated from Motor 1)
+% Actual Parameters (estimated from Motor 1) (here only for PID gains)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
 mld.tausf = 0.013;      % [Nm]
 mld.Jeq = 3.4640e-07;   % [kg m^2]
@@ -61,12 +56,13 @@ plant.km = (drv.dcgain*mot.Kt)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]); 
 
-% resulting gains from bode method
 %PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
+% resulting gains from bode method for estimated motor parameters
 PID.Kp = 7.845;
 PID.Ki = 100.8347;
 PID.Kd = 0.0763;
 PID.Tl = 9.7252e-04;
+
 
 % Manual PID tuning Nihal
 %PID.Kp = 24; 
@@ -128,4 +124,6 @@ switch sIn.program
         sIn.time = inert_est.time * inert_est.num*2;
 end
 
+% Time steps sto save for realtimesimulation
+disp(sIn.time*1000 + 1)
 
