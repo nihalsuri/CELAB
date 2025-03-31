@@ -9,6 +9,7 @@
 |31-03 02:28  | Added 2.2.1 and 2.2.2    | NS           | Not yet completed!, need to add validation routine, need to verify functionality|
 |31-03 14:23  | Added 2.2.1 and 2.2.2    | NS           | completed, need to check on overshoot and add validation routine|
 |31-03 14:27  | Changed feedforward      | BM           | Fixed feeforward s othe calculations are in radians and not deg | 
+|31-03 19:19  | Added repeating validation sequence for 2.2.2| NS | - | 
 
 
 
