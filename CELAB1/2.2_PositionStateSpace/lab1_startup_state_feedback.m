@@ -1,7 +1,6 @@
 % Matlab script to start the Simulink simulation of the blackbox- and real
-% model of the Quanser SRV-02 + NI DAQ. In both cases a PID controller is 
-% used, the parameters can be calculated based of a reduced model or 
-% manually set.
+% model of the Quanser SRV-02 + NI DAQ. In both cases state-space feedback
+% is used. 
 clear
 
 
@@ -72,8 +71,14 @@ plant_SS.gains = ([plant_SS.A, plant_SS.B; plant_SS.C, plant_SS.D])\[0;0;1];
 feedback.nominal.Nx = plant_SS.gains(1:2);
 feedback.nominal.Nu = plant_SS.gains(3);
 
-% Set-points for state-space control test
-feedback.setpoints = [40 70 120]; %[degrees]
+
+%% Simulation Parameters 
+
+% Define the time and output values
+sIn.position = [0, 40, 0, 70, 0, 120, 0]; 
+sIn.sample_time = 5; 
+sIn.simulation_time = sIn.sample_time*length(sIn.position) - 1;
+
 
 
 
