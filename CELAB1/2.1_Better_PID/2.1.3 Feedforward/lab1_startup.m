@@ -62,7 +62,7 @@ plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]); 
 
 % resulting gains from bode method
-%PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
+PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
 PID.i_saturation = 5000;  %saturation on integral part
 
 % Manual PID tuning Nihal
