@@ -45,9 +45,11 @@ filt.high.den = [1, 2*filt.high.delta*filt.high.omega_c, filt.high.omega_c^2];
 specs.mp = 0.1; 
 specs.settling_time = 0.15; %[seconds]
 
-% Plant's A and B matrix 
+% Plant's A, B, C, D matrix 
 plant_SS.A = [0 1; 0 -(1/plant.Tm)];
 plant_SS.B = [0 ;  plant.km/(gbox.N*plant.Tm)]; 
+plant_SS.C = [1 0];
+plant_SS.D = 0;
 
 % desired closed loop eigenvalues 
 % Calculation of damping ratio from maximum overshoot
@@ -65,8 +67,14 @@ eig.nominal.values = [eig.nominal.real + 1i*eig.nominal.img, eig.nominal.real - 
 [feedback.nominal.place.K, feedback.nominal.place.prec] = place(plant_SS.A, plant_SS.B, eig.nominal.values);
 feedback.nominal.acker.K = acker(plant_SS.A, plant_SS.B, eig.nominal.values);
 
+% calculation of Nx(state feedforward gain), Nu (input feedforward gain)
+plant_SS.gains = ([plant_SS.A, plant_SS.B; plant_SS.C, plant_SS.D])\[0;0;1];
+feedback.nominal.Nx = plant_SS.gains(1:2);
+feedback.nominal.Nu = plant_SS.gains(3);
+
 % Set-points for state-space control test
 feedback.setpoints = [40 70 120]; %[degrees]
+
 
 
 
