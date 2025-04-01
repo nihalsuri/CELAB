@@ -82,9 +82,15 @@ PID.i_saturation = 5000;  %saturation on integral part
 %  90 deg => Mp = 7.60%, t_s5% = 0.076s
 % 180 deg => Mp = 7.40%, t_s5% = 0.115s
 % 360 deg => Mp = 8.00%, t_s5% = 0.394s
-PID.Kp = 90; 
-PID.Ki = 60; 
-PID.Kd = 0.40; 
+%PID.Kp = 100; 
+%PID.Ki = 40; 
+%PID.Kd = 0.40; 
+
+
+
+% Anit Windup
+PID.t_s5 = 1; % 5% settling time from lab0
+PID.Kw =0; % 1/(PID.t_s5/5); % anit windup gain: 1/Tw, Tw=t_s5/5
 
 
 
@@ -104,7 +110,6 @@ filt.low.num = filt.low.omega_ci^2;
 filt.low.den = [1, 2*filt.low.delta_i*filt.low.omega_ci, filt.low.omega_ci^2];
 
 
-
 %% Simulation Parameters from User Input
 % PID-Tuning
 step_resp.num = length(step_resp.mag)*2-1; %number of (steps + breaks)
@@ -116,20 +121,21 @@ frict_est.ref = (1:frict_est.num)*frict_est.del_omega;
 frict_est.ref = [frict_est.ref, 0, -1*frict_est.ref];
 
 % Inertia Estimation
-inert_est.ref = ones(2*inert_est.num,1);
-inert_est.ref(2:2:end) = -1;
-inert_est.ref = inert_est.ref*inert_est.acc/gbox.N;
+feedforward.ref = ones(6*feedforward.num,1);
+feedforward.ref(2:3:end) = 0;
+feedforward.ref(union(3:6:end, 4:6:end)) = -1;
+feedforward.ref = feedforward.ref*feedforward.acc;
+
 
 % Total Simulation time
 switch sIn.program
-    case 1  %"Step"
-        sIn.time = step_resp.time * step_resp.num;
+    case 1  %"Anti-Windup"
+        sIn.time = windup.time * windup.num;
 
-    case 2  %"Beq"
-        sIn.time = frict_est.time * (frict_est.num*2+1);
-
-    case 3  %"Jeq"
-        sIn.time = inert_est.time * inert_est.num*2;
+    case 2  %"Feedforward"
+        sIn.time = feedforward.time*6 *feedforward.num;
 end
 
 
+% Time steps to save for realtimesimulation
+disp(sIn.time*1000 + 1)
