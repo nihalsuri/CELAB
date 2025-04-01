@@ -16,10 +16,10 @@ Lab 1
 	(NS) 3. Design a position SS-controller (with aslo rejection of constant load disturbances)
 	(NS) 4. Validate the design 3 steps
 
-	5. Design a position SS-controlle(tracking sinusodal position adn rejection of contant load disturbance)
-	6. Validate the design
-	7. Repeat the test of point 6 with "wrong" T_r
-	8. Repeat the test of point 6 with input with amplitude 40deg 
+	(BM) 5. Design a position SS-controlle(tracking sinusodal position and rejection of constant load disturbance)
+	(BM) 6. Validate the design
+	(BM) 7. Repeat the test of point 6 with "wrong" T_r
+	(BM) 8. Repeat the test of point 6 with input with amplitude 40deg 
 
 	9.(Opt)  Repeat the design of point 5 by using the extended–state estimator method
  	10.(Opt) Repeat the tests of points 6, 7 and 8 with the controller designed in point 9
