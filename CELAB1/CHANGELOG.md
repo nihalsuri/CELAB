@@ -11,6 +11,7 @@
 |31-03 14:27  | Changed feedforward      | BM           | Fixed feeforward s othe calculations are in radians and not deg | 
 |31-03 19:19  | Added repeating validation sequence for 2.2.2| NS | - | 
 |01-04 08:54  | Changed feedforward      | BM | Added test sequence to feedforward and switched butterworth derrivator to a normal derrivator | 
+|01-04 15:24  | Added Plotting Script    | MP           | -
 
 
 
