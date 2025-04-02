@@ -2,6 +2,7 @@
 % model of the Quanser SRV-02 + NI DAQ. In both cases state-space feedback
 % is used. 
 clear
+clc
 
 
 
@@ -23,6 +24,11 @@ mld.Jeq = mld.Jeq;      % [kg m^2]
 %mld.tausf = 0.013;      % [Nm]
 %mld.Jeq = 3.4640e-07;   % [kg m^2]
 
+% High-pass filter (Continous - Time) for load velocity calculation
+filt.high.omega_c = 2*pi*50; 
+filt.high.delta = 1/sqrt(2);
+filt.high.num = [filt.high.omega_c^2, 0];
+filt.high.den = [1, 2*filt.high.delta*filt.high.omega_c, filt.high.omega_c^2];
 
 
 %% Plant parameters Parameters
@@ -32,17 +38,10 @@ plant.km = (drv.dcgain*mot.Kt)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 
 
-%% State feedback matrix calculation [2.2.1]  
-% High-pass filter (Continous - Time) for load velocity calculation
-filt.high.omega_c = 2*pi*50; 
-filt.high.delta = 1/sqrt(2);
-filt.high.num = [filt.high.omega_c^2, 0];
-filt.high.den = [1, 2*filt.high.delta*filt.high.omega_c, filt.high.omega_c^2];
-
-
 % Desired specifications
-specs.T_r = 0.15; 
-specs.Freq = (1/specs.T_r)*2*pi; 
+specs.T_r = 1; 
+specs.Freq = (1/specs.T_r)*2*pi;
+specs.W_n = 12; %sqrt(plant.km); 
 specs.mp = 0.1; 
 specs.settling_time = 0.15; %[seconds]
 
@@ -55,30 +54,30 @@ plant_SS.D = 0;
 ref_SS.A_r = [0 1; -specs.Freq^2 0];
 ref_SS.C_r = [1 0];
 
-A_12 = [0 0 ;-ref_SS.C_r];
-A_21 = zeros([size(plant_SS.A,1),size(ref_SS.A_r,2)]);
-B_12 = zeros([size(ref_SS.A_r,1),size(plant_SS.B,2)]);
+math.A_12 = [0 0 ;-ref_SS.C_r];
+math.A_21 = zeros([size(plant_SS.A,1),size(ref_SS.A_r,2)]);
+math.B_12 = zeros([size(ref_SS.A_r,1),size(plant_SS.B,2)]);
 
-hat_SS.A = [ref_SS.A_r A_12;A_21 plant_SS.A ];
-hat_SS.B = [B_12;plant_SS.B];
+hat_SS.A = [ref_SS.A_r math.A_12;math.A_21 plant_SS.A ];
+hat_SS.B = [math.B_12;plant_SS.B];
 
 
 
 % eigenvalues (poles calculation)
-[x, y] = pol2cart(-pi+pi/4, specs.Freq);
-eig_val(1) = x + 1i * y;
-[x, y] = pol2cart(-pi-pi/4,specs.Freq);
-eig_val(2) = x + 1i * y;
-[x, y] = pol2cart(-pi+pi/6,specs.Freq);
-eig_val(3) =x + 1i * y;
-[x, y] = pol2cart(-pi-pi/6,specs.Freq);
-eig_val(4) =x + 1i * y;
-%eig_val(5) = -specs.Freq;
+% First conjugate pair (-pi ± pi/4)
+[math.x1, math.y1] = pol2cart(-pi+pi/4, specs.W_n);
+[math.x2, math.y2] = pol2cart(-pi-pi/4, specs.W_n);
+
+% Second conjugate pair (-pi ± pi/6)
+[math.x3, math.y3] = pol2cart(-pi+pi/6, specs.W_n);
+[math.x4, math.y4] = pol2cart(-pi-pi/6, specs.W_n);
+
+% Ensure conjugate pairs
+math.eig_val = [math.x1 + 1i*math.y1, math.x1 - 1i*math.y1, math.x3 + 1i*math.y3, math.x3 - 1i*math.y3];
 
 % calculation of feedback via acker and place
-[feedback.nominal.place.K, feedback.nominal.place.prec] = place(hat_SS.A, hat_SS.B, eig_val);
+[feedback.K, feedback.prec] = place(hat_SS.A, hat_SS.B, math.eig_val);
 
-
-sIn.simulation_time = specs.T_r*2;
+sIn.simulation_time = specs.T_r*10;
 
 

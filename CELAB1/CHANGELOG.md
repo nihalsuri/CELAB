@@ -13,8 +13,7 @@
 |01-04 08:54  | Changed feedforward      | BM | Added test sequence to feedforward and switched butterworth derrivator to a normal derrivator | 
 |01-04 15:24  | Added Plotting Script    | MP           | -
 |01-04 19:09  | Completed 2.2.1 and 2.2.2| NS           | -
-
-
+|01-04 19:09  |Working on 2.2.5          | BM           | Made the  position state–space controller 
 
 
 
