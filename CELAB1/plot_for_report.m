@@ -33,5 +33,5 @@ ylabel(xlab)
 set(f1,'Position',[300 300 800 400])
 
 % save figure as a .png file and save the corresponding data
-saveas(f1, 'Data_and_Plots/'+save_name+'.png')
-save('Data_and_Plots/'+save_name+'.mat', "simout")
+%saveas(f1, 'Data_and_Plots/'+save_name+'.png')
+%save('Data_and_Plots/'+save_name+'.mat', "simout")

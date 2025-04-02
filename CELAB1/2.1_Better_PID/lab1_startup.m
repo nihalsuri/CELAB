@@ -20,14 +20,14 @@ mld.tausf = 0.0056;     % [Nm]
 mld.Jeq = mld.Jeq;      % [kg m^2]
 
 % Actual Parameters (estimated from Motor 1)
-mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-mld.tausf = 0.013;      % [Nm]
-mld.Jeq = 3.4640e-07;   % [kg m^2]
+%mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
+%mld.tausf = 0.013;      % [Nm]
+%mld.Jeq = 3.4640e-07;   % [kg m^2]
 
 
 % Validation Anti-Windup
 % magnitude of reference step in [deg]
-windup.mag = 360;
+windup.mag = 70;
 % time for which each refference is applied [s]
 windup.time = 5;
 
@@ -42,7 +42,7 @@ feedforward.num = 1;
 
 
 % Choice of Input => "Anti-Windup"->1 or "Feedforward"->2
-sIn.program = 2;
+sIn.program = 1;
 
 
 %% PID Parameters
