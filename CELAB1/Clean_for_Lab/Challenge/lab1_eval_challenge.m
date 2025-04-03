@@ -1,17 +1,19 @@
-% This script is used to evaluate the step response for one step with
-% multiple signals (i.e. comparison between models or controllers)
+% This script is used to evaluate the step response for different setpoints
+% based on the simulation of the Quanser SRV-02 + NI DAQ. 
+% It is to be run after the simulation on the blackbox model or the real
+% model.
 
 
 % Name of the output variable
-sOut = betterpid_theta_l;
+sOut = out_th_l;
 
 % Port of the scope to analyze (1 for nominal; 2 for integral)
-sOut.inport = 2;
+sOut.inport = 1;
 
 
 
 sInfo = stepinfo(sOut.signals(sOut.inport).values, ...
-                   sOut.time, windup.mag, 'SettlingTimeThreshold', 0.05);
+                   sOut.time, sIn.position, 'SettlingTimeThreshold', 0.05);
 Mp  = sInfo.Overshoot;
 ts5 = sInfo.SettlingTime;
 tr  = sInfo.RiseTime;

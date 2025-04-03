@@ -14,34 +14,38 @@ load_params_inertial_case
 %% User Inputs
 
 % Motor Parameters
-% Nominal Parameters (estimated from Blackbox)
-mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-mld.tausf = 0.0056;     % [Nm]
-mld.Jeq = mld.Jeq;      % [kg m^2]
-
-% Actual Parameters (estimated from Motor 1)
-%mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-%mld.tausf = 0.013;      % [Nm]
-%mld.Jeq = 3.4640e-07;   % [kg m^2]
+% Actual Parameters (estimated from Motor 1) (here only for PID gains)
+mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
+mld.tausf = 0.013;      % [Nm]
+mld.Jeq = 3.4640e-07;   % [kg m^2]
 
 
-% Validation Anti-Windup
+% PID-Tuning
 % magnitude of reference step in [deg]
-windup.mag = 70;
+step_resp.mag = 360;
 % time for which each refference is applied [s]
-windup.time = 5;
+step_resp.time = 5;
 
 
-% Validation Feedforward
-% stepsize of acceleration of the load [rpm/s]
-feedforward.acc = 900;
-% time for which acceleration is applied [s]
-feedforward.time = 0.5;
-% number of cycles (pos. -> 0 -> neg. -> neg. -> 0 -> pos.)
-feedforward.num = 1;
+% Friction Estimation
+% increment of steps for load angular velocity
+frict_est.del_omega = 45;
+% time for which each refference is applied [s]
+frict_est.time = 5;
+% number of increments
+frict_est.num = 3;
 
 
-% Choice of Input => "Anti-Windup"->1 or "Feedforward"->2
+% Inertia Estimation
+% motor acceleration in [rpm/s]
+inert_est.acc = 450;
+% time for which acceleration is applied in one direction [s]
+inert_est.time = 1;
+% number of cycles (positive and negative acceleration)
+inert_est.num = 10;
+
+
+% Choice of Input => "Step"->1, "Friction"->2 or "Inertia"->3
 sIn.program = 1;
 
 
@@ -52,22 +56,13 @@ plant.km = (drv.dcgain*mot.Kt)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]); 
 
-% resulting gains from bode method
 %PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
+% resulting gains from bode method for estimated motor parameters
 PID.Kp = 7.845;
 PID.Ki = 100.8347;
 PID.Kd = 0.0763;
 PID.Tl = 9.7252e-04;
 
-% Manual PID tuning Nihal
-%PID.Kp = 24; 
-%PID.Ki = 0.43; 
-%PID.Kd = 1.0; 
-
-% Manual PID tuning Max 
-%PID.Kp = 90; 
-%PID.Ki = 60; 
-%PID.Kd = 0.40; 
 
 
 % Anit Windup
@@ -94,27 +89,31 @@ filt.low.den = [1, 2*filt.low.delta_i*filt.low.omega_ci, filt.low.omega_ci^2];
 
 %% Simulation Parameters from User Input
 % PID-Tuning
-windup.num = length(windup.mag)*2-1; %number of (steps + breaks)
-windup.ref = zeros(1,windup.num);
-windup.ref(1:2:end) = windup.mag;    %zeros between setpoints
+step_resp.num = length(step_resp.mag)*2-1; %number of (steps + breaks)
+step_resp.ref = zeros(1,step_resp.num);
+step_resp.ref(1:2:end) = step_resp.mag;    %zeros between setpoints
 
+% Friction Estimation
+frict_est.ref = (1:frict_est.num)*frict_est.del_omega;
+frict_est.ref = [frict_est.ref, 0, -1*frict_est.ref];
 
 % Inertia Estimation
-feedforward.ref = ones(6*feedforward.num,1);
-feedforward.ref(2:3:end) = 0;
-feedforward.ref(union(3:6:end, 4:6:end)) = -1;
-feedforward.ref = feedforward.ref*feedforward.acc;
-
+inert_est.ref = ones(2*inert_est.num,1);
+inert_est.ref(2:2:end) = -1;
+inert_est.ref = inert_est.ref*inert_est.acc/gbox.N;
 
 % Total Simulation time
 switch sIn.program
-    case 1  %"Anti-Windup"
-        sIn.time = windup.time * windup.num;
+    case 1  %"Step"
+        sIn.time = step_resp.time * step_resp.num;
 
-    case 2  %"Feedforward"
-        sIn.time = feedforward.time*6 *feedforward.num;
+    case 2  %"Beq"
+        sIn.time = frict_est.time * (frict_est.num*2+1);
+
+    case 3  %"Jeq"
+        sIn.time = inert_est.time * inert_est.num*2;
 end
 
-
-% Time steps to save for realtimesimulation
+% Time steps sto save for realtimesimulation
 disp(sIn.time*1000 + 1)
+
