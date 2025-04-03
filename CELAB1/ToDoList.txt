@@ -13,8 +13,8 @@ Lab 1
 		   -t_s =< 0.15s and M_p =< 10%
 	(NS) 2. Validate the design 3 steps
 
-	(NS) 3. Design a position SS-controller (with aslo rejection of constant load disturbances)
-	(NS) 4. Validate the design 3 steps
+	(MP) 3. Design a position SS-controller (with aslo rejection of constant load disturbances)
+	(MP) 4. Validate the design 3 steps
 
 	(BM) 5. Design a position SS-controlle(tracking sinusodal position and rejection of constant load disturbance)
 	(BM) 6. Validate the design
