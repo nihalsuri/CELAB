@@ -131,7 +131,7 @@ feedback.Nu = plant_SS.gains(3);
 
 
 %% Anti Windup
-feedback.Kw = 1/(specs.settling_time/3.5);
+feedback.Kw = 1/(specs.settling_time/3);
 
 
 %% Simulation Parameters 
