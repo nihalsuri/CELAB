@@ -16,7 +16,7 @@
 |01-04 19:09  | Working on 2.2.5         | BM           | Made the  position state–space controller 
 |02-04 16:58  | made 2.2.3 integral ss   | MP           | Integral augmentation for ss
 |02-04 17:36  | add AntiWindup to integral ss | MP      | Just as an idea for the challange, in the folder jus_a_try_xd in 2.2.3
-
+|03-04 11:23  | cleaned 2.2.1-2.2.4      | MP/NS        |
 
 
 
