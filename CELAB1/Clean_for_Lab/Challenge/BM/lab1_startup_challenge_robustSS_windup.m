@@ -4,7 +4,6 @@
 clear
 
 
-
 %% Load Predefined Parameters
 load_params_inertial_case
 
@@ -125,4 +124,7 @@ sIn.sample_time = 5;
 sIn.simulation_time = sIn.sample_time*length(sIn.position) - 1;
 
 
-sim('lab1_model_challenge_robustSS_windup',sIn.simulation_time) % most basic way to simulate with command script.
+%% Anti Windup
+feedback.Kw = 1/(specs.settling_time/2.05);
+feedback.State_Tune = [2 , 0.5]; 
+feedback.Int_Tune = 1.26;
