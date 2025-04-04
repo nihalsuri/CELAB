@@ -14,20 +14,14 @@ load_params_inertial_case
 
 % Motor Parameters
 % Nominal Parameters (estimated from Blackbox)
-%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-%mld.tausf = 0.0056;     % [Nm]
-%mld.tausf = 0;          % (nominal zero static)
-%mld.Jeq = mld.Jeq;      % [kg m^2]
+%%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
+%%mld.tausf = 0.0056;     % [Nm]
+%%mld.Jeq = mld.Jeq;      % [kg m^2]
 
 % Actual Parameters (estimated from Motor 1)
-%mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-%mld.tausf = 0.013;      % [Nm]
-%mld.Jeq = 3.4640e-07;   % [kg m^2]
-
-% Parameters from last year
-mld.Beq = 1.67e-6;    % [Nm/(rad/s)]
-mld.tausf = 9.33e-3;  % [Nm]
-mld.Jeq = 7.45e-7;    % [kg m^2]
+mld.Beq = 1.3672e-6;     % [Nm/(rad/s)]
+mld.tausf = 0.0148;      % [Nm]
+mld.Jeq = 6.4640e-07;    % [kg m^2]
 
 
 
@@ -115,10 +109,10 @@ eig.int.values4 = [2*eig.real + 1i*eig.img, ...
 %feedback.int.place.Ki = feedback.int.place.Ke(1);
 %feedback.int.place.K  = feedback.int.place.Ke(2:end);
 
-feedback.int.acker.Ke = ...
+feedback.integ.acker.Ke = ...
     acker(plant_SS.Ae, plant_SS.Be, eig.int.("values"+eig.set));
-feedback.int.acker.Ki = feedback.int.acker.Ke(1);
-feedback.int.acker.K  = feedback.int.acker.Ke(2:end);
+feedback.integ.acker.Ki = feedback.integ.acker.Ke(1);
+feedback.integ.acker.K  = feedback.integ.acker.Ke(2:end);
 
 % calculation of feedback for the nominal case
 [feedback.nominal.place.K, feedback.nominal.place.prec] =...

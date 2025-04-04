@@ -19,9 +19,9 @@ specs.settling_time = 0.15; %[seconds]
 
 
 % Validation Task (6, 7 or 8)
-sIn.val = 8;
+sIn.val = 6;
 %Amplitude of reference signal (only for 6)
-sIn.Amp = 60;
+sIn.Amp = 90;
 
 
 
@@ -53,19 +53,15 @@ specs.Freq = (1/specs.T_r)*2*pi;
 %% Motor Parameters
 
 % Nominal Parameters (estimated from Blackbox)
-%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-%mld.tausf = 0.0056;     % [Nm]
-%mld.Jeq = mld.Jeq;      % [kg m^2]
+%%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
+%%mld.tausf = 0.0056;     % [Nm]
+%%mld.Jeq = mld.Jeq;      % [kg m^2]
 
 % Actual Parameters (estimated from Motor 1)
-%mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-%mld.tausf = 0.013;      % [Nm]
-%mld.Jeq = 3.4640e-07;   % [kg m^2]
-
-% Parameters from last year
-mld.Beq = 1.67e-6;    % [Nm/(rad/s)]
-mld.tausf = 9.33e-3;  % [Nm]
-mld.Jeq = 7.45e-7;    % [kg m^2]
+mld.Beq = 1.3672e-6;     % [Nm/(rad/s)]
+mld.tausf = 0.0148;      % [Nm]
+mld.Jeq = 6.4640e-07;    % [kg m^2]
+%mld.tausf = 0;
 
 
 % High-pass filter (Continous - Time) for load velocity calculation

@@ -5,7 +5,7 @@
 
 
 % Name of the output variable
-sOut = out_th_l;
+sOut = ScopeData;
 
 % Port of the scope to analyze (1 for nominal; 2 for integral)
 sOut.inport = 1;

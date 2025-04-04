@@ -17,14 +17,14 @@ load_params_inertial_case
 
 % Motor Parameters
 % Nominal Parameters (estimated from Blackbox)
-%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-%mld.tausf = 0.0056;     % [Nm]
-%mld.Jeq = mld.Jeq;      % [kg m^2]
+%%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
+%%mld.tausf = 0.0056;     % [Nm]
+%%mld.Jeq = mld.Jeq;      % [kg m^2]
 
 % Actual Parameters (estimated from Motor 1)
-mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-mld.tausf = 0.013;      % [Nm]
-mld.Jeq = 3.4640e-07;   % [kg m^2]
+mld.Beq = 1.3672e-6;     % [Nm/(rad/s)]
+mld.tausf = 0.0148;      % [Nm]
+mld.Jeq = 6.4640e-07;    % [kg m^2]
 
 
 % Validation Anti-Windup
@@ -40,11 +40,11 @@ feedforward.acc = 900;
 % time for which acceleration is applied [s]
 feedforward.time = 0.5;
 % number of cycles (pos. -> 0 -> neg. -> neg. -> 0 -> pos.)
-feedforward.num = 1;
+feedforward.num = 2;
 
 
 % Choice of Input => "Anti-Windup"->1 or "Feedforward"->2
-sIn.program = 1;
+sIn.program = 2;
 
 
 %% PID Parameters

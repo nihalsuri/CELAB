@@ -15,19 +15,15 @@ load_params_inertial_case
 
 % Motor Parameters
 % Nominal Parameters (estimated from Blackbox)
-mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-mld.tausf = 0.0056;     % [Nm]
-mld.Jeq = mld.Jeq;      % [kg m^2]
+%%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
+%%mld.tausf = 0.0056;     % [Nm]
+%%mld.Jeq = mld.Jeq;      % [kg m^2]
 
 % Actual Parameters (estimated from Motor 1)
-%mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-%mld.tausf = 0.013;      % [Nm]
-%mld.Jeq = 3.4640e-07;   % [kg m^2]
-
-% Parameters from last year
-mld.Beq = 1.67e-6;    % [Nm/(rad/s)]
-mld.tausf = 9.33e-3;  % [Nm]
-mld.Jeq = 7.45e-7;    % [kg m^2]
+mld.Beq = 1.3672e-6;     % [Nm/(rad/s)]
+mld.tausf = 0.0148;      % [Nm]
+mld.Jeq = 6.4640e-07;    % [kg m^2]
+%mld.tausf = 0;
 
 
 % Set of eigenvalues
@@ -86,28 +82,28 @@ eig.img = eig.wn * sqrt(1 - eig.damping^2);
 
 
 % four different sets of eigenvalues for integral augmented CL
-%eig.int.values1 = [eig.real + 1i*eig.img, ...
-%                   eig.real - 1i*eig.img, ...
-%                   eig.real];
+eig.integ.values1 = [eig.real + 1i*eig.img, ...
+                     eig.real - 1i*eig.img, ...
+                     eig.real];
 
-%eig.int.values2 = [eig.real, ...
-%                   eig.real,...
-%                   eig.real];
+eig.integ.values2 = [eig.real, ...
+                     eig.real,...
+                     eig.real];
 
-%eig.int.values3 = [2*eig.real + 1i*eig.img, ...
-%                   2*eig.real - 1i*eig.img, ...
-%                   2*eig.real];
+eig.integ.values3 = [2*eig.real + 1i*eig.img, ...
+                     2*eig.real - 1i*eig.img, ...
+                     2*eig.real];
 
-eig.int.values4 = [2*eig.real + 1i*eig.img, ...
+eig.integ.values4 = [2*eig.real + 1i*eig.img, ...
                    2*eig.real - 1i*eig.img, ...
                    3*eig.real];
 
 
 
-feedback.int.acker.Ke = ...
-    acker(plant_SS.Ae, plant_SS.Be, eig.int.("values"+eig.set));
-feedback.int.acker.Ki = feedback.int.acker.Ke(1);
-feedback.int.acker.K  = feedback.int.acker.Ke(2:end);
+feedback.integ.acker.Ke = ...
+    acker(plant_SS.Ae, plant_SS.Be, eig.integ.("values"+eig.set));
+feedback.integ.acker.Ki = feedback.integ.acker.Ke(1);
+feedback.integ.acker.K  = feedback.integ.acker.Ke(2:end);
 
 
 % calculation of Nx(state feedforward gain), Nu (input feedforward gain)
@@ -117,7 +113,7 @@ feedback.Nu = plant_SS.gains(3);
 
 
 %% Anti Windup
-feedback.Kw = 1/(specs.settling_time/3);
+feedback.Kw = 1/(specs.settling_time/6);
 
 
 %% Simulation Parameters 

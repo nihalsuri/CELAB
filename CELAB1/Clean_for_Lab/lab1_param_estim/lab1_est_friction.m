@@ -6,6 +6,10 @@
 
 
 %% Data Preparation
+out_omega_motor = ScopeData2;
+out_i_a = ScopeData4;
+
+
 
 % Define indices of positive and negative staircases
 idx.t_end_staircase_p = frict_est.time*frict_est.num;

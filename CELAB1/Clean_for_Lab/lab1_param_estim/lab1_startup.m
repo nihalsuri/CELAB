@@ -33,7 +33,7 @@ frict_est.del_omega = 45;
 % time for which each refference is applied [s]
 frict_est.time = 5;
 % number of increments
-frict_est.num = 3;
+frict_est.num = 9;
 
 
 % Inertia Estimation
@@ -46,7 +46,7 @@ inert_est.num = 10;
 
 
 % Choice of Input => "Step"->1, "Friction"->2 or "Inertia"->3
-sIn.program = 1;
+sIn.program = 3;
 
 
 %% PID Parameters
@@ -58,9 +58,13 @@ plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]);
 
 %PID = computePIDGains(8, 0.15, 0.1, plant.Ps, "PID");
 % resulting gains from bode method for estimated motor parameters
-PID.Kp = 7.845;
-PID.Ki = 100.8347;
-PID.Kd = 0.0763;
+%PID.Kp = 7.845;
+%PID.Ki = 100.8347;
+%PID.Kd = 0.0763;
+
+PID.Kp = 90; 
+PID.Ki = 60; 
+PID.Kd = 0.40;
 PID.Tl = 9.7252e-04;
 
 
