@@ -1,0 +1,40 @@
+Lab 1 
+
+
+-2.1 Position PID–control improvements
+	(MP) 1. Add anti.windup gain K_w =1/T_w
+	(MP) 2. Validate with step of 360deg 
+	(BM) 3. Implement feedforward
+	(BM) 4. Validate the effectiveness of the feedforward compensation
+
+
+-2.2 Position state–space control design
+	(NS) 1. Design a position SS-controller (perfect tracking of constant position)
+		   -t_s =< 0.15s and M_p =< 10%
+	(NS) 2. Validate the design 3 steps
+
+	(MP) 3. Design a position SS-controller (with aslo rejection of constant load disturbances)
+	(MP) 4. Validate the design 3 steps
+
+	(BM) 5. Design a position SS-controlle(tracking sinusodal position and rejection of constant load disturbance)
+	(BM) 6. Validate the design
+	(BM) 7. Repeat the test of point 6 with "wrong" T_r
+	(BM) 8. Repeat the test of point 6 with input with amplitude 40deg 
+
+	9.(Opt)  Repeat the design of point 5 by using the extended–state estimator method
+ 	10.(Opt) Repeat the tests of points 6, 7 and 8 with the controller designed in point 9
+ 
+
+In the lab 
+-3.1 Position PID–control improvements
+	1. Validate the anti–windup scheme designed in 2.1.1 
+	2. Validate the feedforward compensator designed in 2.1.3 
+
+
+-3.2 Position state–space control design
+	1. Validate the position state–space controller designed in 2.2.1 
+	2. Validate the position state–space controller designed in 2.2.3 
+	3. Validate the position state–space controller designed in 2.2.5 
+
+
+-3.3 Challanges 
