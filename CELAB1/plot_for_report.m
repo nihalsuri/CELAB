@@ -3,8 +3,8 @@ clear simout legends xlab f1 save_name
 
 
 % Replace with the name of the output to plot and the filename for the .png
-simout = betterpid_omega_m;
-save_name = "windup_sim";
+simout = ScopeData1;
+save_name = "voltage";
 % =========================================================================
 
 
@@ -32,6 +32,6 @@ ylabel(xlab)
 % a nice dimension to put into a report
 set(f1,'Position',[300 300 800 400])
 
-% save figure as a .png file and save the corresponding data
-%saveas(f1, 'Data_and_Plots/'+save_name+'.png')
+%%save figure as a .png file and save the corresponding data
+saveas(f1, 'Data_and_Plots/'+save_name+'.png')
 %save('Data_and_Plots/'+save_name+'.mat', "simout")
