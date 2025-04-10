@@ -3,8 +3,8 @@ clear simout legends xlab f1 save_name
 
 
 % Replace with the name of the output to plot and the filename for the .png
-simout = betterpid_omega_m;
-save_name = "windup_sim";
+simout = out_theta;
+save_name = "Robust";
 % =========================================================================
 
 
@@ -33,5 +33,5 @@ ylabel(xlab)
 set(f1,'Position',[300 300 800 400])
 
 % save figure as a .png file and save the corresponding data
-%saveas(f1, 'Data_and_Plots/'+save_name+'.png')
-%save('Data_and_Plots/'+save_name+'.mat', "simout")
+saveas(f1, 'Data_and_Plots/22/Clean Figures/'+save_name+'.png')
+%save('Data_and_Plots/22/Clean Figures/'+save_name+'.mat', "simout")
