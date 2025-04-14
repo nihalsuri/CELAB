@@ -1,9 +1,9 @@
 % Script to automate nice plotting from simulink
-clear simout legends xlab f1 save_name
+clear simout legends ylab f1 save_name
 
 
 % Replace with the name of the output to plot and the filename for the .png
-simout = ScopeData1;
+simout = out_w_m;
 save_name = "voltage";
 % =========================================================================
 
@@ -11,8 +11,8 @@ save_name = "voltage";
 
 
 % Get the x-label from the name of the scope
-xlab = split(simout.blockName,"/");
-xlab = xlab(end);
+ylab = split(simout.blockName,"/");
+ylab = join(ylab(2:end), "/");
 
 % Initialize cellarray
 legends = cell(length(simout.signals),1);
@@ -28,10 +28,10 @@ end
 grid on
 legend(legends{:})
 xlabel("Time [s]")
-ylabel(xlab)
+ylabel(ylab)
 % a nice dimension to put into a report
 set(f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-saveas(f1, 'Data_and_Plots/'+save_name+'.png')
+%saveas(f1, 'Data_and_Plots/'+save_name+'.png')
 %save('Data_and_Plots/'+save_name+'.mat', "simout")

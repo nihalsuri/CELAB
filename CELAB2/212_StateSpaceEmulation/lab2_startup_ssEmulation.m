@@ -28,8 +28,24 @@ mld.Jeq = 3.4640e-07;   % [kg m^2]
 specs.mp = 0.1; 
 % Settling Time
 specs.settling_time = 0.15; %[s]
-% Sampling Time (1 ms)
-specs.Ts = 1e-3; %[s]
+
+
+
+%% Simulation Parameters 
+% Sampling time (1 ms)
+sIn.Ts = 1e-3; %[s]
+
+% Solver step time (0.1 ms)
+sIn.step_size = 1e-4;
+
+% List of reference positions [s]
+sIn.position = [0, 40, 0, 70, 0, 120, 0]; 
+
+% Time the reference positions are held [s]
+sIn.sample_time = 5; 
+
+% Automatic calculation of total simulation time [s]
+sIn.simulation_time = sIn.sample_time*length(sIn.position) - 1;
 
 
 
@@ -95,17 +111,10 @@ obs.D0 = [0,   1;
 
 
 %% Discretized Reduced Observer 
-obsD.Phi0 = 1+obs.A0*specs.Ts;
-obsD.Gamma0 = obs.B0*specs.Ts;
+obsD.Phi0 = 1+obs.A0*sIn.Ts;
+obsD.Gamma0 = obs.B0*sIn.Ts;
 obsD.H0 = obs.C0;
 obsD.J0 = obs.D0;
-
-
-%% Simulation Parameters 
-sIn.position = [0, 40, 0, 70, 0, 120, 0]; 
-sIn.sample_time = 5; 
-sIn.simulation_time = sIn.sample_time*length(sIn.position) - 1;
-
 
 
 
