@@ -31,30 +31,20 @@ plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]);
 PID.Kp = 7.845;
 PID.Ki = 100.8347;
 PID.Kd = 0.0763;
-PID.Tl = 9.7252e-04;
+% unstable for FE 
+% PID.Tl = 9.7252e-04;
+
+% boderline stable for FE, Tustin
+% PID.Tl = 250.7253e-04;
+
+% stable for FE, Tustin
+PID.Tl = 700e-04;
+
 PID.Cs = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl); 
 
 % Anit Windup
 PID.t_s5 = 0.15; % 5% settling time from lab0
 PID.Kw = 1/(PID.t_s5/4.5); % anit windup gain: 1/Tw, Tw=t_s5/5
-
-
-%% Discrete-Time PID
-% Backward-Euler, this is only for visualization (NOT USED IN SIMULATION)
-PID.Discrete.CzBE = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl, 1e-3, ...
-    'IFormula', 'BackwardEuler', 'DFormula', 'BackwardEuler');
-
-% Forward-Euler
-PID.Discrete.CzFE = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl, 1e-3, ...
-    'IFormula', 'ForwardEuler', 'DFormula', 'ForwardEuler');
-
-% Tustin
-PID.Discrete.CzTustin = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl, 1e-3, ...
-    'IFormula', 'Trapezoidal', 'DFormula', 'Trapezoidal');
-
-
-
-
 
 
 %% Simulation Parameters 
@@ -63,3 +53,51 @@ specs.Ts = [1e-3; 1e-2; 5e-2]; % [s]
 % Step reference input
 sIn.position = [50, 360];
 sIn.simulation_time = 5;
+
+
+
+%% Discrete-Time PID
+% Define discretization methods and their corresponding labels
+methods = {'BackwardEuler', 'ForwardEuler', 'Trapezoidal'};
+methodLabels = {'BE', 'FE', 'Tustin'};
+
+% Initialize storage structures
+for m = 1:length(methods)
+    label = methodLabels{m};
+    PID.Discrete.(label).Cz = cell(length(specs.Ts), 1);
+    PID.Discrete.(label).num = cell(length(specs.Ts), 1);
+    PID.Discrete.(label).den = cell(length(specs.Ts), 1);
+end
+
+% Loop over each sample time and discretization method
+for i = 1:length(specs.Ts)
+    Ts = specs.Ts(i);
+    
+    for m = 1:length(methods)
+        method = methods{m};
+        label = methodLabels{m};
+        
+        % Create discrete-time PID controller
+        PID.Discrete.(label).Cz{i} = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl, Ts, ...
+            'IFormula', method, 'DFormula', method);
+        
+        % Extract numerator and denominator coefficients
+        [PID.Discrete.(label).num{i}, PID.Discrete.(label).den{i}] = ...
+            tfdata(PID.Discrete.(label).Cz{i}, 'v');
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
