@@ -10,10 +10,10 @@ clear p i j
 % ignored.
 % the y-label will be extracted form the first entry.
 
-p.simout = [theta_nominal theta_robust];
-p.save_name = "nominal_robust_long";
+p.simout = [out_a_load_windup out_a_load_windupff];
+p.save_name = "feedforward_comparison_acc";
 p.time_start = 0;
-p.time_stop  = 25;
+p.time_stop  = 6;
 % =========================================================================
 
 
