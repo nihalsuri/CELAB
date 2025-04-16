@@ -11,10 +11,10 @@
 	3)(MP) Implenet a discrete equivalent of 1) with euler forward 
 	4)(MP) Test 3) 
 
-	5) Position SS-controller with integral and reduced-order observer 
-	6) Implenet a discrete equivalent of 5) with euler forward 
-	7) Test 6) 
-  [OPT] 8) Repeate 3) and 6) with other discretizations methods 
+	5)(MP) Position SS-controller with integral and reduced-order observer 
+	6)(MP) Implenet a discrete equivalent of 5) with euler forward 
+	7)(MP) Test 6) 
+  [OPT] 8)(MP) Repeate 3) and 6) with other discretizations methods 
 
 -2.2  Direct digital design
 	1)(BM) Discretise the SS-model directly 

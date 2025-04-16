@@ -1,0 +1,4 @@
+implement backward Euler and Tustin
+ -> switch block in Simulink to start everything from MatLab and only have one subsystem total?
+
+make small script to evaluate a single response form a struct with time

@@ -32,14 +32,15 @@ specs.settling_time = 0.15; %[s]
 
 
 %% Simulation Parameters 
-% Sampling time (1 ms)
-sIn.Ts = 1e-3; %[s]
+% Sampling time
+sIn.Ts =1e-3; %[s]
 
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
 
 % List of reference positions [s]
-sIn.position = [0, 40, 0, 70, 0, 120, 0]; 
+sIn.position = [40, 0, 70, 0, 120]; 
+%sIn.position = [0,50];
 
 % Time the reference positions are held [s]
 sIn.sample_time = 5; 
@@ -49,7 +50,7 @@ sIn.simulation_time = sIn.sample_time*length(sIn.position) - 1;
 
 
 
-%% Reduced State-Space Model
+%% State-Space Model
 % Plant Parameters
 plant.km = (drv.dcgain*mot.Kt)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
@@ -62,6 +63,11 @@ plant.B = [0;
 plant.C = [1, 0];
 plant.D = 0;
 
+% Extended state-space model
+plant.Ae = [0, plant.C; zeros(2,1), plant.A];
+plant.Be = [0; plant.B];
+plant.Ce = [0, plant.C];
+plant.De = plant.D;
 
 
 %% Closed Loop Eigenvalues
@@ -75,7 +81,7 @@ eigP.wn = 3/(eigP.damping*specs.settling_time);
 eigP.real = -eigP.damping*eigP.wn; 
 eigP.img = eigP.wn * sqrt(1 - eigP.damping^2);
 
-% Desired eigenvalues
+% Desired eigenvalues for nominal tracking
 eigP.values = [eigP.real + 1i*eigP.img, ...
                eigP.real - 1i*eigP.img];
 
@@ -86,6 +92,17 @@ feedback.K = acker(plant.A, plant.B, eigP.values);
 feedback.gains = ([plant.A, plant.B; plant.C, plant.D])\[0;0;1];
 feedback.Nx = feedback.gains(1:2);
 feedback.Nu = feedback.gains(3);
+
+
+% Eigenvalues for robust tracking
+eigP.robustValues = [eigP.real + 1i*eigP.img, ...
+                     eigP.real - 1i*eigP.img, ...
+                     eigP.real];
+
+% State feedback matrix frot the robust case
+feedback.robustKe = acker(plant.Ae, plant.Be, eigP.robustValues);
+feedback.robustKi = feedback.robustKe(1);
+feedback.robustK  = feedback.robustKe(2:end);
 
 
 
@@ -110,21 +127,9 @@ obs.D0 = [0,   1;
 
 
 
-%% Discretized Reduced Observer 
+%% Discretized Reduced Observer
+% Forward Euler
 obsD.Phi0 = 1+obs.A0*sIn.Ts;
 obsD.Gamma0 = obs.B0*sIn.Ts;
 obsD.H0 = obs.C0;
 obsD.J0 = obs.D0;
-
-
-
-
-%% Butterworth Derrivator for Comparison with Simple Observer
-filt.omega_c = 2*pi*50; 
-filt.delta = 1/sqrt(2);
-filt.num = [filt.omega_c^2, 0];
-filt.den = [1, 2*filt.delta*filt.omega_c, filt .omega_c^2];
-
-
-obs.sys = ss(obs.A0, obs.B0, obs.C0, obs.D0);
-plant.sys = ss(plant.A-plant.B*feedback.K, plant.B, plant.C, plant.D);
