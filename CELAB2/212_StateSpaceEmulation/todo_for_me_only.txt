@@ -2,3 +2,22 @@ implement backward Euler and Tustin
  -> switch block in Simulink to start everything from MatLab and only have one subsystem total?
 
 make small script to evaluate a single response form a struct with time
+
+
+2.1.2 Simulations
+1. Make conti time nominal ss-controller with red observer
+2. Test it with step references of [40, 70, 120] degrees
+
+3. Make discrete time nominal ss-controller with red observer (Forward Euler)
+4. Test it with step reference of [1, 10, 50] ms on 50 degree reference
+
+5. Make Conti time robust ss-controller with red observer
+   Test it with step reference of [40, 70, 120] degrees
+
+6. Make discrete time robust ss-controller with red observer (Forward Euler)
+7. Test it with step reference of [1, 10, 50] ms on 50 degree reference
+
+8. Repeat 3,4 and 6,7 with Backward Euler and Tustin
+
+
+   

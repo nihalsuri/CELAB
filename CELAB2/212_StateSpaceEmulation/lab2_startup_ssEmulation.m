@@ -33,10 +33,16 @@ specs.settling_time = 0.15; %[s]
 
 %% Simulation Parameters 
 % Sampling time
-sIn.Ts =1e-3; %[s]
+sIn.Ts =10e-3; %[s]
 
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
+
+% Integration methos (1:FE,  2:BE,  3:Tustin)
+sIn.integrationMethod = 3;
+
+% Choice of nominal or robust controller (0:nominal,  1:robust)
+sIn.nominal_robust = 0;
 
 % List of reference positions [s]
 sIn.position = [40, 0, 70, 0, 120]; 
@@ -129,7 +135,24 @@ obs.D0 = [0,   1;
 
 %% Discretized Reduced Observer
 % Forward Euler
-obsD.Phi0 = 1+obs.A0*sIn.Ts;
-obsD.Gamma0 = obs.B0*sIn.Ts;
-obsD.H0 = obs.C0;
-obsD.J0 = obs.D0;
+obsFe.Phi0 = 1+obs.A0*sIn.Ts;
+obsFe.Gamma0 = obs.B0*sIn.Ts;
+obsFe.H0 = obs.C0;
+obsFe.J0 = obs.D0;
+
+% Backward Euler
+obsBe.Phi0 = 1/(1-obs.A0*sIn.Ts);
+obsBe.Gamma0 = 1/(1-obs.A0*sIn.Ts) *obs.B0*sIn.Ts;
+obsBe.H0 = obs.C0/(1-obs.A0*sIn.Ts);
+obsBe.J0 = obs.D0 + obs.C0/(1-obs.A0*sIn.Ts) *obs.B0*sIn.Ts;
+
+% Tustin
+obsTu.Phi0 = (1+(obs.A0*sIn.Ts)/2)/(1-(obs.A0*sIn.Ts)/2);
+obsTu.Gamma0 = 1/(1-(obs.A0*sIn.Ts)/2) *obs.B0*sqrt(sIn.Ts);
+obsTu.H0 = sqrt(sIn.Ts)*obs.C0 /(1-(obs.A0*sIn.Ts)/2);
+obsTu.J0 = obs.D0 + obs.C0/(1-(obs.A0*sIn.Ts)/2) *obs.B0*sIn.Ts/2;
+
+% Selection
+obs.tmp = [obsFe, obsBe, obsTu];
+obsD = obs.tmp(sIn.integrationMethod);
+
