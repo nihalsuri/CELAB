@@ -21,8 +21,8 @@
 	2)(BM) Design a discrete nominal SS-controller 
 	3)(BM) Test 2) 
 
-	4) Design a discrete SS-controller with integral action
-	5) Test 5) 
+	4)(BM) Design a discrete SS-controller with integral action
+	5)(BM) Test 5) 
 
 In Lab
 -3.1.1 Position PID–controller
