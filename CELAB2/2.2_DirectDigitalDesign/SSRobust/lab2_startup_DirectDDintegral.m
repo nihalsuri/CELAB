@@ -34,19 +34,13 @@ mld.Jeq = 3.4640e-07;   % [kg m^2]
 
 
 
-%% Plant parameters Parameters
+%% Plant Parameters
 
 % reduced plant transfer function
 plant.km = (drv.dcgain*mot.Kt)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 plant.Tm = (mot.Req*mld.Jeq)/((mot.Req*mld.Beq) + (mot.Kt*mot.Ke));
 
 
-%% State feedback matrix calculation   
-% High-pass filter (Continous - Time) for load velocity calculation
-filt.high.omega_c = 2*pi*50; 
-filt.high.delta = 1/sqrt(2);
-filt.high.num = [filt.high.omega_c^2, 0];
-filt.high.den = [1, 2*filt.high.delta*filt.high.omega_c, filt.high.omega_c^2];
 
 %% Closed Loop Eigenvalues 
 % Desired specifications
@@ -65,8 +59,8 @@ eigP.img = eigP.wn * sqrt(1 - eigP.damping^2);
 
 % Desired eigenvalues for nominal tracking
 eigP.values =  [eigP.real + 1i*eigP.img, ...
-                     eigP.real - 1i*eigP.img, ...
-                     eigP.real];
+                eigP.real - 1i*eigP.img, ...
+                eigP.real];
 
 % Desired eigenvalues for nominal tracking discretized 
 eigP.values_d=exp(sIn.T_s*eigP.values); 
