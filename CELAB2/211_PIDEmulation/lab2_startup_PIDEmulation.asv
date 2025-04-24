@@ -88,15 +88,11 @@ for i = 1:length(specs.Ts)
 end
 
 %% ZOH
-PID.Discrete.ZOH1 = c2d(PID.Cs, specs.Ts(1), 'zoh');
-PID.Discrete.ZOH10 = c2d(PID.Cs, specs.Ts(2), 'zoh');
-PID.Discrete.ZOH50 = c2d(PID.Cs, specs.Ts(3), 'zoh');
+PID.Discrete.ZOH1 = c2d(PID.Cs, specs.Ts(1), 'zoh')
+PID.Discrete.ZOH10 = c2d(PID.Cs, specs.Ts(2), 'zoh')
+PID.Discrete.ZOH50 = c2d(PID.Cs, specs.Ts(3), 'zoh')
 
-[numZOH1, denZOH1] = tfdata(PID.Discrete.ZOH1, 'v');
-[numZOH10, denZOH10] = tfdata(PID.Discrete.ZOH10, 'v');
-[numZOH50, denZOH50] = tfdata(PID.Discrete.ZOH50, 'v');
-
-
+[PID.Discrete.ZOH1.num, PID.Discrete.ZOH1.den] = 
 
 
 
