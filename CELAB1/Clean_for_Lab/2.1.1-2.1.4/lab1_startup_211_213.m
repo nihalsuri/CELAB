@@ -40,7 +40,7 @@ feedforward.acc = 900;
 % time for which acceleration is applied [s]
 feedforward.time = 0.5;
 % number of cycles (pos. -> 0 -> neg. -> neg. -> 0 -> pos.)
-feedforward.num = 2;
+feedforward.num = 1;
 
 
 % Choice of Input => "Anti-Windup"->1 or "Feedforward"->2
@@ -70,7 +70,7 @@ PID.Kw = 1/(PID.t_s5/4.5); % anit windup gain: 1/Tw, Tw=t_s5/5
 
 %% Filter Parameters for Friction Estimation
 % Butterworth high-pass for differentiating measured position
-filt.butt.omega_c = 2*pi*20;
+filt.butt.omega_c = 2*pi*10;
 filt.butt.delta =1/sqrt(2);
 filt.butt.num = [filt.butt.omega_c^2, 0];
 filt.butt.den = [1, 2*filt.butt.delta*filt.butt.omega_c, filt.butt.omega_c^2];

@@ -20,4 +20,25 @@ make small script to evaluate a single response form a struct with time
 8. Repeat 3,4 and 6,7 with Backward Euler and Tustin
 
 
+
+TESTS TO BE RUN
+1) CT
+  a) Nominal [40, 70, 120] deg
+  b) Robust  [40, 70, 120] deg
+
+2) DT
+  a) Forward Euler
+     i)  Nominal 40 deg [1, 10, 50] ms
+     ii) Robust  40 deg [1, 10, 50] ms
+  b) Backward Euler
+  c) Tustin
+
+
+
+
+
+
+
+
+
    
