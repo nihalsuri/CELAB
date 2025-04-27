@@ -7,7 +7,7 @@ load_params_inertial_case
 
 %% User Inputs
 % Define the sampler times for the controler and observer 
-sIn.T_s = 55e-3;
+sIn.T_s = 305e-4;
 sIn.simulation_time = 10;
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
@@ -63,7 +63,7 @@ plant.sys_c = ss(plant.A, plant.B, plant.C, plant.D);
 feedback.Kw = 1/(specs.settling_time/2.05);
 feedback.State_Tune = [2 , 0.5]; 
 feedback.Int_Tune = 1.26;
-feedback.aw_tuner = 0.12; 
+feedback.aw_tuner = 0.0152; 
 
 
 %% Simulation and Results
