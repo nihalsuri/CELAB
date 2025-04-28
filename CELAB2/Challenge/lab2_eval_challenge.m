@@ -3,7 +3,7 @@
 
 
 % Name of the output variable
-sOut = ans.ScopeData;
+sOut = ScopeData;
 
 % Retrieving the Information of the step response
 sInfo = stepinfo(sOut.signals(1).values, sOut.time, ...
