@@ -13,11 +13,6 @@ load_params_inertial_case
 %% User Inputs
 
 % Motor Parameters
-% Nominal Parameters (estimated from Blackbox)
-%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-%mld.tausf = 0.0056;     % [Nm]
-%mld.Jeq = mld.Jeq;      % [kg m^2]
-
 % Actual Parameters (estimated from Motor 1)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
 mld.tausf = 0.013;      % [Nm]
@@ -33,20 +28,19 @@ specs.settling_time = 0.15; %[s]
 
 %% Simulation Parameters 
 % Sampling time
-sIn.Ts =10e-3; %[s]
+sIn.T_s =190e-3; %[s]
 
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
 
 % Integration methos (1:FE,  2:BE,  3:Tustin)
-sIn.integrationMethod = 1;
+sIn.integrationMethod = 2;
 
 % Choice of nominal or robust controller (0:nominal,  1:robust)
 sIn.nominal_robust = 1;
 
 % List of reference positions [s]
-%sIn.position = [40, 0, 70, 0, 120]; 
-sIn.position = 50;
+sIn.position = 60;
 
 % Time the reference positions are held [s]
 sIn.sample_time = 5; 
@@ -101,8 +95,8 @@ feedback.Nu = feedback.gains(3);
 
 
 % Eigenvalues for robust tracking
-eigP.robustValues = [eigP.real + 1i*eigP.img, ...
-                     eigP.real - 1i*eigP.img, ...
+eigP.robustValues = [eigP.real + 0.1*1i*eigP.img, ...
+                     eigP.real - 0.1*1i*eigP.img, ...
                      eigP.real];
 
 % State feedback matrix frot the robust case
@@ -110,13 +104,34 @@ feedback.robustKe = acker(plant.Ae, plant.Be, eigP.robustValues);
 feedback.robustKi = feedback.robustKe(1);
 feedback.robustK  = feedback.robustKe(2:end);
 
+% Controller Tuning ideal impulse
+% Sampling Time: 0.1s
+%impVal = 2.46;
+%thError = 0.2115;
+%w = 45.66;
 
+% Sampling Time: 0.15s
+%impVal = 1.74;
+%thError = 0.3665;
+%w = 51.71;
+
+% Sampling Time: 0.15s
+impVal = 1.44;
+thError = 0.3215;
+w = 26.55;
+
+k1 = (impVal*180)/(60*pi*feedback.robustK(1));
+k2 = (thError*feedback.robustK(1)*k1)/(w*feedback.robustK(2));
+
+feedback.stateTune = [k1, k2];
+feedback.intTune = 0.01;
 
 %% Reduced Observer Model
 % Observer eigenvalue
 eigO.damping = eigP.damping;
-eigO.wn = 5*eigP.wn;
+eigO.wn = 40*eigP.wn;
 eigO.value = -eigO.damping*eigO.wn;
+%eigO.value = -10;
 
 
 % Observer gain
@@ -135,24 +150,27 @@ obs.D0 = [0,   1;
 
 %% Discretized Reduced Observer
 % Forward Euler
-obsFe.Phi0 = 1+obs.A0*sIn.Ts;
-obsFe.Gamma0 = obs.B0*sIn.Ts;
+obsFe.Phi0 = 1+obs.A0*sIn.T_s;
+obsFe.Gamma0 = obs.B0*sIn.T_s;
 obsFe.H0 = obs.C0;
 obsFe.J0 = obs.D0;
 
 % Backward Euler
-obsBe.Phi0 = 1/(1-obs.A0*sIn.Ts);
-obsBe.Gamma0 = 1/(1-obs.A0*sIn.Ts) *obs.B0*sIn.Ts;
-obsBe.H0 = obs.C0/(1-obs.A0*sIn.Ts);
-obsBe.J0 = obs.D0 + obs.C0/(1-obs.A0*sIn.Ts) *obs.B0*sIn.Ts;
+obsBe.Phi0 = 1/(1-obs.A0*sIn.T_s);
+obsBe.Gamma0 = 1/(1-obs.A0*sIn.T_s) *obs.B0*sIn.T_s;
+obsBe.H0 = obs.C0/(1-obs.A0*sIn.T_s);
+obsBe.J0 = obs.D0 + obs.C0/(1-obs.A0*sIn.T_s) *obs.B0*sIn.T_s;
 
 % Tustin
-obsTu.Phi0 = (1+(obs.A0*sIn.Ts)/2)/(1-(obs.A0*sIn.Ts)/2);
-obsTu.Gamma0 = 1/(1-(obs.A0*sIn.Ts)/2) *obs.B0*sqrt(sIn.Ts);
-obsTu.H0 = sqrt(sIn.Ts)*obs.C0 /(1-(obs.A0*sIn.Ts)/2);
-obsTu.J0 = obs.D0 + obs.C0/(1-(obs.A0*sIn.Ts)/2) *obs.B0*sIn.Ts/2;
+obsTu.Phi0 = (1+(obs.A0*sIn.T_s)/2)/(1-(obs.A0*sIn.T_s)/2);
+obsTu.Gamma0 = 1/(1-(obs.A0*sIn.T_s)/2) *obs.B0*sqrt(sIn.T_s);
+obsTu.H0 = sqrt(sIn.T_s)*obs.C0 /(1-(obs.A0*sIn.T_s)/2);
+obsTu.J0 = obs.D0 + obs.C0/(1-(obs.A0*sIn.T_s)/2) *obs.B0*sIn.T_s/2;
 
 % Selection
 obs.tmp = [obsFe, obsBe, obsTu];
 obsD = obs.tmp(sIn.integrationMethod);
 
+%% Simulation and Results
+sim("lab2_model_ssEmulation_choices.slx");
+lab2_eval_challenge
