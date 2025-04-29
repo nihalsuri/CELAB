@@ -11,7 +11,7 @@ load_params_inertial_case
 
 %% User Inputs
 % Define the sampling times for the controler and observer 
-sIn.T_s = 10e-3;  % [ms]
+sIn.T_s = 27e-3;  % [ms]
 sIn.simulation_time = 1;
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
@@ -48,7 +48,7 @@ eigP.img = eigP.wn * sqrt(1 - eigP.damping^2);
 % Desired eigenvalues for robust tracking
 eigP.values =  [2*eigP.real + 1i*eigP.img, ...
                 2*eigP.real - 1i*eigP.img, ...
-                3*eigP.real];
+                3.1*eigP.real];
 
 % Desired eigenvalues for robust tracking discretized 
 eigP.values_d=exp(sIn.T_s*eigP.values); 
@@ -73,7 +73,7 @@ plant.sys_c = ss(plant.A, plant.B, plant.C, plant.D);
 
 
 %% Anti Windup and Tuning
-feedback.Kw = 1/(specs.settling_time/1.05);
+feedback.Kw = 1/(specs.settling_time/1.4);
 feedback.State_Tune = [2/2 , 0.5*2]; 
 feedback.Int_Tune = 1;
 
