@@ -24,9 +24,9 @@ sIn.position = 60;
 sIn.simulation_time = 2;
 
 
+
 %% State-Space Model
-% Motor Parameters
-% Actual Parameters (estimated from Motor 1)
+% Motor Parameters (estimated from Motor 1)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
 mld.tausf = 0.013;      % [Nm]
 mld.Jeq = 3.4640e-07;   % [kg m^2]
@@ -46,6 +46,7 @@ plant.Ae = [0, plant.C; zeros(2,1), plant.A];
 plant.Be = [0; plant.B];
 plant.Ce = [0, plant.C];
 plant.De = plant.D;
+
 
 
 %% Feedback Calculations
@@ -68,12 +69,13 @@ feedback.k2 = (thErr1*feedback.k1 + ...
 
 feedback.state = [feedback.k1, feedback.k2];
 
-
 % Stability check
 eig.values = eig(plant.Ae-plant.Be*[feedback.integrator, feedback.state]);
 if (any(eig.values>=0))
     disp("WARNING: Unstable feedback system!")
 end
+
+
 
 %% Reduced Observer Model
 % Observer eigenvalue - Continuous Time
@@ -88,7 +90,6 @@ obs.B0 = [plant.B(2), obs.A0*obs.L];
 obs.C0 = [0; 1];
 obs.D0 = [0, 1;  0, obs.L];
 
-
 % Discretized Observer - DT Backward Euler
 obs.Phi0 = 1/(1-obs.A0*sIn.T_s);
 obs.Gamma0 = 1/(1-obs.A0*sIn.T_s) *obs.B0*sIn.T_s;
@@ -96,6 +97,7 @@ obs.H0 = obs.C0/(1-obs.A0*sIn.T_s);
 obs.J0 = obs.D0 + obs.C0/(1-obs.A0*sIn.T_s) *obs.B0*sIn.T_s;
 
 
+
 %% Simulation and Results
-sim("lab2_model_ssEmulation_choices.slx");
+sim("lab2_model_challenge.slx");
 lab2_eval_challenge
