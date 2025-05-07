@@ -1,0 +1,37 @@
+-2.1  Simulink model of the DC gearmotor with resonant load
+	1) Simulink model of the DC gearmotor with resonant load
+	2) Model of the electric circuit used to measure the beam displacement
+
+
+-2.2 Position PID control
+	1) Design a PID for the hub position
+	2) Validate 50 and 120deg step 	
+
+-2.3   Position state–space control with eigenvaules 
+	1) Design a SS controller for the hub position
+	2) Validate 50deg step  
+
+  [OPT]	3) Robust control 
+  [OPT]	4) Validate 50deg step
+
+2.4 Position state–space control using LQR methods
+	1) Design a SS controller for the hub using LQR 
+	2) Validate 50deg step
+        3) Design a SS controller for the hub using LQR new cost function 
+	4) Validate 50deg step
+
+  [OPT] 5) Do the 2.3.3 using LQR methods 
+  [OPT] 6) Validate 50deg step
+  [OPT] 7) Add robust tracking to 2.4.3 
+  [OPT] 8) Validate 50deg step
+  [OPT] 9) Change 2.4.3 with a  frequency dependent weight (q_22(w))
+  [OPT]10) Validate 50deg step, with q_22[0.01, 1, 100]	
+  [OPT]11) Add robust tracking to 2.4.9 
+  [OPT]12) Validate 50deg step, with q_22[0.01, 1, 100]	
+
+
+In Lab 
+
+	
+
+-4 Challanges 
