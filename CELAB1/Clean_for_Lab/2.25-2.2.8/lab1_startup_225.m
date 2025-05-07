@@ -19,9 +19,9 @@ specs.settling_time = 0.15; %[seconds]
 
 
 % Validation Task (6, 7 or 8)
-sIn.val = 6;
+sIn.val = 8;
 %Amplitude of reference signal (only for 6)
-sIn.Amp = 90;
+sIn.Amp = 30;
 
 
 
@@ -61,7 +61,6 @@ specs.Freq = (1/specs.T_r)*2*pi;
 mld.Beq = 1.3672e-6;     % [Nm/(rad/s)]
 mld.tausf = 0.0148;      % [Nm]
 mld.Jeq = 6.4640e-07;    % [kg m^2]
-%mld.tausf = 0;
 
 
 % High-pass filter (Continous - Time) for load velocity calculation
