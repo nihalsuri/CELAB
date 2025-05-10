@@ -121,5 +121,6 @@ daq.dac.q = 2*daq.dac.fs/(2^daq.dac.bits-1); % quantization
 daq.adc.bits = 16; % resolution (bits)
 daq.adc.fs = 10; % full scale (as set in SLDRT Analog Input block)
 daq.adc.q = 2*daq.adc.fs/(2^daq.adc.bits-1); % quantization
+daq.adc.Ts = 1e-3; % sampling time
 
 
