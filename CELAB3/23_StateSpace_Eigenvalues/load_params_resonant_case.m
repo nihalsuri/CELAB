@@ -100,6 +100,17 @@ sens.pot1.rad2V = sens.pot1.range.V / sens.pot1.range.th; % sensitivity [V/rad]
 sens.pot1.V2deg = 1/sens.pot1.deg2V; % conversion gain [V] −> [deg]
 sens.pot1.V2rad = 1/sens.pot1.rad2V; % conversion gain [V] −> [rad]
 
+% potentiometer 2 (Spectrol 357-0-0-103) - installed on hub
+sens.pot2.range.R = 10e3;            % ohmic value range
+sens.pot2.range.V = 5;               % voltage range
+sens.pot2.range.th_deg = 340;        % angle range [deg]
+sens.pot2.range.th = sens.pot2.range.th_deg*deg2rad; % angle range [rad]
+sens.pot2.deg2V = sens.pot2.range.V / sens.pot2.range.th_deg; %sensitivity [V/deg]
+sens.pot2.rad2V = sens.pot2.range.V / sens.pot2.range.th; %sensitivity [V/rad]
+sens.pot2.V2deg = 1/sens.pot2.deg2V; % conversion gain [V] -> [deg]
+sens.pot2.V2rad = 1/sens.pot2.rad2V; % conversion gain [V] -> [rad]
+sens.pot2.noise.var = 3.5e-7;         % out noise variance [V^2]
+
 %% Data acquisition board (daq) data
 % NI PCI−6221 DAC data
 daq.dac.bits = 16; % resolution (bits)
