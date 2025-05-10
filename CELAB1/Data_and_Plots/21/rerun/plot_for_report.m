@@ -10,10 +10,10 @@ clear p i j
 % ignored.
 % the y-label will be extracted form the first entry.
 
-p.simout = [out_theta_l, out_theta_l_windup];
-p.save_name = "antiWindup_comparison";
+p.simout = [position_pid position_ff];
+p.save_name = "feedforward_comparison_position";
 p.time_start = 0;
-p.time_stop  = 1;
+p.time_stop  = 3;
 % =========================================================================
 
 
@@ -75,5 +75,5 @@ ylim("padded")
 set(p.f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-saveas(p.f1, 'Clean Figures/'+p.save_name+'.png')
+saveas(p.f1, p.save_name+'.png')
 %save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")
