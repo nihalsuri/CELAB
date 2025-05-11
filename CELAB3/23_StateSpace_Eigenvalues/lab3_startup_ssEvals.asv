@@ -78,7 +78,7 @@ eigP.values = eigP.wn*exp(1i*[-pi+eigP.phi,-pi+eigP.phi/2]);
 eigP.values = [eigP.values, conj(eigP.values)];
 
 % State feedback matrix
-feedback.K = place(plant.A, plant.B, eigP.values);
+feedback.K = acker(plant.A, plant.B, eigP.values);
 
 
 % State feedforward gain and input feedforward gain
@@ -98,7 +98,7 @@ plant.Ce = [0,plant.C];
 eigP.robustValues = [eigP.values, -eigP.wn];
 
 % State feedback matrix frot the robust case
-feedback.robustKe = place(plant.Ae, plant.Be, eigP.robustValues);
+feedback.robustKe = acker(plant.Ae, plant.Be, eigP.robustValues);
 feedback.robustKi = feedback.robustKe(1);
 feedback.robustK  = feedback.robustKe(2:end);
 if sIn.intOn
