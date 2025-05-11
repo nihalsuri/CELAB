@@ -29,7 +29,7 @@ sIn.solver_time = 1e-4;
 sIn.position = [0, 50]; 
 
 % Time the reference positions are held [s]
-sIn.step_time = 2; 
+sIn.step_time = 3; 
 
 % Automatic calculation of total simulation time [s]
 sIn.simulation_time = sIn.step_time*length(sIn.position);
