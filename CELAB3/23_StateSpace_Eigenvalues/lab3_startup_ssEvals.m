@@ -8,19 +8,12 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
+sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+load_params_model
 
 
 %% User Inputs
-
-% Nominal(0) or Robust(1)
-sIn.intOn = 0;
-
-% Actual parameters (estimated from motor 1, lab 0)
-mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-mld.tausf = 0.013;      % [Nm]
-
-mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-mld.tausf = 0.0056;     % [Nm]
+sIn.intOn = 0;  % 0: nominal;  1: robust
 
 % Desired specifications
 % Overshoot
@@ -31,7 +24,6 @@ specs.settling_time = 0.5; % [s]
 
 
 %% Simulation Parameters 
-
 % Solver step time (0.1 ms)
 sIn.solver_time = 1e-4;
 
@@ -48,22 +40,9 @@ sIn.simulation_time = sIn.step_time*length(sIn.position);
 sIn.t0 = 0.2;
 sIn.t1 = 0.7;
 
-% Transfer function tau_m -> theta_hub
-% denominator missing an integrator => to extract omega
-sIn.num_taum_thh = [mld.Jb, mld.Bb, mld.k];
-
-sIn.den_taum_thh = gbox.N*[mld.Jeq*mld.Jb, ...
-    (mld.Jeq*mld.Bb+mld.Jb*mld.Beq), ... 
-    (mld.Beq*mld.Bb+mld.k*(mld.Jeq+mld.Jb/gbox.N^2)), ...
-    mld.k*(mld.Beq+mld.Bb/gbox.N^2)];
-
-% Transfer function tau_m ->theta_beam
-sIn.num_taum_thb = mld.k;
-sIn.den_taum_thb = [sIn.den_taum_thh, 0]; % include integrator directly
 
 %% State-Space Model
 % with the state x=[theta_h, theta_d, omega_h, omega_d]
-
 tmp.v1 = 1 /(gbox.N^2 * mld.Jeq);
 tmp.v2 = (mld.Beq + mot.Kt*mot.Ke/mot.Req) /mld.Jeq;
 tmp.v3 = mot.Kt*drv.dcgain /gbox.N /mld.Jeq / mot.Req;
