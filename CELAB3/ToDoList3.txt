@@ -24,8 +24,8 @@ Estimation
 
   [OPT] 5) Do the 2.3.3 using LQR methods 
   [OPT] 6) Validate 50deg step
-  [OPT] 7) Add robust tracking to 2.4.3 
-  [OPT] 8) Validate 50deg step
+  [OPT] 7)(BM) Add robust tracking to 2.4.3 
+  [OPT] 8)(BM) Validate 50deg step
   [OPT] 9) Change 2.4.3 with a  frequency dependent weight (q_22(w))
   [OPT]10) Validate 50deg step, with q_22[0.01, 1, 100]	
   [OPT]11) Add robust tracking to 2.4.9 

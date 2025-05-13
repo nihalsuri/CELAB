@@ -3,37 +3,43 @@
 % space controller with chosen eigenvalues.
 clear
 
+
+
 %% Load Predefined Parameters
 load_params_resonant_case
 
-%% User Inputs
-% Normal PID(0) or With Anti Windup(1)
-sIn.AntiWindup = 1;
-%PID-par Bode's method (0) or Selftuned (1) 
-sIn.SelftunedPID = 1; 
-% List of reference positions [s]
-sIn.position =50; 
+sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+load_params_model
 
-% Actual parameters (estimated from motor 1, lab 0)
-mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-mld.tausf = 0.013;      % [Nm]
+
+%% User Inputs
+sIn.intOn = 0;  % 0: nominal;  1: robust
 
 % Desired specifications
 % Overshoot
 specs.mp = 0.3; % [30%] 
 % Settling Time
-specs.settling_time = 0.85; % [s]
+specs.settling_time = 0.5; % [s]
+
+
 
 %% Simulation Parameters 
 % Solver step time (0.1 ms)
 sIn.solver_time = 1e-4;
+
+% List of reference positions [s]
+sIn.position = 50; 
+
 % Time the reference positions are held [s]
-sIn.step_time = 3; 
+sIn.step_time = 10; 
+
 % Automatic calculation of total simulation time [s]
 sIn.simulation_time = sIn.step_time*length(sIn.position);
+
 % Time for averaging the bias of displacement sensor
 sIn.t0 = 0.2;
-sIn.t1 = 0.3;
+sIn.t1 = 0.7;
+
 
 %% State-Space Model
 % with the state x=[theta_h, theta_d, omega_h, omega_d]
@@ -44,33 +50,39 @@ tmp.v3 = mot.Kt*drv.dcgain /gbox.N /mld.Jeq / mot.Req;
 plant.A = [zeros(2,2),    eye(2,2);
       0,  mld.k*tmp.v1, -tmp.v2, 0;
       0, -mld.k/mld.Jb-mld.k*tmp.v1, tmp.v2-mld.Bb/mld.Jb, -mld.Bb/mld.Jb];
+
 plant.B = [0;0; tmp.v3; -tmp.v3];
+
 plant.C = [1,0,0,0];
 plant.D = 0;
 
-sys = ss(plant.A, plant.B, plant.C, plant.D); 
+sys = ss(plant.A,plant.B,plant.C,plant.D);
 
-%% Computing PID gains 
-%Compute PID with Bode's method
-PID = computePIDGains(4, specs.settling_time, specs.mp, tf(sys), "PID");
-PID.Kw = 1/(specs.settling_time/5); % anit windup gain: 1/Tw, Tw=t_s5/5
 
-%Use tuned PID parameters 
-if ( sIn.SelftunedPID>0)
-PID.Kp = 7.5; 
-PID.Ki = 28; 
-PID.Kd = 2;
-end
 
-%Use tuned PID parameters 
-if ( sIn.SelftunedPID>0) && (sIn.AntiWindup>0)
-    PID.Kp = 2; 
-    PID.Ki = 3; 
-    PID.Kd = 5;
-end
+%% Feedback Controller Design
+% Desired dynamic parameters for approximation
+eigP.damping = log(1/specs.mp) / sqrt(pi^2 + log(1/specs.mp)^2);
+eigP.wn = 3/(eigP.damping*specs.settling_time);
 
-%%Run simulation and evaluate the results 
-set_param('lab3_PID', 'AlgebraicLoopMsg', 'none');
-simOut = sim('lab3_PID');
-evalPID
 
+%% LQR control 
+LQR.bar_theta_h = 0.3*sIn.position*pi/180;
+LQR.bar_theta_d = pi/36; 
+LQR.bar_u = 10; %[v]
+LQR.Q = diag([1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+LQR.R=(1/LQR.bar_u^2);
+
+
+feedback.K = lqr(sys, LQR.Q, LQR.R)
+
+% State feedforward gain and input feedforward gain
+feedback.gains = ([plant.A, plant.B; plant.C, plant.D])\[zeros(4,1);1];
+feedback.Nx = feedback.gains(1:end-1);
+feedback.Nu = feedback.gains(end);
+
+%% Simple Observer
+filt.wc = 2*pi*50;
+filt.del = 1/sqrt(2);
+filt.num = [filt.wc^2, 0];
+filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
