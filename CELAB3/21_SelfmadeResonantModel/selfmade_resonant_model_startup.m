@@ -9,6 +9,10 @@ load_params_resonant_case
 sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
 load_params_model
 
+% Time for averaging the bias of displacement sensor
+sIn.t0 = 0.2;
+sIn.t1 = 0.7;
+
 
 %% User Inputs
 
