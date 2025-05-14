@@ -13,7 +13,7 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 0;  % 1: nominal;  0: robust
+sIn.intOn = 0;  % 0: nominal;  1: robust
 
 % Desired specifications
 % Overshoot
@@ -31,7 +31,7 @@ sIn.solver_time = 1e-4;
 sIn.position = 50; 
 
 % Time the reference positions are held [s]
-sIn.step_time = 3; 
+sIn.step_time = 10; 
 
 % Automatic calculation of total simulation time [s]
 sIn.simulation_time = sIn.step_time*length(sIn.position);
@@ -87,8 +87,8 @@ plant.Ae = [0, plant.C; zeros(4,1), plant.A];
 plant.Be = [0;plant.B];
 plant.Ce = [0,plant.C];
 syse = ss(plant.Ae,plant.Be,plant.Ce,plant.D);
-LQR.Qe = diag([1 1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
-feedback.robustK = lqr(syse, LQR.Qe, LQR.R)
+LQR.Qe = diag([0.1 1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+feedback.robustK = lqr(syse, LQR.Qe, LQR.R);
 feedback.robustKi = feedback.robustK(1);
 feedback.robustK  = feedback.robustK(2:end);
 

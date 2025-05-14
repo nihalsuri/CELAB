@@ -3,8 +3,13 @@
 % space controller with chosen eigenvalues.
 clear
 
+
 %% Load Predefined Parameters
 load_params_resonant_case
+
+sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+load_params_model
+
 
 %% User Inputs
 % Normal PID(0) or With Anti Windup(1)
