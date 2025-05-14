@@ -56,6 +56,8 @@ plant.B = [0;0; tmp.v3; -tmp.v3];
 plant.C = [1,0,0,0];
 plant.D = 0;
 
+sys= ss(plant.A,plant.B,plant.C,plant.D);
+
 
 
 %% Feedback Controller Design
@@ -68,8 +70,28 @@ eigP.wn = 3/(eigP.damping*specs.settling_time);
 LQR.bar_theta_h = 0.3*sIn.position*pi/180;
 LQR.bar_theta_d = pi/36; 
 LQR.bar_u = 10; %[v]
-LQRQ = diag([bar_theta_h 0 bar_theta_d 0]);
-R=1;
+LQR.Q = diag([1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+LQR.R=(1/LQR.bar_u^2);
+
+
+feedback.K = lqr(sys, LQR.Q, LQR.R);
+
+% State feedforward gain and input feedforward gain
+feedback.gains = ([plant.A, plant.B; plant.C, plant.D])\[zeros(4,1);1];
+feedback.Nx = feedback.gains(1:end-1);
+feedback.Nu = feedback.gains(end);
+
+%% Robust Statespace
+% Extended statespace model
+plant.Ae = [0, plant.C; zeros(4,1), plant.A];
+plant.Be = [0;plant.B];
+plant.Ce = [0,plant.C];
+syse = ss(plant.Ae,plant.Be,plant.Ce,plant.D);
+LQR.Qe = diag([1 1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+feedback.robustK = lqr(syse, LQR.Qe, LQR.R);
+feedback.robustKi = feedback.robustK(1);
+feedback.robustK  = feedback.robustK(2:end);
+
 
 %% Simple Observer
 filt.wc = 2*pi*50;
