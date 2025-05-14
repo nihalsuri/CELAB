@@ -6,19 +6,12 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+sIn.motor_or_blackbox_params = 1;   % 0: motor;  1: blackbox
 load_params_model
 
 % Time for averaging the bias of displacement sensor
 sIn.t0 = 0.2;
 sIn.t1 = 0.7;
-
-
-%% User Inputs
-
-% Actual parameters (estimated from motor 1, lab 0)
-mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-mld.tausf = 0.013;      % [Nm]
 
 
 %% Simulation Parameters 

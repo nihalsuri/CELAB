@@ -19,7 +19,7 @@ Estimation
 2.4 Position state–space control using LQR methods
 	1)(NS) Design a SS controller for the hub using LQR 
 	2)(NS)Validate 50deg step
-        3)(BM) Design a SS controller for the hub using LQR new cost function 
+    3)(BM) Design a SS controller for the hub using LQR new cost function 
 	4)(BM) Validate 50deg step
 
   [OPT] 5) Do the 2.3.3 using LQR methods 

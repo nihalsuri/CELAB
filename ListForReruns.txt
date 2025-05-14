@@ -1,3 +1,0 @@
-Lab1
--> run acceleration profile with PID and ONLY ANTI-WINDUP (=> Feedforward Validation)
-
