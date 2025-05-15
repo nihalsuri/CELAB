@@ -1,4 +1,4 @@
-%% Updated Values
+% Choose to load parameters estimated from the motor or nominal
 
 if sIn.motor_or_nominal == 0
     % Parameters estimated from motor 1 
@@ -10,19 +10,3 @@ if sIn.motor_or_nominal == 0
     %mld.Bb = ;
     %mld.k = ;
 end
-
-
-
-%% Transfer function parameters
-% Transfer function tau_m -> theta_hub
-% denominator missing an integrator => to extract omega
-sIn.num_taum_thh = [mld.Jb, mld.Bb, mld.k];
-
-sIn.den_taum_thh = gbox.N*[mld.Jeq*mld.Jb, ...
-    (mld.Jeq*mld.Bb+mld.Jb*mld.Beq), ... 
-    (mld.Beq*mld.Bb+mld.k*(mld.Jeq+mld.Jb/gbox.N^2)), ...
-    mld.k*(mld.Beq+mld.Bb/gbox.N^2)];
-
-% Transfer function tau_m ->theta_beam
-sIn.num_taum_thb = mld.k;
-sIn.den_taum_thb = [sIn.den_taum_thh, 0]; % include integrator directly

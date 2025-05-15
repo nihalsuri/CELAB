@@ -8,9 +8,6 @@ clearvars -except simulation_resp
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_blackbox_params = 1;   % 0: motor;  1: blackbox
-load_params_model
-
 
 
 %% Simulation Parameters 
@@ -18,7 +15,7 @@ load_params_model
 sIn.solver_time = 1e-4;
 
 % Automatic calculation of total simulation time [s]
-sIn.simulation_time = 1.2;
+sIn.simulation_time = 100;
 
 % Time for averaging the bias of displacement sensor
 sIn.t0 = 0.2;
@@ -29,8 +26,11 @@ sIn.t1 = 0.7;
 times = [0, 0.126, 0.253, 0.379, 0.505, 0.632, 0.754, 0.882, 1.009];
 peaks = [10, 8.132, 6.602, 5.061, 4.029, 2.986, 2.140, 1.326, 0.6667];
 
-times = times(1:end-4);
-peaks = peaks(1:end-4);
+remove_last = 0;
+
+times = times(1:end-remove_last);
+peaks = peaks(1:end-remove_last);
+
 
 
 %% Least Squares Fitting
@@ -62,8 +62,8 @@ omega_n_hat = omega_hat/sqrt(1-gamma_ls^2);
 % Desired parameters
 Bb_hat = 2*mld.Jb*gamma_ls*omega_n_hat;
 k_hat  = mld.Jb*omega_n_hat^2;
-fprintf("Bb: %.5f  vs. Prev: %.5f\n", Bb_hat, mld.Bb)
-fprintf("k : %.5f  vs. Prev: %.5f\n", k_hat, mld.k)
+fprintf("Bb: %.5f\n", Bb_hat)
+fprintf("k : %.5f\n", k_hat)
 
 
 %% Plot of the resulting exponential

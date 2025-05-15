@@ -8,7 +8,7 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+sIn.motor_or_nominal = 0;   % 0: motor;  1: nominal
 load_params_model
 
 
@@ -19,7 +19,7 @@ sIn.intOn = 0;  % 0: nominal;  1: robust
 % Overshoot
 specs.mp = 0.3; % [30%] 
 % Settling Time
-specs.settling_time = 0.65; % [s]
+specs.settling_time = 0.85; % [s]
 
 
 

@@ -8,7 +8,7 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_blackbox_params = 3;   % 0: motor;  1: blackbox
+sIn.motor_or_nominal = 3;   % 0: motor;  1: nominal
 load_params_model
 
 
