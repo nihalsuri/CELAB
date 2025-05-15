@@ -13,7 +13,7 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 0;  % 1: nominal;  0: robust
+sIn.intOn = 1;  % 1: nominal;  0: robust
 
 % Desired specifications
 % Overshoot
@@ -87,8 +87,8 @@ plant.Ae = [0, plant.C; zeros(4,1), plant.A];
 plant.Be = [0;plant.B];
 plant.Ce = [0,plant.C];
 syse = ss(plant.Ae,plant.Be,plant.Ce,plant.D);
-LQR.Qe = diag([1 1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
-feedback.robustK = lqr(syse, LQR.Qe, LQR.R)
+LQR.Qe = diag([10e-5 1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+feedback.robustK = lqr(syse, LQR.Qe, LQR.R);
 feedback.robustKi = feedback.robustK(1);
 feedback.robustK  = feedback.robustK(2:end);
 
@@ -98,3 +98,10 @@ filt.wc = 2*pi*50;
 filt.del = 1/sqrt(2);
 filt.num = [filt.wc^2, 0];
 filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
+
+
+%%Run simulation and evaluate the results 
+set_param('lab3_LQRnew', 'AlgebraicLoopMsg', 'none');
+simOut = sim('lab3_LQRnew');
+evalLQR
+

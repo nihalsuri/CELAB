@@ -1,6 +1,6 @@
 %% Updated Values
 
-if sIn.motor_or_nominal == 0
+if sIn.motor_or_blackbox_params == 0
     % Parameters estimated from motor 1 
     % Motor Friction (lab0)
     mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
@@ -9,6 +9,16 @@ if sIn.motor_or_nominal == 0
     % Resonant Load (lab3)
     %mld.Bb = ;
     %mld.k = ;
+    
+else
+    % Blackbox
+    % Motor Friction (lab0)
+    mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
+    mld.tausf = 0.0056;     % [Nm]
+    
+    % Resonant Load (lab3)
+    mld.Bb = 0.00508;
+    mld.k = 87153;
 end
 
 

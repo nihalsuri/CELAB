@@ -8,12 +8,12 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+sIn.motor_or_blackbox_params = 3;   % 0: motor;  1: blackbox
 load_params_model
 
 
 %% User Inputs
-sIn.intOn = 0;  % 0: nominal;  1: robust
+sIn.intOn = 0;  % 1: nominal;  0: robust
 
 % Desired specifications
 % Overshoot
@@ -31,7 +31,7 @@ sIn.solver_time = 1e-4;
 sIn.position = 50; 
 
 % Time the reference positions are held [s]
-sIn.step_time = 10; 
+sIn.step_time = 3; 
 
 % Automatic calculation of total simulation time [s]
 sIn.simulation_time = sIn.step_time*length(sIn.position);
@@ -60,17 +60,12 @@ sys= ss(plant.A,plant.B,plant.C,plant.D);
 
 
 
-%% Feedback Controller Design
-% Desired dynamic parameters for approximation
-eigP.damping = log(1/specs.mp) / sqrt(pi^2 + log(1/specs.mp)^2);
-eigP.wn = 3/(eigP.damping*specs.settling_time);
-
-
 %% LQR control 
 LQR.bar_theta_h = 0.3*sIn.position*pi/180;
 LQR.bar_theta_d = pi/36; 
 LQR.bar_u = 10; %[v]
-LQR.Q = diag([1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+LQR.Q = diag([1/LQR.bar_theta_h^2 0 0 0]);
+LQR.Q = 1*LQR.Q; 
 LQR.R=(1/LQR.bar_u^2);
 
 
@@ -87,10 +82,12 @@ plant.Ae = [0, plant.C; zeros(4,1), plant.A];
 plant.Be = [0;plant.B];
 plant.Ce = [0,plant.C];
 syse = ss(plant.Ae,plant.Be,plant.Ce,plant.D);
-LQR.Qe = diag([0.1 1/LQR.bar_theta_h^2 1/LQR.bar_theta_d^2 0 0]);
+LQR.Qe = diag([1 1/LQR.bar_theta_h^2 0 0 0]);
 feedback.robustK = lqr(syse, LQR.Qe, LQR.R);
 feedback.robustKi = feedback.robustK(1);
 feedback.robustK  = feedback.robustK(2:end);
+
+PID.Kw = 5; 
 
 
 %% Simple Observer
@@ -98,3 +95,10 @@ filt.wc = 2*pi*50;
 filt.del = 1/sqrt(2);
 filt.num = [filt.wc^2, 0];
 filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
+
+
+%%Run simulation and evaluate the results 
+set_param('BMlab3_GeneralLQR', 'AlgebraicLoopMsg', 'none');
+simOut = sim('lab3_LQRnew');
+evalLQR
+

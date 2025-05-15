@@ -13,7 +13,7 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 1;  % 0: nominal;  1: robust
+sIn.intOn = 0;  % 0: nominal;  1: robust
 
 % Desired specifications
 % Overshoot
@@ -28,7 +28,7 @@ specs.settling_time = 0.65; % [s]
 sIn.solver_time = 1e-4;
 
 % List of reference positions [s]
-sIn.position = 90; 
+sIn.position = 50; 
 
 % Time the reference positions are held [s]
 sIn.step_time = 10; 

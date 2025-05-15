@@ -7,15 +7,15 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_blackbox_params = 0;   % 0: motor;  1: blackbox
+sIn.motor_or_nominal = 0;   % 0: motor;  1: blackbox
 load_params_model
 
 
 %% User Inputs
-% Normal PID(0) or With Anti Windup(1)
-sIn.AntiWindup = 1;
+% Normal PID(1) or With Anti Windup(0)
+sIn.AntiWindup = 0;
 %PID-par Bode's method (0) or Selftuned (1) 
-sIn.SelftunedPID = 1; 
+sIn.SelftunedPID = 0; 
 % List of reference positions [s]
 sIn.position =50; 
 
@@ -68,7 +68,7 @@ PID.Kd = 2;
 end
 
 %Use tuned PID parameters 
-if ( sIn.SelftunedPID>0) && (sIn.AntiWindup>0)
+if ( sIn.SelftunedPID>0) && (sIn.AntiWindup==0)
     PID.Kp = 2; 
     PID.Ki = 3; 
     PID.Kd = 5;
