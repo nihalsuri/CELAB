@@ -18,7 +18,7 @@ Estimation
 
 2.4 Position state–space control using LQR methods
 	1)(NS) Design a SS controller for the hub using LQR 
-	2)(NS)Validate 50deg step
+	2)(NS) Validate 50deg step
     3)(BM) Design a SS controller for the hub using LQR new cost function 
 	4)(BM) Validate 50deg step
 
@@ -26,10 +26,10 @@ Estimation
   [OPT] 6) Validate 50deg step
   [OPT] 7)(BM) Add robust tracking to 2.4.3 
   [OPT] 8)(BM) Validate 50deg step
-  [OPT] 9) Change 2.4.3 with a  frequency dependent weight (q_22(w))
-  [OPT]10) Validate 50deg step, with q_22[0.01, 1, 100]	
-  [OPT]11) Add robust tracking to 2.4.9 
-  [OPT]12) Validate 50deg step, with q_22[0.01, 1, 100]	
+  [OPT] 9)(MP) Change 2.4.3 with a  frequency dependent weight (q_22(w))
+  [OPT]10)(MP) Validate 50deg step, with q_22[0.01, 1, 100]	
+  [OPT]11)(MP) Add robust tracking to 2.4.9 
+  [OPT]12)(MP) Validate 50deg step, with q_22[0.01, 1, 100]	
 
 
 In Lab 
