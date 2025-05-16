@@ -6,6 +6,6 @@ mld.tausf = 0.013;      % [Nm]
 
 if sIn.motor_or_nominal == 0   
     % Resonant Load (lab3)
-    %mld.Bb = ;
-    %mld.k = ;
+    mld.Bb = 0.00579 ;
+    mld.k = 0.73030;
 end

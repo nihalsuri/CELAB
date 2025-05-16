@@ -96,7 +96,9 @@ grid on;
 title('Symmetric Root Locus with Design Specifications (Nominal)');
 
 %value obtained from visually examining the rlocus plot 
-feedback.r = 1/3.53e+03;
+%feedback.r = 1/3.53e+03;
+% for challenge
+feedback.r = 1/28e+03; 
 feedback.K = lqry(plant.sysG, 1, feedback.r);
 
 % State feedforward gain and input feedforward gain
@@ -147,5 +149,5 @@ filt.num = [filt.wc^2, 0];
 filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
 
 % %% Evaluation script to check if specs match
-sim('lab3_ss_srl')
+%sim('lab3_ss_srl')
 % evalLQR

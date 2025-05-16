@@ -15,9 +15,9 @@ load_params_model
 % Normal PID(1) or With Anti Windup(0)
 sIn.AntiWindup = 0;
 %PID-par Bode's method (0) or Selftuned (1) 
-sIn.SelftunedPID = 0; 
+sIn.SelftunedPID = 1; 
 % List of reference positions [s]
-sIn.position =50; 
+sIn.position =120; 
 
 % Actual parameters (estimated from motor 1, lab 0)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
@@ -74,8 +74,4 @@ if ( sIn.SelftunedPID>0) && (sIn.AntiWindup==0)
     PID.Kd = 5;
 end
 
-%%Run simulation and evaluate the results 
-set_param('lab3_PID', 'AlgebraicLoopMsg', 'none');
-simOut = sim('lab3_PID');
-evalPID
 

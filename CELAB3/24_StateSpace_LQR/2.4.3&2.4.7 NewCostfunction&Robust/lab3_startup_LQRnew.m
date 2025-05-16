@@ -13,7 +13,7 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 1;  % 1: nominal;  0: robust
+sIn.intOn = 0;  % 1: nominal;  0: robust
 
 % Desired specifications
 % Overshoot
@@ -99,9 +99,4 @@ filt.del = 1/sqrt(2);
 filt.num = [filt.wc^2, 0];
 filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
 
-
-%%Run simulation and evaluate the results 
-set_param('lab3_LQRnew', 'AlgebraicLoopMsg', 'none');
-simOut = sim('lab3_LQRnew');
-evalLQR
 

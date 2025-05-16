@@ -8,14 +8,14 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_nominal = 1;   % 0: motor;  1: nominal
+sIn.motor_or_nominal = 0;   % 0: motor;  1: nominal
 load_params_model
 
 
 %% User Inputs
 sIn.intOn = 1;     % 0: nominal,  1: robust
-LQR.q22 = 0.1;     % weight for resonant frequency
-LQR.qi = 0.01;     % weight for integrator
+LQR.q22 = 100;     % weight for resonant frequency
+LQR.qi = 10;     % weight for integrator
 
 % Desired specifications
 % Overshoot
@@ -146,6 +146,6 @@ filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
 
 
 %% Run Simulation
-set_param('lab3_model_freqLQR', 'AlgebraicLoopMsg', 'none');
-simOut = sim('lab3_model_freqLQR');
-evalLQR
+%set_param('lab3_model_freqLQR', 'AlgebraicLoopMsg', 'none');
+%simOut = sim('lab3_model_freqLQR');
+%evalLQR

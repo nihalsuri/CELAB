@@ -23,10 +23,19 @@ sIn.t1 = 0.7;
 
 
 %% Measurements
-times = [0, 0.126, 0.253, 0.379, 0.505, 0.632, 0.754, 0.882, 1.009];
-peaks = [10, 8.132, 6.602, 5.061, 4.029, 2.986, 2.140, 1.326, 0.6667];
 
-remove_last = 0;
+% 1st measuer 10 deg
+%Bb: 0.00775
+%k : 0.72867
+times = [10.423, 10.632, 10.758, 10.885, 11.016, 11.144];
+peaks = [10.01, 5.254, 3.868, 3.353, 2.057, 1.229];
+
+%Bb: 0.00579
+%k : 0.73030
+times = [18.072, 18.283, 18.413, 18.541, 18.671, 18.801, 18.929, 19.061];
+peaks = [13.38, 6.361, 5.791, 4.829, 3.969, 2.918, 1.778, 0.805];
+
+remove_last = 1;
 
 times = times(1:end-remove_last);
 peaks = peaks(1:end-remove_last);
@@ -76,8 +85,10 @@ estimated_resp = A*exp(sigma*t).*cos(omega_hat*t+phi);
 
 
 if exist('simulation_resp','var') == 1
+    idx = find(simulation_resp.time >= times(1));
+    simulation_resp.time = simulation_resp.time-times(1);
     f1 = figure(1);
-    plot(simulation_resp.time, simulation_resp.signals.values)
+    plot(simulation_resp.time(idx), simulation_resp.signals.values(idx))
     hold on
     plot(t, abs(estimated_resp))
     grid on

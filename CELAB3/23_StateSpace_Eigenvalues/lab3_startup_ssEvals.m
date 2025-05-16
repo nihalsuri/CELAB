@@ -13,13 +13,13 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 0;  % 0: nominal;  1: robust
+sIn.intOn = 1;  % 0: nominal;  1: robust
 
 % Desired specifications
 % Overshoot
 specs.mp = 0.3; % [30%] 
 % Settling Time
-specs.settling_time = 0.85; % [s]
+specs.settling_time = 0.5; % [s]
 
 
 
