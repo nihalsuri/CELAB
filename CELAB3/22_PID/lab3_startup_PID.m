@@ -17,7 +17,7 @@ sIn.AntiWindup = 0;
 %PID-par Bode's method (0) or Selftuned (1) 
 sIn.SelftunedPID = 1; 
 % List of reference positions [s]
-sIn.position =120; 
+sIn.position =50; 
 
 % Actual parameters (estimated from motor 1, lab 0)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
@@ -69,9 +69,9 @@ end
 
 %Use tuned PID parameters 
 if ( sIn.SelftunedPID>0) && (sIn.AntiWindup==0)
-    PID.Kp = 2; 
-    PID.Ki = 3; 
-    PID.Kd = 5;
+    PID.Kp = 30; 
+    PID.Ki = 100; 
+    PID.Kd = 4;
 end
 
 

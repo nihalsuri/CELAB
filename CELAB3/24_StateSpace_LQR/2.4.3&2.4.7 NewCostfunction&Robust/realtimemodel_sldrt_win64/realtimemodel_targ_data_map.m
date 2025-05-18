@@ -170,7 +170,7 @@
                     section.data(6).logicalSrcIdx = 25;
                     section.data(6).dtTransOffset = 5;
 
-                    ;% realtimemodel_P.uV_Y0_e
+                    ;% realtimemodel_P.uV_Y0_p
                     section.data(7).logicalSrcIdx = 26;
                     section.data(7).dtTransOffset = 6;
 
@@ -178,11 +178,11 @@
                     section.data(8).logicalSrcIdx = 27;
                     section.data(8).dtTransOffset = 7;
 
-                    ;% realtimemodel_P.Saturation_UpperSat_f
+                    ;% realtimemodel_P.Saturation_UpperSat_g
                     section.data(9).logicalSrcIdx = 28;
                     section.data(9).dtTransOffset = 8;
 
-                    ;% realtimemodel_P.Saturation_LowerSat_e
+                    ;% realtimemodel_P.Saturation_LowerSat_n
                     section.data(10).logicalSrcIdx = 29;
                     section.data(10).dtTransOffset = 9;
 
@@ -314,7 +314,7 @@
                     section.data(10).logicalSrcIdx = 9;
                     section.data(10).dtTransOffset = 9;
 
-                    ;% realtimemodel_B.Saturation_p
+                    ;% realtimemodel_B.Saturation_e
                     section.data(11).logicalSrcIdx = 10;
                     section.data(11).dtTransOffset = 10;
 
@@ -465,8 +465,8 @@
     ;%
 
 
-    targMap.checksum0 = 2197784176;
-    targMap.checksum1 = 508250240;
-    targMap.checksum2 = 2909723367;
-    targMap.checksum3 = 2396511699;
+    targMap.checksum0 = 3138874594;
+    targMap.checksum1 = 2353818714;
+    targMap.checksum2 = 2333014380;
+    targMap.checksum3 = 1290862661;
 

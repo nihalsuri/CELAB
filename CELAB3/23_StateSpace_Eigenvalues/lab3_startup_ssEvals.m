@@ -14,7 +14,7 @@ load_params_model
 
 %% User Inputs
 sIn.intOn = 1;  % 0: nominal;  1: robust
-
+q11 = 0.01;
 % Desired specifications
 % Overshoot
 specs.mp = 0.3; % [30%] 

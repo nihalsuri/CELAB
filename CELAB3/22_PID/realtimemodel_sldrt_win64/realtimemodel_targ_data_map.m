@@ -174,23 +174,23 @@
                     section.data(8).logicalSrcIdx = 26;
                     section.data(8).dtTransOffset = 7;
 
-                    ;% realtimemodel_P.Saturation_UpperSat_i
+                    ;% realtimemodel_P.Saturation_UpperSat_a
                     section.data(9).logicalSrcIdx = 27;
                     section.data(9).dtTransOffset = 8;
 
-                    ;% realtimemodel_P.Saturation_LowerSat_n
+                    ;% realtimemodel_P.Saturation_LowerSat_j
                     section.data(10).logicalSrcIdx = 28;
                     section.data(10).dtTransOffset = 9;
 
-                    ;% realtimemodel_P.Gain1_Gain_n
+                    ;% realtimemodel_P.Gain1_Gain_j
                     section.data(11).logicalSrcIdx = 29;
                     section.data(11).dtTransOffset = 10;
 
-                    ;% realtimemodel_P.Integrator_IC_c
+                    ;% realtimemodel_P.Integrator_IC_e
                     section.data(12).logicalSrcIdx = 30;
                     section.data(12).dtTransOffset = 11;
 
-                    ;% realtimemodel_P.TransferFcn_A_h
+                    ;% realtimemodel_P.TransferFcn_A_i
                     section.data(13).logicalSrcIdx = 31;
                     section.data(13).dtTransOffset = 12;
 
@@ -198,7 +198,7 @@
                     section.data(14).logicalSrcIdx = 32;
                     section.data(14).dtTransOffset = 13;
 
-                    ;% realtimemodel_P.TransferFcn_D_k
+                    ;% realtimemodel_P.TransferFcn_D_j
                     section.data(15).logicalSrcIdx = 33;
                     section.data(15).dtTransOffset = 14;
 
@@ -270,7 +270,7 @@
                     section.data(4).logicalSrcIdx = 3;
                     section.data(4).dtTransOffset = 3;
 
-                    ;% realtimemodel_B.Gain_g
+                    ;% realtimemodel_B.Gain_d
                     section.data(5).logicalSrcIdx = 4;
                     section.data(5).dtTransOffset = 4;
 
@@ -334,7 +334,7 @@
                     section.data(2).logicalSrcIdx = 1;
                     section.data(2).dtTransOffset = 1;
 
-                    ;% realtimemodel_DW.vartheta_hubdeg_PWORK.LoggedData
+                    ;% realtimemodel_DW.varthetadeg_PWORK.LoggedData
                     section.data(3).logicalSrcIdx = 2;
                     section.data(3).dtTransOffset = 2;
 
@@ -372,8 +372,8 @@
     ;%
 
 
-    targMap.checksum0 = 521994489;
-    targMap.checksum1 = 3499676209;
-    targMap.checksum2 = 737465543;
-    targMap.checksum3 = 844648364;
+    targMap.checksum0 = 2841175924;
+    targMap.checksum1 = 2583241407;
+    targMap.checksum2 = 3970287479;
+    targMap.checksum3 = 1313603880;
 

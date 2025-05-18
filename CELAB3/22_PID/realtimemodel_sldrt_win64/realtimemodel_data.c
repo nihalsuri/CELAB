@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.3
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 11:50:36 2025
+ * C source code generated on : Fri May 16 13:02:42 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,7 +23,7 @@
 /* Block parameters (default storage) */
 P_realtimemodel_T realtimemodel_P = {
   /* Variable: sens
-   * Referenced by: '<Root>/Pulses2Deg'
+   * Referenced by: '<Root>/Pulses2Deg1'
    */
   {
     {
@@ -78,7 +78,7 @@ P_realtimemodel_T realtimemodel_P = {
     0.0,
     0.0,
     1.0,
-    120.0,
+    50.0,
     0.0001,
     3.0,
     3.0,
@@ -97,9 +97,9 @@ P_realtimemodel_T realtimemodel_P = {
    *   '<S4>/Gain2'
    */
   {
-    2.0,
-    3.0,
-    5.0,
+    30.0,
+    100.0,
+    4.0,
     0.0506964268213032,
     5.882352941176471
   },
@@ -244,7 +244,7 @@ P_realtimemodel_T realtimemodel_P = {
    */
   0.0,
 
-  /* Computed Parameter: TransferFcn_A_h
+  /* Computed Parameter: TransferFcn_A_i
    * Referenced by: '<S4>/Transfer Fcn'
    */
   -19.7252560525585,
@@ -254,7 +254,7 @@ P_realtimemodel_T realtimemodel_P = {
    */
   -389.0857263389957,
 
-  /* Computed Parameter: TransferFcn_D_k
+  /* Computed Parameter: TransferFcn_D_j
    * Referenced by: '<S4>/Transfer Fcn'
    */
   19.7252560525585,

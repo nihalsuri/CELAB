@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.7
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 12:31:47 2025
+ * C source code generated on : Fri May 16 13:13:52 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -892,7 +892,7 @@ typedef struct {
   real_T HiddenBuf_InsertedFor_FeedbackControllerRobust_at_inport_2;/* '<S2>/Step2' */
   real_T Integralgain;                 /* '<S9>/Integral gain' */
   real_T Saturation;                   /* '<S9>/Saturation' */
-  real_T Saturation_p;                 /* '<S8>/Saturation' */
+  real_T Saturation_e;                 /* '<S8>/Saturation' */
   real_T DiscreteTimeIntegrator;       /* '<S6>/Discrete-Time Integrator' */
 } B_realtimemodel_T;
 
@@ -903,7 +903,7 @@ typedef struct {
   void *AnalogInput_PWORK;             /* '<S4>/Analog Input' */
   struct {
     void *LoggedData[3];
-  } varthetadeg_PWORK;                 /* '<Root>/\vartheta [deg]' */
+  } varthetadeg_PWORK;                 /* '<Root>/[\vartheta [deg]]' */
 
   void *AnalogOutput_PWORK;            /* '<S4>/Analog Output' */
   int8_T FeedbackControllerRobust_SubsysRanBC;/* '<S2>/Feedback Controller Robust' */
@@ -1066,16 +1066,16 @@ struct P_realtimemodel_T_ {
   real_T Saturation_LowerSat;          /* Expression: -10
                                         * Referenced by: '<S8>/Saturation'
                                         */
-  real_T uV_Y0_e;                      /* Computed Parameter: uV_Y0_e
+  real_T uV_Y0_p;                      /* Computed Parameter: uV_Y0_p
                                         * Referenced by: '<S9>/u [V]'
                                         */
   real_T Integrator_IC;                /* Expression: 0
                                         * Referenced by: '<S9>/Integrator'
                                         */
-  real_T Saturation_UpperSat_f;        /* Expression: 10
+  real_T Saturation_UpperSat_g;        /* Expression: 10
                                         * Referenced by: '<S9>/Saturation'
                                         */
-  real_T Saturation_LowerSat_e;        /* Expression: -10
+  real_T Saturation_LowerSat_n;        /* Expression: -10
                                         * Referenced by: '<S9>/Saturation'
                                         */
   real_T Step1_Y0;                     /* Expression: 0

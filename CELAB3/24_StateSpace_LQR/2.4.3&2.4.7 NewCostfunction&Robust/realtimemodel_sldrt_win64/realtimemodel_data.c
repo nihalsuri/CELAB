@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.7
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 12:31:47 2025
+ * C source code generated on : Fri May 16 13:13:52 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -90,9 +90,9 @@ P_realtimemodel_T realtimemodel_P = {
     { 1.0, -0.0, -0.0, 0.0 },
     0.0,
 
-    { 38.208392464894395, -69.576141924439256, 3.2461721952485414,
-      0.63130546709697943 },
-    0.10000000000010843
+    { 49.213777549968484, -65.426963344890225, 3.8128706885495416,
+      1.1101853438986331 },
+    99.999999999999787
   },
 
   /* Variable: sIn
@@ -234,7 +234,7 @@ P_realtimemodel_T realtimemodel_P = {
    */
   -10.0,
 
-  /* Computed Parameter: uV_Y0_e
+  /* Computed Parameter: uV_Y0_p
    * Referenced by: '<S9>/u [V]'
    */
   0.0,

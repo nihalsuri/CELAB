@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.3
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 11:50:36 2025
+ * C source code generated on : Fri May 16 13:02:42 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

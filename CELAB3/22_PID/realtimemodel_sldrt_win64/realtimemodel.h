@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.3
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 11:50:36 2025
+ * C source code generated on : Fri May 16 13:02:42 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -882,11 +882,11 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T th_hubdeg;                    /* '<Root>/Pulses2Deg' */
+  real_T th_hubdeg;                    /* '<Root>/Pulses2Deg1' */
   real_T Step1;                        /* '<Root>/Step1' */
   real_T Gain;                         /* '<S3>/Gain' */
   real_T Sum2;                         /* '<S3>/Sum2' */
-  real_T Gain_g;                       /* '<S4>/Gain' */
+  real_T Gain_d;                       /* '<S4>/Gain' */
   real_T Gain2;                        /* '<S4>/Gain2' */
 } B_realtimemodel_T;
 
@@ -896,7 +896,7 @@ typedef struct {
   void *AnalogInput_PWORK;             /* '<S2>/Analog Input' */
   struct {
     void *LoggedData[2];
-  } vartheta_hubdeg_PWORK;             /* '<Root>/\vartheta_{hub} [deg]' */
+  } varthetadeg_PWORK;                 /* '<Root>/\vartheta [deg]' */
 
   void *AnalogOutput_PWORK;            /* '<S2>/Analog Output' */
 } DW_realtimemodel_T;
@@ -905,24 +905,24 @@ typedef struct {
 typedef struct {
   real_T Integrator_CSTATE;            /* '<S3>/Integrator' */
   real_T TransferFcn_CSTATE;           /* '<S3>/Transfer Fcn' */
-  real_T Integrator_CSTATE_h;          /* '<S4>/Integrator' */
-  real_T TransferFcn_CSTATE_f;         /* '<S4>/Transfer Fcn' */
+  real_T Integrator_CSTATE_p;          /* '<S4>/Integrator' */
+  real_T TransferFcn_CSTATE_o;         /* '<S4>/Transfer Fcn' */
 } X_realtimemodel_T;
 
 /* State derivatives (default storage) */
 typedef struct {
   real_T Integrator_CSTATE;            /* '<S3>/Integrator' */
   real_T TransferFcn_CSTATE;           /* '<S3>/Transfer Fcn' */
-  real_T Integrator_CSTATE_h;          /* '<S4>/Integrator' */
-  real_T TransferFcn_CSTATE_f;         /* '<S4>/Transfer Fcn' */
+  real_T Integrator_CSTATE_p;          /* '<S4>/Integrator' */
+  real_T TransferFcn_CSTATE_o;         /* '<S4>/Transfer Fcn' */
 } XDot_realtimemodel_T;
 
 /* State disabled  */
 typedef struct {
   boolean_T Integrator_CSTATE;         /* '<S3>/Integrator' */
   boolean_T TransferFcn_CSTATE;        /* '<S3>/Transfer Fcn' */
-  boolean_T Integrator_CSTATE_h;       /* '<S4>/Integrator' */
-  boolean_T TransferFcn_CSTATE_f;      /* '<S4>/Transfer Fcn' */
+  boolean_T Integrator_CSTATE_p;       /* '<S4>/Integrator' */
+  boolean_T TransferFcn_CSTATE_o;      /* '<S4>/Transfer Fcn' */
 } XDis_realtimemodel_T;
 
 #ifndef ODE5_INTG
@@ -953,7 +953,7 @@ typedef struct {
 /* Parameters (default storage) */
 struct P_realtimemodel_T_ {
   struct_4jr0aBoeUcVnCi5PWU4anE sens;  /* Variable: sens
-                                        * Referenced by: '<Root>/Pulses2Deg'
+                                        * Referenced by: '<Root>/Pulses2Deg1'
                                         */
   struct_920DhQDEUcX8rEEEFuNjn sIn;    /* Variable: sIn
                                         * Referenced by:
@@ -1048,25 +1048,25 @@ struct P_realtimemodel_T_ {
   real_T TransferFcn_D;                /* Computed Parameter: TransferFcn_D
                                         * Referenced by: '<S3>/Transfer Fcn'
                                         */
-  real_T Saturation_UpperSat_i;        /* Expression: 12
+  real_T Saturation_UpperSat_a;        /* Expression: 12
                                         * Referenced by: '<S3>/Saturation'
                                         */
-  real_T Saturation_LowerSat_n;        /* Expression: -12
+  real_T Saturation_LowerSat_j;        /* Expression: -12
                                         * Referenced by: '<S3>/Saturation'
                                         */
-  real_T Gain1_Gain_n;                 /* Expression: pi/180
+  real_T Gain1_Gain_j;                 /* Expression: pi/180
                                         * Referenced by: '<S6>/Gain1'
                                         */
-  real_T Integrator_IC_c;              /* Expression: 0
+  real_T Integrator_IC_e;              /* Expression: 0
                                         * Referenced by: '<S4>/Integrator'
                                         */
-  real_T TransferFcn_A_h;              /* Computed Parameter: TransferFcn_A_h
+  real_T TransferFcn_A_i;              /* Computed Parameter: TransferFcn_A_i
                                         * Referenced by: '<S4>/Transfer Fcn'
                                         */
   real_T TransferFcn_C_k;              /* Computed Parameter: TransferFcn_C_k
                                         * Referenced by: '<S4>/Transfer Fcn'
                                         */
-  real_T TransferFcn_D_k;              /* Computed Parameter: TransferFcn_D_k
+  real_T TransferFcn_D_j;              /* Computed Parameter: TransferFcn_D_j
                                         * Referenced by: '<S4>/Transfer Fcn'
                                         */
   real_T Switch_Threshold;             /* Expression: 0

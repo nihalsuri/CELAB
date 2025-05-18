@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.3
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 11:50:36 2025
+ * C source code generated on : Fri May 16 13:02:42 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -204,8 +204,8 @@ void realtimemodel_output(void)
   /* local block i/o variables */
   real_T rtb_AnalogInput[2];
   real_T rtb_Gain2;
-  real_T rtb_Sum_a;
   real_T rtb_Sum_c;
+  real_T rtb_Sum_i;
   real_T rtb_Switch;
   boolean_T tmp;
   if (rtmIsMajorTimeStep(realtimemodel_M)) {
@@ -235,7 +235,7 @@ void realtimemodel_output(void)
     parm.index = (INDEXPULSE) 0;
     parm.infilter = realtimemodel_P.EncoderInput_InputFilter;
     RTBIO_DriverIO(0, ENCODERINPUT, IOREAD, 1,
-                   &realtimemodel_P.EncoderInput_Channels, &rtb_Sum_a, &parm);
+                   &realtimemodel_P.EncoderInput_Channels, &rtb_Sum_c, &parm);
   }
 
   tmp = rtmIsMajorTimeStep(realtimemodel_M);
@@ -252,8 +252,8 @@ void realtimemodel_output(void)
     }
   }
 
-  /* Gain: '<Root>/Pulses2Deg' */
-  realtimemodel_B.th_hubdeg = realtimemodel_P.sens.enc.pulse2deg * rtb_Sum_a;
+  /* Gain: '<Root>/Pulses2Deg1' */
+  realtimemodel_B.th_hubdeg = realtimemodel_P.sens.enc.pulse2deg * rtb_Sum_c;
 
   /* Step: '<Root>/Step1' */
   if (realtimemodel_M->Timing.t[0] < realtimemodel_P.sIn.t1) {
@@ -269,16 +269,16 @@ void realtimemodel_output(void)
   }
 
   /* Sum: '<Root>/Sum' */
-  rtb_Sum_a = realtimemodel_B.Step1 - realtimemodel_B.th_hubdeg;
+  rtb_Sum_c = realtimemodel_B.Step1 - realtimemodel_B.th_hubdeg;
 
   /* Gain: '<S5>/Gain1' */
-  rtb_Sum_c = realtimemodel_P.Gain1_Gain * rtb_Sum_a;
+  rtb_Sum_i = realtimemodel_P.Gain1_Gain * rtb_Sum_c;
 
   /* Gain: '<S3>/Gain' */
-  realtimemodel_B.Gain = realtimemodel_P.PID.Kd * rtb_Sum_c;
+  realtimemodel_B.Gain = realtimemodel_P.PID.Kd * rtb_Sum_i;
 
   /* Gain: '<S3>/Gain2' */
-  rtb_Gain2 = realtimemodel_P.PID.Ki * rtb_Sum_c;
+  rtb_Gain2 = realtimemodel_P.PID.Ki * rtb_Sum_i;
 
   /* TransferFcn: '<S3>/Transfer Fcn' */
   rtb_Switch = realtimemodel_P.TransferFcn_C *
@@ -289,17 +289,17 @@ void realtimemodel_output(void)
    *  Integrator: '<S3>/Integrator'
    *  TransferFcn: '<S3>/Transfer Fcn'
    */
-  rtb_Sum_c = (realtimemodel_P.PID.Kp * rtb_Sum_c +
+  rtb_Sum_i = (realtimemodel_P.PID.Kp * rtb_Sum_i +
                realtimemodel_X.Integrator_CSTATE) +
     (realtimemodel_P.TransferFcn_D * realtimemodel_B.Gain + rtb_Switch);
 
   /* Saturate: '<S3>/Saturation' */
-  if (rtb_Sum_c > realtimemodel_P.Saturation_UpperSat_i) {
-    rtb_Switch = realtimemodel_P.Saturation_UpperSat_i;
-  } else if (rtb_Sum_c < realtimemodel_P.Saturation_LowerSat_n) {
-    rtb_Switch = realtimemodel_P.Saturation_LowerSat_n;
+  if (rtb_Sum_i > realtimemodel_P.Saturation_UpperSat_a) {
+    rtb_Switch = realtimemodel_P.Saturation_UpperSat_a;
+  } else if (rtb_Sum_i < realtimemodel_P.Saturation_LowerSat_j) {
+    rtb_Switch = realtimemodel_P.Saturation_LowerSat_j;
   } else {
-    rtb_Switch = rtb_Sum_c;
+    rtb_Switch = rtb_Sum_i;
   }
 
   /* End of Saturate: '<S3>/Saturation' */
@@ -308,17 +308,17 @@ void realtimemodel_output(void)
    *  Gain: '<S3>/Gain3'
    *  Sum: '<S3>/Sum1'
    */
-  realtimemodel_B.Sum2 = rtb_Gain2 - (rtb_Sum_c - rtb_Switch) *
+  realtimemodel_B.Sum2 = rtb_Gain2 - (rtb_Sum_i - rtb_Switch) *
     realtimemodel_P.PID.Kw;
 
   /* Gain: '<S6>/Gain1' */
-  rtb_Sum_a *= realtimemodel_P.Gain1_Gain_n;
+  rtb_Sum_c *= realtimemodel_P.Gain1_Gain_j;
 
   /* Gain: '<S4>/Gain' */
-  realtimemodel_B.Gain_g = realtimemodel_P.PID.Kd * rtb_Sum_a;
+  realtimemodel_B.Gain_d = realtimemodel_P.PID.Kd * rtb_Sum_c;
 
   /* Gain: '<S4>/Gain2' */
-  realtimemodel_B.Gain2 = realtimemodel_P.PID.Ki * rtb_Sum_a;
+  realtimemodel_B.Gain2 = realtimemodel_P.PID.Ki * rtb_Sum_c;
 
   /* Switch: '<S1>/Switch' incorporates:
    *  Constant: '<S1>/Constant'
@@ -329,10 +329,10 @@ void realtimemodel_output(void)
      *  Integrator: '<S4>/Integrator'
      *  TransferFcn: '<S4>/Transfer Fcn'
      */
-    rtb_Switch = (realtimemodel_P.PID.Kp * rtb_Sum_a +
-                  realtimemodel_X.Integrator_CSTATE_h) +
-      (realtimemodel_P.TransferFcn_C_k * realtimemodel_X.TransferFcn_CSTATE_f +
-       realtimemodel_P.TransferFcn_D_k * realtimemodel_B.Gain_g);
+    rtb_Switch = (realtimemodel_P.PID.Kp * rtb_Sum_c +
+                  realtimemodel_X.Integrator_CSTATE_p) +
+      (realtimemodel_P.TransferFcn_C_k * realtimemodel_X.TransferFcn_CSTATE_o +
+       realtimemodel_P.TransferFcn_D_j * realtimemodel_B.Gain_d);
 
     /* Saturate: '<S4>/Saturation' */
     if (rtb_Switch > realtimemodel_P.Saturation_UpperSat) {
@@ -418,12 +418,12 @@ void realtimemodel_derivatives(void)
   _rtXdot->TransferFcn_CSTATE += realtimemodel_B.Gain;
 
   /* Derivatives for Integrator: '<S4>/Integrator' */
-  _rtXdot->Integrator_CSTATE_h = realtimemodel_B.Gain2;
+  _rtXdot->Integrator_CSTATE_p = realtimemodel_B.Gain2;
 
   /* Derivatives for TransferFcn: '<S4>/Transfer Fcn' */
-  _rtXdot->TransferFcn_CSTATE_f = realtimemodel_P.TransferFcn_A_h *
-    realtimemodel_X.TransferFcn_CSTATE_f;
-  _rtXdot->TransferFcn_CSTATE_f += realtimemodel_B.Gain_g;
+  _rtXdot->TransferFcn_CSTATE_o = realtimemodel_P.TransferFcn_A_i *
+    realtimemodel_X.TransferFcn_CSTATE_o;
+  _rtXdot->TransferFcn_CSTATE_o += realtimemodel_B.Gain_d;
 }
 
 /* Model initialize function */
@@ -462,10 +462,10 @@ void realtimemodel_initialize(void)
   realtimemodel_X.TransferFcn_CSTATE = 0.0;
 
   /* InitializeConditions for Integrator: '<S4>/Integrator' */
-  realtimemodel_X.Integrator_CSTATE_h = realtimemodel_P.Integrator_IC_c;
+  realtimemodel_X.Integrator_CSTATE_p = realtimemodel_P.Integrator_IC_e;
 
   /* InitializeConditions for TransferFcn: '<S4>/Transfer Fcn' */
-  realtimemodel_X.TransferFcn_CSTATE_f = 0.0;
+  realtimemodel_X.TransferFcn_CSTATE_o = 0.0;
 }
 
 /* Model terminate function */
@@ -627,15 +627,15 @@ RT_MODEL_realtimemodel_T *realtimemodel(void)
     realtimemodel_M->Timing.sampleHits = (&mdlSampleHits[0]);
   }
 
-  rtmSetTFinal(realtimemodel_M, 10.0);
+  rtmSetTFinal(realtimemodel_M, 20.0);
   realtimemodel_M->Timing.stepSize0 = 0.001;
   realtimemodel_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  realtimemodel_M->Sizes.checksums[0] = (521994489U);
-  realtimemodel_M->Sizes.checksums[1] = (3499676209U);
-  realtimemodel_M->Sizes.checksums[2] = (737465543U);
-  realtimemodel_M->Sizes.checksums[3] = (844648364U);
+  realtimemodel_M->Sizes.checksums[0] = (2841175924U);
+  realtimemodel_M->Sizes.checksums[1] = (2583241407U);
+  realtimemodel_M->Sizes.checksums[2] = (3970287479U);
+  realtimemodel_M->Sizes.checksums[3] = (1313603880U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

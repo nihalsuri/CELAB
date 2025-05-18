@@ -7,9 +7,9 @@
  *
  * Code generation for model "realtimemodel".
  *
- * Model version              : 1.7
+ * Model version              : 1.8
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri May 16 12:31:47 2025
+ * C source code generated on : Fri May 16 13:13:52 2025
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -398,13 +398,13 @@ void realtimemodel_output(void)
     /* Saturate: '<S8>/Saturation' */
     if (rtb_Integrator > realtimemodel_P.Saturation_UpperSat) {
       /* Saturate: '<S8>/Saturation' */
-      realtimemodel_B.Saturation_p = realtimemodel_P.Saturation_UpperSat;
+      realtimemodel_B.Saturation_e = realtimemodel_P.Saturation_UpperSat;
     } else if (rtb_Integrator < realtimemodel_P.Saturation_LowerSat) {
       /* Saturate: '<S8>/Saturation' */
-      realtimemodel_B.Saturation_p = realtimemodel_P.Saturation_LowerSat;
+      realtimemodel_B.Saturation_e = realtimemodel_P.Saturation_LowerSat;
     } else {
       /* Saturate: '<S8>/Saturation' */
-      realtimemodel_B.Saturation_p = rtb_Integrator;
+      realtimemodel_B.Saturation_e = rtb_Integrator;
     }
 
     /* End of Saturate: '<S8>/Saturation' */
@@ -496,12 +496,12 @@ void realtimemodel_output(void)
       realtimemodel_X.Integrator_CSTATE;
 
     /* Saturate: '<S9>/Saturation' */
-    if (rtb_Integrator > realtimemodel_P.Saturation_UpperSat_f) {
+    if (rtb_Integrator > realtimemodel_P.Saturation_UpperSat_g) {
       /* Saturate: '<S9>/Saturation' */
-      realtimemodel_B.Saturation = realtimemodel_P.Saturation_UpperSat_f;
-    } else if (rtb_Integrator < realtimemodel_P.Saturation_LowerSat_e) {
+      realtimemodel_B.Saturation = realtimemodel_P.Saturation_UpperSat_g;
+    } else if (rtb_Integrator < realtimemodel_P.Saturation_LowerSat_n) {
       /* Saturate: '<S9>/Saturation' */
-      realtimemodel_B.Saturation = realtimemodel_P.Saturation_LowerSat_e;
+      realtimemodel_B.Saturation = realtimemodel_P.Saturation_LowerSat_n;
     } else {
       /* Saturate: '<S9>/Saturation' */
       realtimemodel_B.Saturation = rtb_Integrator;
@@ -519,7 +519,7 @@ void realtimemodel_output(void)
    *  Constant: '<S2>/Constant'
    */
   if (realtimemodel_P.sIn.intOn > realtimemodel_P.Switch_Threshold) {
-    rtb_Switch = realtimemodel_B.Saturation_p;
+    rtb_Switch = realtimemodel_B.Saturation_e;
   } else {
     rtb_Switch = realtimemodel_B.Saturation;
   }
@@ -711,7 +711,7 @@ void realtimemodel_initialize(void)
   /* SystemInitialize for Saturate: '<S8>/Saturation' incorporates:
    *  Outport: '<S8>/u [V]'
    */
-  realtimemodel_B.Saturation_p = realtimemodel_P.uV_Y0;
+  realtimemodel_B.Saturation_e = realtimemodel_P.uV_Y0;
 
   /* End of SystemInitialize for SubSystem: '<S2>/Feedback Controller' */
 
@@ -722,7 +722,7 @@ void realtimemodel_initialize(void)
   /* SystemInitialize for Saturate: '<S9>/Saturation' incorporates:
    *  Outport: '<S9>/u [V]'
    */
-  realtimemodel_B.Saturation = realtimemodel_P.uV_Y0_e;
+  realtimemodel_B.Saturation = realtimemodel_P.uV_Y0_p;
 
   /* End of SystemInitialize for SubSystem: '<S2>/Feedback Controller Robust' */
 }
@@ -891,10 +891,10 @@ RT_MODEL_realtimemodel_T *realtimemodel(void)
   realtimemodel_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  realtimemodel_M->Sizes.checksums[0] = (2197784176U);
-  realtimemodel_M->Sizes.checksums[1] = (508250240U);
-  realtimemodel_M->Sizes.checksums[2] = (2909723367U);
-  realtimemodel_M->Sizes.checksums[3] = (2396511699U);
+  realtimemodel_M->Sizes.checksums[0] = (3138874594U);
+  realtimemodel_M->Sizes.checksums[1] = (2353818714U);
+  realtimemodel_M->Sizes.checksums[2] = (2333014380U);
+  realtimemodel_M->Sizes.checksums[3] = (1290862661U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
