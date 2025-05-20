@@ -19,5 +19,5 @@ ts5 = sInfo.SettlingTime-sIn.t1;
 tr  = sInfo.RiseTime;
 
 % Output of the transient parameters
-fprintf("Overshoot: Mp=%2.2f;  SettlingTime: t_s5=%.3f; raiseTime t_r,=%.3f\n",Mp,ts5,tr)
+fprintf("Overshoot: Mp=%2.2f;  SettlingTime: t_s5=%.3f\n",Mp,ts5)
 

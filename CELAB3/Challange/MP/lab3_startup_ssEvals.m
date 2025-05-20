@@ -14,15 +14,21 @@ load_params_model
 
 %% User Inputs
 sIn.intOn = 1;  % 0: nominal;  1: robust
-feedback.AWgain = 35;
+feedback.AWgain = 33;
 % Desired specifications
 % Overshoot
-specs.mp = 0.14;
+specs.mp = 0.21;
 % Settling Time
-specs.settling_time = 0.13; % [s]
+specs.settling_time = 0.11; % [s]
+% Phase difference between the two pole pairs
+eigP.phaseTune = 2.89;
+% Magnitude difference between the two pole pairs
+eigP.magTune = 0.44;
+% Integrator pole tuning
+eigP.intTune = 0.96;
 
-% 28, 13, 13 => 0.241
-% 35, 14, 13 => 0.200
+% 33, 20, 11, 2.9, 0.45, 1.1 => 0.192
+% 33, 21, 11, 2.89, 0.44, 0.96 => 0.191
 
 %% Simulation Parameters 
 % Solver step time (0.1 ms)
@@ -68,7 +74,8 @@ eigP.wn = 3/(eigP.damping*specs.settling_time);
 eigP.phi = atan2(sqrt(1-eigP.damping^2), eigP.damping);
 
 % Desired eigenvalues for nominal tracking
-eigP.values = eigP.wn*exp(1i*[-pi+eigP.phi,-pi+eigP.phi/2]);
+eigP.values = eigP.wn*[exp(1i*(-pi+eigP.phi)), ...
+                       eigP.magTune*exp(1i*(-pi+eigP.phi/eigP.phaseTune))];
 eigP.values = [eigP.values, conj(eigP.values)];
 
 % State feedback matrix
@@ -89,7 +96,7 @@ plant.Be = [0;plant.B];
 plant.Ce = [0,plant.C];
 
 % Eigenvalues for robust tracking
-eigP.robustValues = [eigP.values, -eigP.wn];
+eigP.robustValues = [eigP.values, -eigP.intTune*eigP.wn];
 
 % State feedback matrix frot the robust case
 feedback.robustKe = place(plant.Ae, plant.Be, eigP.robustValues);
@@ -98,6 +105,7 @@ feedback.robustK  = feedback.robustKe(2:end);
 if sIn.intOn
     feedback.K = feedback.robustK;
 end
+plant.feedbackSys = plant.Ae-plant.Be*feedback.robustKe;
 
 
 
