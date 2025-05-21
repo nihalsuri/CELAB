@@ -1,8 +1,7 @@
 % Matlab script to start the Simulink simulation of an accurate model of 
 % the Quanser SRV-02 + NI DAQ with a resonant load and a position state-
-% space controller with chosen eigenvalues.
+% space controller with chosen eigenvalues, optimized for settling time.
 clear
-
 
 
 %% Load Predefined Parameters
@@ -13,22 +12,27 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 1;  % 0: nominal;  1: robust
-feedback.AWgain = 33;
-% Desired specifications
-% Overshoot
+% Run the simulation?
+run_sim = 0;
+
+% Desired overshoot
 specs.mp = 0.21;
-% Settling Time
+
+% Desired Settling Time
 specs.settling_time = 0.11; % [s]
-% Phase difference between the two pole pairs
+
+% Phase difference between the two cc. pole pairs
 eigP.phaseTune = 2.89;
-% Magnitude difference between the two pole pairs
+
+% Magnitude difference between the two cc. pole pairs
 eigP.magTune = 0.44;
+
 % Integrator pole tuning
 eigP.intTune = 0.96;
 
-% 33, 20, 11, 2.9, 0.45, 1.1 => 0.192
-% 33, 21, 11, 2.89, 0.44, 0.96 => 0.191
+% Anti Windup gain
+feedback.AWgain = 33;
+
 
 %% Simulation Parameters 
 % Solver step time (0.1 ms)
@@ -64,6 +68,12 @@ plant.C = [1,0,0,0];
 plant.D = 0;
 
 
+% State feedforward gain and input feedforward gain
+feedback.gains = ([plant.A, plant.B; plant.C, plant.D])\[zeros(4,1);1];
+feedback.Nx = feedback.gains(1:end-1);
+feedback.Nu = feedback.gains(end);
+
+
 
 %% Feedback Controller Design
 % Desired dynamic parameters for approximation
@@ -75,38 +85,22 @@ eigP.phi = atan2(sqrt(1-eigP.damping^2), eigP.damping);
 
 % Desired eigenvalues for nominal tracking
 eigP.values = eigP.wn*[exp(1i*(-pi+eigP.phi)), ...
-                       eigP.magTune*exp(1i*(-pi+eigP.phi/eigP.phaseTune))];
+          eigP.magTune*exp(1i*(-pi+eigP.phi/eigP.phaseTune))];
 eigP.values = [eigP.values, conj(eigP.values)];
 
-% State feedback matrix
-feedback.K = place(plant.A, plant.B, eigP.values);
+% Eigenvalues for robust tracking
+eigP.robustValues = [eigP.values, -eigP.intTune*eigP.wn];
 
-
-% State feedforward gain and input feedforward gain
-feedback.gains = ([plant.A, plant.B; plant.C, plant.D])\[zeros(4,1);1];
-feedback.Nx = feedback.gains(1:end-1);
-feedback.Nu = feedback.gains(end);
-
-
-
-%% Robust Statespace
 % Extended statespace model
 plant.Ae = [0, plant.C; zeros(4,1), plant.A];
 plant.Be = [0;plant.B];
 plant.Ce = [0,plant.C];
 
-% Eigenvalues for robust tracking
-eigP.robustValues = [eigP.values, -eigP.intTune*eigP.wn];
 
 % State feedback matrix frot the robust case
 feedback.robustKe = place(plant.Ae, plant.Be, eigP.robustValues);
 feedback.robustKi = feedback.robustKe(1);
 feedback.robustK  = feedback.robustKe(2:end);
-if sIn.intOn
-    feedback.K = feedback.robustK;
-end
-plant.feedbackSys = plant.Ae-plant.Be*feedback.robustKe;
-
 
 
 %% Simple Observer
@@ -115,6 +109,10 @@ filt.del = 1/sqrt(2);
 filt.num = [filt.wc^2, 0];
 filt.den = [1, 2*filt.del*filt.wc, filt.wc^2];
 
-set_param('lab3_ssEvals', 'AlgebraicLoopMsg', 'none');
-simOut = sim('lab3_ssEvals.slx');
-evalLQR
+
+%% Simulation
+if run_sim == 1
+    set_param('lab3_ssEvals', 'AlgebraicLoopMsg', 'none');
+    simOut = sim('lab3_ssEvals.slx');
+    evalLQR
+end
