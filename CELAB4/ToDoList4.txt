@@ -1,13 +1,13 @@
 4.1 Simulink model of the balancing robot 
-	S1) Simulink model of the nonlinear electromechanical dynamics
-	S2) Simulink model of the Motion Processing Unit
-	S3) Simulink model of the incremental encoder
-	S4) Simulink model of the motor voltage driver
+	S1)(MP) Simulink model of the nonlinear electromechanical dynamics
+	S2)(MP) Simulink model of the Motion Processing Unit
+	S3)(BM) Simulink model of the incremental encoder
+	S4)(BM) Simulink model of the motor voltage driver
 	S5) Combine all the models 
 
 4.2 Balance–and–position SS control using LQR methods
-	S6) Observer for the robot 
-	S7) DT LQR for stabilization of the body 
+	S6)(NS) Observer for the robot 
+	S7)(NS) DT LQR for stabilization of the body 
 	S8) Validate 7) 
 	S6) Test controller 7) 
 	S9) Add robust tracking to 7) 
