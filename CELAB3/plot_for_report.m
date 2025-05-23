@@ -10,8 +10,8 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [struct_1, struct_2];
-p.save_name = "save_name";
+p.simout = [ScopeData,ScopeData1];
+p.save_name = "Test";
 p.time_start = 0;
 p.time_stop  = 1;
 % =========================================================================

@@ -19,7 +19,7 @@ specs.settling_time = 0.15; %[seconds]
 
 
 % Validation Task (6, 7 or 8)
-sIn.val = 8;
+sIn.val = 6;
 %Amplitude of reference signal (only for 6)
 sIn.Amp = 30;
 
