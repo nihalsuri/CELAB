@@ -25,7 +25,7 @@ model.C12_fact = -(body.m*body.zb+2*mot.rot.m*mot.rot.zb)*wheel.r;
 % Viscous friction coefficients
 model.Fv = [2*(gbox.B+wheel.B), -2*gbox.B;
                 -2*gbox.B,       2*gbox.B];
-model.Fv_ = Fv+ (2*gbox.N^2*mot.Kt*mot.Ke)/mot.R *[1,-1;-1,1];
+model.Fv_ = model.Fv+ (2*gbox.N^2*mot.Kt*mot.Ke)/mot.R *[1,-1;-1,1];
 
 % Gravity vector
 model.g2_fact = -(body.m*body.zb + 2*mot.rot.m*mot.rot.zb)*g;
