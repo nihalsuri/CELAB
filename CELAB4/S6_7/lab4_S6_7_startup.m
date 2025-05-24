@@ -2,8 +2,8 @@
 % measurements of the MPU and incremental encoder
 clear 
 
-% load robot parameters file 
-balrob_params
+% load selfmade model requirements with static parameters 
+lab4_model_startup
 
 %% Simulation parameters
 % simulation parameters
@@ -30,6 +30,70 @@ filter.high.N = 3;
 filter.high = tf([1 0 0 -1], [filter.high.N*sIn.Ts, 0, 0, 0], sIn.Ts);
 
 %% DT SS control based on LQR using Bryson's rule
+% The following methodology should gurantee nominal perfect tracking of
+% constant wheel angle position set-point gamma
+
+%% Continous time plant model 
+% with the state x=[gamma, theta, dot_gamma, dot_theta]
+tmp.m11 = 2*wheel.Iyy + 2*(gbox.N^2)*(mot.rot.Iyy) + ...
+    (body.m + 2*wheel.m + 2*mot.rot.m)*(wheel.r^2);
+
+% same for m21
+tmp.m12 = 2*gbox.N*(1 - gbox.N)*mot.rot.Iyy + ...
+    (body.m*body.zb + 2*mot.rot.m*mot.rot.zb)*wheel.r;
+
+tmp.m22 = body.Iyy + 2*((1 - gbox.N)^2)*(mot.rot.Iyy) + ...
+    body.m*(body.zb^2) + 2*mot.rot.m*((mot.rot.zb)^2);
+
+%eqn 45 in methods
+tmp.M = [tmp.m11, tmp.m12; tmp.m12, tmp.m22]; 
+
+tmp.g22 = -(body.m*body.zb + 2*mot.rot.m*mot.rot.zb)*g; 
+
+tmp.Fv = [2*(gbox.B + wheel.B) -2*gbox.B; -2*gbox.B 2*gbox.B];
+tmp.Fv_const = (2*(gbox.N^2)*mot.Kt*mot.Ke)/mot.R; 
+tmp.Fv_hat = tmp.Fv + tmp.Fv_const*[1 -1; -1 1];
+
+tmp.G = [0 0; 0 tmp.g22]; 
+
+% eqn 58 in methods
+plant.A = [zeros(2,2), eye(2,2); 
+          -inv(tmp.M)*tmp.G, -inv(tmp.M)*tmp.Fv_hat];
+
+plant.B = ((2*gbox.N*mot.Kt)/mot.R)*([zeros(2,2); inv(tmp.M)]*[1;-1]);
+plant.C = [1 0 0 0]; 
+plant.D = 0; 
+
+% create a ss model
+plant.ssCT = ss(plant.A, plant.B, plant.C, plant.D); 
+
+%% Discretize the model with exact discretization 
+plant.ssDT = c2d(plant.ssCT, sIn.Ts, 'zoh'); 
+plant.gainsDT = ([plant.ssDT.A - eye(4), plant.ssDT.B; plant.ssDT.C, plant.ssDT.D])\[flip(eye(5,1))];
+feedback.Nx = plant.gainsDT(1:end-1); 
+feedback.Nu = plant.gainsDT(end); 
+
+%% LQR using Bryson's rule
+% Q commands the control accuracy, and R the control effort
+% the extra factor rho is used to consider relative weighting between 
+% control input and the control energies 
+LQR.rho = [500, 5000]; 
+% eqn 14 in assignment
+LQR.gamma_bar = pi/18; 
+LQR.theta_bar = pi/360; 
+LQR.u_bar = 1; 
+
+LQR.Q = diag([1/((LQR.gamma_bar)^2), 1/((LQR.theta_bar)^2), 0, 0]); 
+LQR.R = (1/(LQR.u_bar^2)); 
+% with both values of rho
+feedback.K1 = dlqr(plant.ssDT.A, plant.ssDT.B, LQR.Q, LQR.R*LQR.rho(1));
+feedback.K2 = dlqr(plant.ssDT.A, plant.ssDT.B, LQR.Q, LQR.R*LQR.rho(2));
+
+
+
+
+
+
 
 
 
