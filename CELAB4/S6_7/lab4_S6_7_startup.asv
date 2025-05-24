@@ -27,10 +27,9 @@ filter.low.firstorderDT = c2d(filter.low.firstorderCT, sIn.Ts, 'zoh');
 % High pass filter ("real derivative")
 % as mentioned in eqn 7 in assignment
 filter.high.N = 3; 
-filter.high = tf([1 0 0 -1], [filter.high.N*sIn.Ts, 0, 0, 0], sIn.Ts);
+filter.high = tf([1 0 0 1], filter.high.N*sIn.Ts, sIn.Ts);
 
 %% DT SS control based on LQR using Bryson's rule
-
 
 
 
