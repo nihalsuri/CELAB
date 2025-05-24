@@ -10,6 +10,14 @@ lab4_model_startup
 sIn.Ts = 0.01;
 sIn.simulation_time = 10; 
 
+% Robot initial condition
+sIn.x0 =[ ...
+0, ... % gam(0)
+5*deg2rad, ... % th(0)
+0, ... % dot_gam(0)
+0]; % dot_th(0)
+
+
 %% Tilt angle estimation 
 % Tilt angle estimation via a complementary filter approach
 % Low-pass filter for the accelerometer, high-pass for the gyroscope
