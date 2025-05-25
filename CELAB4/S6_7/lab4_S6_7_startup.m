@@ -17,6 +17,9 @@ sIn.x0 =[ ...
 0, ... % dot_gam(0)
 0]; % dot_th(0)
 
+% Blackboc initial condition
+sIn.bb_ic = [0, 0, 5*deg2rad, 0, 0, 0];
+
 
 %% Tilt angle estimation 
 % Tilt angle estimation via a complementary filter approach
