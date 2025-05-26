@@ -6,9 +6,9 @@ clear
 lab4_model_startup
 
 %% User inputs 
-LQR.rho = 500; 
+LQR.rho = 5000; 
 
-LQR.q11 = 0.1 ; 
+LQR.q11 = 1 ; 
 
 %% Simulation parameters
 % simulation parameters
@@ -99,14 +99,14 @@ LQR.theta_bar = pi/360;
 LQR.u_bar = 1; 
 %% Robust Statespace
 % Extended statespace model
-plant.Ae = [0, plant.ssDT.C; zeros(4,1), plant.ssDT.A];
+plant.Ae = [1, plant.ssDT.C;
+            zeros(4,1), plant.ssDT.A];
 plant.Be = [0;plant.ssDT.B];
-plant.Ce = [0,plant.ssDT.C];
 
 LQR.Qe = diag([LQR.q11 1/((LQR.gamma_bar)^2), 1/((LQR.theta_bar)^2), 0, 0]);
 LQR.R = (1/(LQR.u_bar^2)); 
 
-feedback.robustK = dlqr(plant.Ae,plant.Be, LQR.Qe, LQR.R*LQR.rho);
+feedback.robustK = dlqr(plant.Ae, plant.Be, LQR.Qe, LQR.R*LQR.rho);
 feedback.robustKi = feedback.robustK(1);
 feedback.robustK  = feedback.robustK(2:end);
 
