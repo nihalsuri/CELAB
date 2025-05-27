@@ -1,16 +1,25 @@
 % Startup file so as to estimate the state of the balancing robot from the
-% measurements of the MPU and incremental encoder
+% measurements of the MPU and incremental encoder, and apply nominal LQR
+% control using Bryson's rule. % There are two choices of gains in this 
+% task set, with three different verifications to be run, it total there 
+% are 2*3=6 results to be saved at the end of S6,7,8. 
+
 clear 
 
-% load selfmade model requirements with static parameters 
+% load selfmade model requirements with static parameters (balrob_params)
 lab4_model_startup
 
 %% Simulation parameters
 % simulation parameters
 sIn.Ts = 0.01;
 sIn.simulation_time = 10; 
+% swithced off by default
+sIn.disturbance = 0;
 % 1 for S81, 2 for S82, 3 for S83
-sIn.case = 2; 
+sIn.case = 3; 
+% 1 for rho equal to 500, 2 for rho equal to 5000, higher rho more
+% contributions to cost function
+sIn.feedback_gains = 1;
 
 switch sIn.case
     case 1
@@ -36,6 +45,19 @@ switch sIn.case
         sIn.bb_ic = [0, 0, 0, 0, 0, 0];
 
     case 3
+        % Robot initial condition
+        sIn.x0 =[ ...
+        0, ... % gam(0)
+        0, ... % th(0)
+        0, ... % dot_gam(0)
+        0]; % dot_th(0)
+
+        % Blackboc initial condition
+        sIn.bb_ic = [0, 0, 0, 0, 0, 0];
+        % disturbance is on
+        sIn.disturbance = 1;
+        % longer simulation time to see the effect of disturbance at t=10
+        sIn.simulation_time = 20; 
 
 end
 
@@ -117,8 +139,13 @@ LQR.u_bar = 1;
 LQR.Q = diag([1/((LQR.gamma_bar)^2), 1/((LQR.theta_bar)^2), 0, 0]); 
 LQR.R = (1/(LQR.u_bar^2)); 
 % with both values of rho
-feedback.K1 = dlqr(plant.ssDT.A, plant.ssDT.B, LQR.Q, LQR.R*LQR.rho(1));
-feedback.K2 = dlqr(plant.ssDT.A, plant.ssDT.B, LQR.Q, LQR.R*LQR.rho(2));
+
+switch sIn.feedback_gains
+    case 1
+        feedback.K1 = dlqr(plant.ssDT.A, plant.ssDT.B, LQR.Q, LQR.R*LQR.rho(1));
+    case 2
+        feedback.K2 = dlqr(plant.ssDT.A, plant.ssDT.B, LQR.Q, LQR.R*LQR.rho(2));
+end
 
 
 
