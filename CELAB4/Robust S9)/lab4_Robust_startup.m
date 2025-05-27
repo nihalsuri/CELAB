@@ -1,5 +1,12 @@
 % Startup file so as to estimate the state of the balancing robot from the
-% measurements of the MPU and incremental encoder
+% measurements of the MPU and incremental encoder, and apply nominal LQR
+% control using Bryson's rule. % There are two choices of q11, which changes 
+% the gains in this task set, with three different verifications to be run, in 
+% total there are 2*3=6 results to be saved at the end of S9,10. 
+% 
+% COMMENT FOR BM: You can take a look at S6_7_8/lab4_S6_7_8_startup.m, that has
+% all the verifications that is required for S10, with the updated simulink
+% model with the disturbance generator. 
 clear 
 
 % load selfmade model requirements with static parameters 
@@ -8,7 +15,7 @@ lab4_model_startup
 %% User inputs 
 LQR.rho = 5000; 
 
-LQR.q11 = 1 ; 
+LQR.q11 = [1e-6 1e-3 0.01 0.1 0.3 0.5 1]; 
 
 %% Simulation parameters
 % simulation parameters
@@ -103,7 +110,7 @@ plant.Ae = [1, plant.ssDT.C;
             zeros(4,1), plant.ssDT.A];
 plant.Be = [0;plant.ssDT.B];
 
-LQR.Qe = diag([LQR.q11 1/((LQR.gamma_bar)^2), 1/((LQR.theta_bar)^2), 0, 0]);
+LQR.Qe = diag([LQR.q11(1) 1/((LQR.gamma_bar)^2), 1/((LQR.theta_bar)^2), 0, 0]);
 LQR.R = (1/(LQR.u_bar^2)); 
 
 feedback.robustK = dlqr(plant.Ae, plant.Be, LQR.Qe, LQR.R*LQR.rho);
