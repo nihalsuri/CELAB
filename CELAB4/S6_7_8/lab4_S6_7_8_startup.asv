@@ -10,35 +10,22 @@ lab4_model_startup
 sIn.Ts = 0.01;
 sIn.simulation_time = 10; 
 % 1 for S81, 2 for S82, 3 for S83
-sIn.case = 2; 
+sIn.case = 1; 
 
 switch sIn.case
-    case 1
-        % Robot initial condition
-        sIn.x0 =[ ...
-        0, ... % gam(0)
-        5*deg2rad, ... % th(0)
-        0, ... % dot_gam(0)
-        0]; % dot_th(0)
+    case sIn.case == 1
+        
 
-        % Blackboc initial condition
-        sIn.bb_ic = [0, 0, 5*deg2rad, 0, 0, 0];
 
-    case 2
-        % Robot initial condition
-        sIn.x0 =[ ...
-        0, ... % gam(0)
-        0, ... % th(0)
-        0, ... % dot_gam(0)
-        0]; % dot_th(0)
+% Robot initial condition
+sIn.x0 =[ ...
+0, ... % gam(0)
+5*deg2rad, ... % th(0)
+0, ... % dot_gam(0)
+0]; % dot_th(0)
 
-        % Blackboc initial condition
-        sIn.bb_ic = [0, 0, 0, 0, 0, 0];
-
-    case 3
-
-end
-
+% Blackboc initial condition
+sIn.bb_ic = [0, 0, 5*deg2rad, 0, 0, 0];
 
 
 %% Tilt angle estimation 
