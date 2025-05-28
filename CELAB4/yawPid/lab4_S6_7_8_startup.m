@@ -18,7 +18,7 @@ sIn.simulation_time = 10;
 % swithced off by default
 sIn.disturbance = 0;
 % 1 for S81, 2 for S82, 3 for S83
-sIn.case = 2; 
+sIn.case = 3; 
 % 1 for rho equal to 500, 2 for rho equal to 5000, higher rho more
 % contributions to cost function
 sIn.feedback_gains = 1;
