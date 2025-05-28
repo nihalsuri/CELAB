@@ -11,6 +11,8 @@ lab4_model_startup
 
 %% Simulation parameters
 % simulation parameters
+% controller enable
+sIn.ctrl = 1; 
 sIn.Ts = 0.01;
 sIn.simulation_time = 10; 
 % swithced off by default
