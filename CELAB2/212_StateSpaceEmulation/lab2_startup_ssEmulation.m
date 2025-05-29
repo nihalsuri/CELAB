@@ -33,7 +33,7 @@ specs.settling_time = 0.15; %[s]
 
 %% Simulation Parameters 
 % Sampling time
-sIn.Ts =10e-3; %[s]
+sIn.Ts =50e-3; %[s]
 
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
@@ -45,7 +45,7 @@ sIn.integrationMethod = 1;
 sIn.nominal_robust = 1;
 
 % List of reference positions [s]
-%sIn.position = [40, 0, 70, 0, 120]; 
+% sIn.position = [40, 0, 70, 0, 120]; 
 sIn.position = 50;
 
 % Time the reference positions are held [s]
