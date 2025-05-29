@@ -13,9 +13,9 @@ clear
 lab4_model_startup
 
 %% User inputs 
-LQR.rho = 5000; 
+LQR.rho = 500; 
 LQR.q11 = [1e-6 1e-3 0.01 0.1 1 10 100]; 
-LQR.q11 = LQR.q11(1)
+LQR.q11 = LQR.q11(7)
 
 %% Simulation parameters
 % simulation parameters
@@ -26,7 +26,7 @@ sIn.simulation_time = 10;
 % swithced off by default
 sIn.disturbance = 0;
 % 1 for S81, 2 for S82, 3 for S83
-sIn.case = 1; 
+sIn.case = 3; 
 
 switch sIn.case
     case 1
