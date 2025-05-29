@@ -33,7 +33,7 @@ specs.settling_time = 0.15; %[s]
 
 %% Simulation Parameters 
 % Sampling time
-sIn.Ts =50e-3; %[s]
+sIn.Ts =1e-3; %[s]
 
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;

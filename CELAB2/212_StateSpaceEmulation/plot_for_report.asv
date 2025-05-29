@@ -10,9 +10,9 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [one.ScopeData1, two.ScopeData1, three.ScopeData1];
+p.simout = [one.ScopeData1, two.ScopeData1, thr];
 p.fname = "simulation_results\";
-p.save_name = "robustFECombined";
+p.save_name = "nominalFECombined";
 p.time_start = 0;
 p.time_stop  = 1;
 % =========================================================================
