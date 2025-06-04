@@ -42,11 +42,11 @@ sIn.step_size = 1e-4;
 sIn.integrationMethod = 1;
 
 % Choice of nominal or robust controller (0:nominal,  1:robust)
-sIn.nominal_robust = 1;
+sIn.nominal_robust = 0;
 
 % List of reference positions [s]
-% sIn.position = [40, 0, 70, 0, 120]; 
-sIn.position = 50;
+sIn.position = [40, 0, 70, 0, 120]; 
+%sIn.position = 50;
 
 % Time the reference positions are held [s]
 sIn.sample_time = 5; 

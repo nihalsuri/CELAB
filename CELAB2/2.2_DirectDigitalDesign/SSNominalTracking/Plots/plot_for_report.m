@@ -7,10 +7,10 @@ clear p i j
 % The reference should be the last channel, as this is the only one to be ignored.
 % The y-label will be extracted from the first entry.
 
-p.simout = [Robust1ms Robust10ms Robust50ms];  % Replace with your actual Simulink output variables
+p.simout = [position_1ms,position_10ms,position_50ms];  % Replace with your actual Simulink output variables
 p.save_name = "nominal_direct";
 p.time_start = 0;
-p.time_stop  = 2;
+p.time_stop  = 1;
 % =========================================================================
 
 % Display input
