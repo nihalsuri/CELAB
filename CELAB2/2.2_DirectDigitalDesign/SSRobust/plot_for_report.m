@@ -10,7 +10,7 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [direct_robust];
+p.simout = [ScopeData_1ms, ScopeData_10ms, ScopeData_50ms];
 p.fname = "simulation_results\";
 p.save_name = "2.2.5";
 p.time_start = 0;
@@ -87,5 +87,5 @@ ylim("padded")
 set(p.f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
+%saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
 %save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")
