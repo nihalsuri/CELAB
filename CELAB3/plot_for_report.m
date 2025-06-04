@@ -10,10 +10,10 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [q10, q100];  % Replace with your actual Simulink output variables;
+p.simout = [ScopeData_120_aw, ScopeData_120];  % Replace with your actual Simulink output variables;
 p.save_name = "Test";
 p.time_start = 0;
-p.time_stop  = 2;
+p.time_stop  = 0;
 % =========================================================================
 
 
@@ -86,5 +86,5 @@ ylim("padded")
 set(p.f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-saveas(p.f1, p.save_name+'.png')
+%saveas(p.f1, p.save_name+'.png')
 %save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")

@@ -110,6 +110,11 @@ feedback.robustKe = acker(plant.Ae, plant.Be, eigP.robustValues);
 feedback.robustKi = feedback.robustKe(1);
 feedback.robustK  = feedback.robustKe(2:end);
 
+% Selection
+if sIn.nominal_robust == 1
+    feedback.K = feedback.robustK;
+end
+
 
 
 %% Reduced Observer Model
