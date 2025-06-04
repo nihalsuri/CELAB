@@ -13,7 +13,7 @@ load_params_model
 
 
 %% User Inputs
-sIn.intOn = 0;  % 1: nominal;  0: robust
+sIn.intOn = 1;  % 1: nominal;  0: robust
 
 q11 = 100;
 % Desired specifications

@@ -9,7 +9,7 @@ clear
 load_params_resonant_case
 
 sIn.motor_or_nominal = 0;   % 0: motor;  1: nominal
-load_params_model
+load_params_model 
 
 
 %% User Inputs
