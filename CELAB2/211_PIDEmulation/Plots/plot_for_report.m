@@ -7,8 +7,8 @@ clear p i j
 % The reference should be the last channel, as this is the only one to be ignored.
 % The y-label will be extracted from the first entry.
 
-p.simout = [position1ms position10ms position50ms];  % Replace with your actual Simulink output variables
-p.save_name = "backward";
+p.simout = [position, position_pid];  % Replace with your actual Simulink output variables
+p.save_name = "pid_aw_comparison";
 p.time_start = 0;
 p.time_stop  = 1;
 % =========================================================================
