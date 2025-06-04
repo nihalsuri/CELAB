@@ -1,39 +1,40 @@
-% Clear and load
-clear; clc;
-load('nominal_1st_gains.mat');
-
 % Rename for convenience
-data = nominalDisturbance;
+data = robustYaw1;
 
-% Extract time
+% Extract time and trim to first 60 seconds
 time = data.time(:);  % Ensure column vector
+idx = time <= 60;     % Logical index for first 60 seconds
+time = time(idx);
+
 num_signals = length(data.out);
 
 % Optional: define your own labels
 labels = {
-    "Signal 1", 
-    "Signal 2", 
-    "Signal 3", 
-    "Signal 4", 
-    "Signal 5", 
-    "Signal 6"
+    "\gamma [deg]", 
+    "\vartheta [deg]", 
+    "$\dot{\gamma}$ [$\frac{deg}{s}$]", 
+    "$\dot{\vartheta}$ [$\frac{deg}{s}$]", 
+    "\psi [deg]", 
+    "duty [V]",
+    "Reference \gamma [deg]"
 };
 
 % Create separate figures for each signal
 for i = 1:num_signals
     y = data.out{i};
     if isrow(y)
-        y = y';  % ensure column
+        y = y';  % Ensure column
     end
+
+    y = y(idx);  % Trim signal to first 60 seconds
 
     figure(i);
     plot(time, y, 'b', 'LineWidth', 1.5);
     grid on;
     xlabel('Time [s]');
     ylabel('Value');
-    title(labels{i});
-    set(gcf, 'Position', [300 + 50*i, 200 + 50*i, 600, 300]);  % cascade figure windows
-
-    % Optional: save each plot
-    % saveas(gcf, sprintf('signal_%d.png', i));
+    title(labels{i}, 'Interpreter', 'latex');
+    set(gcf, 'Position', [300 + 50*i, 200 + 50*i, 600, 300]);  % Cascade figure windows
 end
+    % Optional: save each plot
+    % saveas

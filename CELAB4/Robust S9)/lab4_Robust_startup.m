@@ -4,9 +4,6 @@
 % the gains in this task set, with three different verifications to be run, in 
 % total there are 2*3=6 results to be saved at the end of S9,10. 
 % 
-% COMMENT FOR BM: You can take a look at S6_7_8/lab4_S6_7_8_startup.m, that has
-% all the verifications that is required for S10, with the updated simulink
-% model with the disturbance generator. 
 clear 
 
 % load selfmade model requirements with static parameters 
@@ -15,16 +12,16 @@ lab4_model_startup
 %% User inputs 
 LQR.rho = 5000; 
 LQR.q11 = [1e-6 1e-3 0.01 0.1 1 10 100]; 
-LQR.q11 = LQR.q11(1)
+LQR.q11 = LQR.q11(2)
 
 %% Simulation parameters
 % simulation parameters
 % controller enable
 sIn.ctrl = 1; 
 sIn.Ts = 0.01;
-sIn.simulation_time = 10; 
+sIn.simulation_time =10; 
 % swithced off by default
-sIn.disturbance = 0;
+sIn.disturbance = 1;
 % 1 for S81, 2 for S82, 3 for S83
 sIn.case = 1; 
 

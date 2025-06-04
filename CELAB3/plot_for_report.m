@@ -10,7 +10,7 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [q10, q100];  % Replace with your actual Simulink output variables;
+p.simout = [ThetaSimNominal];  % Replace with your actual Simulink output variables;
 p.save_name = "Test";
 p.time_start = 0;
 p.time_stop  = 2;

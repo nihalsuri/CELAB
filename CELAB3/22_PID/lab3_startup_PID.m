@@ -7,15 +7,15 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_nominal = 0;   % 0: motor;  1: nominal
+sIn.motor_or_nominal = 1;   % 0: motor;  1: nominal
 load_params_model
 
 
 %% User Inputs
 % Normal PID(1) or With Anti Windup(0)
-sIn.AntiWindup = 0;
+sIn.AntiWindup = 1;
 %PID-par Bode's method (0) or Selftuned (1) 
-sIn.SelftunedPID = 1; 
+sIn.SelftunedPID = 0; 
 % List of reference positions [s]
 sIn.position =50; 
 
