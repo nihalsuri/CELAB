@@ -14,7 +14,7 @@ p.simout = [out.zoh];
 p.fname = "simulation_results\";
 p.save_name = "2.1.1.5_ZOH";
 p.time_start = 0;
-p.time_stop  = 2;
+p.time_stop  = 1;
 % =========================================================================
 
 

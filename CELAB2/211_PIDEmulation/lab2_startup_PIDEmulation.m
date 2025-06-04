@@ -51,7 +51,7 @@ PID.Kw = 1/(PID.t_s5/4.5); % anit windup gain: 1/Tw, Tw=t_s5/5
 % Sampling Time Vector [1 ms 10ms 50ms]
 specs.Ts = [1e-3; 1e-2; 5e-2]; % [s]
 % Step reference input
-sIn.position = [50, 360];
+sIn.position = [50];
 sIn.simulation_time = 5;
 
 
