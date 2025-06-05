@@ -10,9 +10,8 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [nominal, robust];
-p.fname = "plots/";
-p.save_name = "nominal_robust";
+p.simout = [Bode120, Bode120AW];  % Replace with your actual Simulink output variables;
+p.save_name = "PID120";
 p.time_start = 0;
 p.time_stop  = 2;
 % =========================================================================
@@ -31,8 +30,8 @@ end
 
 p.idx = {};
 for i=1:length(p.simout)
-    p.idx{i} = find((p.simout(i).time >= p.time_start & ...
-                  p.simout(i).time < p.time_stop));
+p.idx{i} = find((p.simout(i).time >= p.time_start & ...
+                 p.simout(i).time <= p.time_stop));
     p.simout(i).time = p.simout(i).time - p.time_start;
 end
 
@@ -77,7 +76,7 @@ end
 
 
 grid on
-legend(p.legends{:}, 'Location', 'northwest')
+legend(p.legends{:})
 xlabel("Time [s]")
 ylabel(p.ylab)
 ylim("padded")
@@ -87,5 +86,5 @@ ylim("padded")
 set(p.f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-%saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
+saveas(p.f1, p.save_name+'.png')
 %save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")

@@ -14,14 +14,10 @@ load_params_model
 %% User Inputs
 % Normal PID(1) or With Anti Windup(0)
 sIn.AntiWindup = 1;
-%PID-par Bode's method (0) or Selftuned (1) 
-sIn.SelftunedPID = 0; 
-% List of reference positions [s]
-sIn.position =50; 
 
-% Actual parameters (estimated from motor 1, lab 0)
-mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
-mld.tausf = 0.013;      % [Nm]
+% List of reference positions [s]
+sIn.position = 120; 
+
 
 % Desired specifications
 % Overshoot
@@ -32,13 +28,10 @@ specs.settling_time = 0.85; % [s]
 %% Simulation Parameters 
 % Solver step time (0.1 ms)
 sIn.solver_time = 1e-4;
-% Time the reference positions are held [s]
-sIn.step_time = 3; 
-% Automatic calculation of total simulation time [s]
-sIn.simulation_time = sIn.step_time*length(sIn.position);
-% Time for averaging the bias of displacement sensor
-sIn.t0 = 0.2;
-sIn.t1 = 0.3;
+
+% Simulation time [s]
+sIn.simulation_time = 10;
+
 
 %% State-Space Model
 % with the state x=[theta_h, theta_d, omega_h, omega_d]
@@ -59,19 +52,3 @@ sys = ss(plant.A, plant.B, plant.C, plant.D);
 %Compute PID with Bode's method
 PID = computePIDGains(4, specs.settling_time, specs.mp, tf(sys), "PID");
 PID.Kw = 1/(specs.settling_time/5); % anit windup gain: 1/Tw, Tw=t_s5/5
-
-%Use tuned PID parameters 
-if ( sIn.SelftunedPID>0)
-PID.Kp = 7.5; 
-PID.Ki = 28; 
-PID.Kd = 2;
-end
-
-%Use tuned PID parameters 
-if ( sIn.SelftunedPID>0) && (sIn.AntiWindup==0)
-    PID.Kp = 30; 
-    PID.Ki = 100; 
-    PID.Kd = 4;
-end
-
-
