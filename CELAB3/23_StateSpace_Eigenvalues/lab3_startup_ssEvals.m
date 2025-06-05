@@ -8,12 +8,12 @@ clear
 %% Load Predefined Parameters
 load_params_resonant_case
 
-sIn.motor_or_nominal = 0;   % 0: motor;  1: nominal
+sIn.motor_or_nominal = 1;   % 0: motor;  1: nominal
 load_params_model
 
 
 %% User Inputs
-sIn.intOn = 1;  % 0: nominal;  1: robust
+sIn.intOn = 0;  % 0: nominal;  1: robust
 q11 = 0.01;
 % Desired specifications
 % Overshoot

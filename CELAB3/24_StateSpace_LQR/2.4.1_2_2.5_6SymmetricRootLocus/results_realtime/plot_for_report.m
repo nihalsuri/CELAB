@@ -7,8 +7,8 @@ clear p i j
 % The reference should be the last channel, as this is the only one to be ignored.
 % The y-label will be extracted from the first entry.
 
-p.simout = [ScopeData];  % Replace with your actual Simulink output variables
-p.save_name = "SRLrobustrealtime";
+p.simout = [nominal, robust];  % Replace with your actual Simulink output variables
+p.save_name = "SRL_nominalRobust_realtime";
 p.time_start = 0;
 p.time_stop  = 3;
 % =========================================================================

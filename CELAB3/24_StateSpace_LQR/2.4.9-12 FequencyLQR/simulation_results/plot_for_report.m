@@ -1,91 +1,92 @@
-% Script to automate nice plotting from simulink
+% Script to automate nice plotting from Simulink
 clear p i j
 
-% Supports up to 4 different responses +1 reference in the same plot 
-% (due to different line styles).
-%
-% Responses can be stored in one or multiple structs. Each struct should
-% include a reference on the last channel.
-% 
-% Supports fixed and variable time (also varying for differnt signals)
+% Replace with the name of the output to plot and the filename for the .png
+% For different responses with the same reference, enter as an array.
+% Supports up to 4 different responses + 1 reference in the same plot (due to different line styles).
+% The reference should be the last channel, as this is the only one to be ignored.
+% The y-label will be extracted from the first entry.
 
-
-p.simout = [nominalq22_100, robustq22_100];
-p.fname = "plots/";
-p.save_name = "q22_100_fs";
+p.simout = [nominal_100, robust_100];  % Replace with your actual Simulink output variables
+p.save_name = "nominal_robust_100";
 p.time_start = 0;
 p.time_stop  = 2;
 % =========================================================================
 
+% Display input
+disp("SaveName: " + p.save_name)
 
-% display input
-disp("SaveName: "+p.save_name)
-
-% change the timewindow
-if p.time_start >= p.simout(1).time(end)
-    p.time_start = 0;
-end
-if p.time_stop == 0
-    p.time_stop = p.simout(1).time(end);
-end
-
-p.idx = {};
-for i=1:length(p.simout)
-    p.idx{i} = find((p.simout(i).time >= p.time_start & ...
-                  p.simout(i).time < p.time_stop));
-    p.simout(i).time = p.simout(i).time - p.time_start;
-end
-
-
-
-
-% Get the x-label from the name of the scope
-p.ylab = split(p.simout(1).blockName,"/");
-p.ylab = join(p.ylab(2:end), "/");
-
-% Plot cell arrays
+% Initialize styles and legends
 p.styles = {"-", "--", "-.", ":"};
-p.legends = cell(length(p.simout(1).signals),1);
-p.plot_count = 0;
+p.legends = {};
 
-% Plot all signals connected to the scope
-% Legend entries will be the names of the signals, same as in simulink
+% Create figure
 p.f1 = figure(1);
-
 hold on
-p.legends{1}= p.simout(1).signals(end).label;
-plot(p.simout(1).time(p.idx{1}), p.simout(1).signals(end).values(p.idx{1}), ...
-            "LineWidth", 0.75);
 
-% loop over all provided datasets
-for i=1:length(p.simout)
-    % loop over all signals in the datasets
-    for j = 1:length(p.simout(i).signals)-1
-        % Increment the plot counter - after loops = #plots-reference
-        p.plot_count = p.plot_count+1;
+% Plot the reference signal (assumed to be the last signal in each dataset)
+% Plot it only once using the first dataset
+p.simout(1).time = p.simout(1).time - p.time_start;
+if p.time_start >= p.simout(1).time(end)
+    idx_ref = 1:length(p.simout(1).time);
+elseif p.time_stop == 0 || p.time_stop > p.simout(1).time(end)
+    idx_ref = find(p.simout(1).time >= p.time_start);
+else
+    idx_ref = find(p.simout(1).time >= p.time_start & p.simout(1).time < p.time_stop);
+end
+ref_signal = p.simout(1).signals(end);
+plot(p.simout(1).time(idx_ref), ref_signal.values(idx_ref), 'LineWidth', 0.75);
+p.legends{end + 1} = ref_signal.label;
 
-        % Plot the j-th signal from the i-th structure
-        plot(p.simout(i).time(p.idx{i}), ...
-             p.simout(i).signals(j).values(p.idx{i}), ...
-            "LineWidth", 1.5, ...
-            "LineStyle", p.styles{p.plot_count});
-    
-        % Add the corresponding label to the legend
-        p.legends{1+p.plot_count} = p.simout(i).signals(j).label;
+% Loop over all provided datasets
+for i = 1:length(p.simout)
+    % Adjust time vector relative to p.time_start
+    p.simout(i).time = p.simout(i).time - p.time_start;
+
+    % Determine time window indices for the current dataset
+    if p.time_start >= p.simout(i).time(end)
+        idx = 1:length(p.simout(i).time);
+    elseif p.time_stop == 0 || p.time_stop > p.simout(i).time(end)
+        idx = find(p.simout(i).time >= p.time_start);
+    else
+        idx = find(p.simout(i).time >= p.time_start & p.simout(i).time < p.time_stop);
+    end
+
+    % Loop over all signals in the dataset except the last one (reference)
+    for j = 1:length(p.simout(i).signals) - 1
+        % Determine line style
+        style_idx = mod((i - 1) * (length(p.simout(i).signals) - 1) + j - 1, length(p.styles)) + 1;
+        line_style = p.styles{style_idx};
+
+        % Plot the signal
+        plot(p.simout(i).time(idx), ...
+             p.simout(i).signals(j).values(idx), ...
+             'LineWidth', 1.5, ...
+             'LineStyle', line_style);
+
+        % Append legend entry
+        p.legends{end + 1} = p.simout(i).signals(j).label;
     end
 end
 
-
+% Configure plot
 grid on
-legend(p.legends{:}, 'Location', 'northwest')
+legend(p.legends{:}, 'Location', 'northwest')  % Position legend at bottom-right corner
 xlabel("Time [s]")
+
+% Extract y-label from the name of the scope
+p.ylab = split(p.simout(1).blockName, "/");
+p.ylab = join(p.ylab(2:end), "/");
 ylabel(p.ylab)
+
 ylim("padded")
 
+% Set figure dimensions for report
+set(p.f1, 'Position', [300 300 800 400])
 
-% a nice dimension to put into a report
-set(p.f1,'Position',[300 300 800 400])
-
-%%save figure as a .png file and save the corresponding data
-saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
-%save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")
+% Save figure as a .png file
+if ~exist('clean_figures', 'dir')
+    mkdir('clean_figures');
+end
+filename = fullfile('clean_figures', [char(p.save_name), '.png']);
+saveas(p.f1, filename);

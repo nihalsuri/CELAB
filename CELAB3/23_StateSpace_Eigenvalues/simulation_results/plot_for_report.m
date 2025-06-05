@@ -87,5 +87,5 @@ ylim("padded")
 set(p.f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-%saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
+saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
 %save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")
