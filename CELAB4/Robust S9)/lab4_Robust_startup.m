@@ -19,7 +19,7 @@ LQR.q11 = LQR.q11(2)
 % controller enable
 sIn.ctrl = 1; 
 sIn.Ts = 0.01;
-sIn.simulation_time =10; 
+sIn.simulation_time =300; 
 % swithced off by default
 sIn.disturbance = 1;
 % 1 for S81, 2 for S82, 3 for S83

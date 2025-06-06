@@ -1,40 +1,71 @@
-% Rename for convenience
-data = robustYaw1;
+% Script to automate nice plotting from simulink
+clear p
 
-% Extract time and trim to first 60 seconds
-time = data.time(:);  % Ensure column vector
-idx = time <= 60;     % Logical index for first 60 seconds
-time = time(idx);
+% Only one response + reference expected (due to single struct)
+% If you plan to support more, switch to cell array as explained.
 
-num_signals = length(data.out);
+p.simout = out.simout; % sc is a single 1x1 struct
+p.fname = "plots/";
+p.save_name = "nominal";
+p.time_start = 0;
+p.time_stop  = 2;
 
-% Optional: define your own labels
-labels = {
-    "\gamma [deg]", 
-    "\vartheta [deg]", 
-    "$\dot{\gamma}$ [$\frac{deg}{s}$]", 
-    "$\dot{\vartheta}$ [$\frac{deg}{s}$]", 
-    "\psi [deg]", 
-    "duty [V]",
-    "Reference \gamma [deg]"
-};
+% Display input
+disp("SaveName: " + p.save_name)
 
-% Create separate figures for each signal
-for i = 1:num_signals
-    y = data.out{i};
-    if isrow(y)
-        y = y';  % Ensure column
-    end
-
-    y = y(idx);  % Trim signal to first 60 seconds
-
-    figure(i);
-    plot(time, y, 'b', 'LineWidth', 1.5);
-    grid on;
-    xlabel('Time [s]');
-    ylabel('Value');
-    title(labels{i}, 'Interpreter', 'latex');
-    set(gcf, 'Position', [300 + 50*i, 200 + 50*i, 600, 300]);  % Cascade figure windows
+% Change time window if needed
+if p.time_start >= p.simout.time(end)
+    p.time_start = 0;
 end
-    % Optional: save each plot
-    % saveas
+if p.time_stop == 0
+    p.time_stop = p.simout.time(end);
+end
+
+% Extract the relevant time indices
+p.idx = find((p.simout.time >= p.time_start & ...
+              p.simout.time < p.time_stop));
+
+% Shift time to start at 0
+p.simout.time = p.simout.time - p.time_start;
+
+% Get the y-label from the block name
+p.ylab = split(p.simout.blockName, "/");
+p.ylab = join(p.ylab(2:end), "/");
+
+% Plot setup
+p.styles = {"-", "--", "-.", ":"};
+p.legends = cell(numel(p.simout.signals), 1);
+p.plot_count = 0;
+
+% Create figure
+p.f1 = figure(1);
+hold on
+
+% Plot reference (assumed to be the last signal)
+p.legends{1} = p.simout.signals(end).label;
+plot(p.simout.time(p.idx), ...
+     p.simout.signals(end).values(p.idx), ...
+     "LineWidth", 0.75);
+
+% Plot all other signals
+for j = 1:numel(p.simout.signals)-1
+    p.plot_count = p.plot_count + 1;
+
+    plot(p.simout.time(p.idx), ...
+         p.simout.signals(j).values(p.idx), ...
+         "LineWidth", 1.5, ...
+         "LineStyle", p.styles{p.plot_count});
+
+    p.legends{1 + p.plot_count} = p.simout.signals(j).label;
+end
+
+% Plot settings
+grid on
+legend(p.legends{:}, 'Location', 'southeast')
+xlabel("Time [s]")
+ylabel(p.ylab)
+ylim("padded")
+set(p.f1, 'Position', [300 300 800 400])
+
+% Save figure
+saveas(p.f1, fullfile(p.fname, p.save_name) + ".png")

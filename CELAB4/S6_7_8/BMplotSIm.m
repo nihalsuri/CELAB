@@ -1,7 +1,7 @@
 % =========================================================================
 % Plot all valid "Structure With Time" outputs from Simulink `out`
 % =========================================================================
-clearvars -except out
+
 
 % === USER SETTINGS =======================================================
 p.save_name   = "SimOutPlot";   % Save figure as this name
