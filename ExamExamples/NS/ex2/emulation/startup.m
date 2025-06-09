@@ -28,18 +28,18 @@ mp = 0.2;
 tr = 0.25; 
 
 % Rule of thumb for Ts:  tr/1000 < Ts < tr/20
-ts = 0.0001; 
+ts = 0.00001; 
 % for eigenvalue calculation
 wn = 1.8/tr; 
-d = log(1/mp) / sqrt ((pi^2) + (log(1/mp)^2 ));
+d = log(1/mp) / sqrt (pi^2 + (log(1/mp)^2 ));
 
 eig_cont_real = -wn*d; 
-eig_cont_imag = wn*(sqrt(1 - (d^2))); 
+eig_cont_imag = wn*sqrt(1 - (d^2)); 
 
 poles_cont = [eig_cont_real + 1i*eig_cont_imag, eig_cont_real - 1i*eig_cont_imag]; 
 K = acker(A,B,poles_cont);
 
-feedforward_gains = ([A B; C D])\[0; 0; 1]; 
+feedforward_gains = ([A, B; C, D])\[0; 0; 1]; 
 Nx = feedforward_gains(1:2);
 Nu = feedforward_gains(3);
 
@@ -51,11 +51,11 @@ L = place(A', C', poles_observer)';
 % Matrices in CT
 Ao = A-L*C; 
 Bo = [B, L]; 
-Co = eye(size(A)); 
-Do = zeros(length(A), length(Bo(1,:))); 
+Co = eye(2); 
+Do = zeros(2,2); 
 obssys = ss(Ao, Bo, Co, Do);
 
-% Matrices in DT via Tustin
+% Matrices in DT via zoh
 obssysd = c2d(obssys, ts, 'zoh'); 
 
 
