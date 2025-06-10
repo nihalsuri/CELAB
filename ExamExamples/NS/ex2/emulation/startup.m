@@ -28,7 +28,7 @@ mp = 0.2;
 tr = 0.25; 
 
 % Rule of thumb for Ts:  tr/1000 < Ts < tr/20
-ts = 0.00001; 
+ts = 0.001; 
 % for eigenvalue calculation
 wn = 1.8/tr; 
 d = log(1/mp) / sqrt (pi^2 + (log(1/mp)^2 ));

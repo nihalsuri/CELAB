@@ -4,9 +4,13 @@
 clear;
 
 % Plant 
-ts = 0.0001; 
+ts = 0.001; 
 Ps = tf(90, [1, 60, 3]); 
-[A, B, C, D] = tf2ss(90, [1, 60, 3]); 
+%[A, B, C, D] = tf2ss(90, [1, 60, 3]);
+A = [0,1; -3, -60];
+B = [0; 1];
+C = [90, 0];
+D = 0;
 sys = ss(A, B, C, D);
 
 % Discrete Plant
@@ -54,7 +58,7 @@ Co = eye(size(phi));
 Do = zeros(2,2); 
 
 %% Reduced observer calculation in DT (place only one eigenvalue)
-Ld = place(phi(2,2), phi(1,2), exp(ts*eig_cont_real)); 
+Ld = place(phi(2,2), phi(1,2), exp(ts*5*eig_cont_real)); 
 % Matrices in DT
 phio = phi(2,2)-Ld*phi(1,2); 
 gammao = [gamma(2) - Ld*gamma(1), phio*Ld + phi(2,1) - phi(1,1)*Ld]; 
