@@ -37,7 +37,7 @@ Nx = feedforward_gains(1:2);
 Nu = feedforward_gains(3);
 
 %% For Robust SS
-phi_e = [0, H; zeros(2,1), phi]; 
+phi_e = [1, H; zeros(2,1), phi]; 
 gamma_e = [0; gamma]; 
 poles_cont_e = [eig_cont_real + 1i*eig_cont_imag, eig_cont_real - 1i*eig_cont_imag, eig_cont_real];
 poles_cont_ed = exp(ts*poles_cont_e); 
