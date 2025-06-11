@@ -20,14 +20,14 @@ N_u = gains(3);
 
 
 %Augmented state for integrator 
-phi_e = [0 -H; 
+phi_e = [1 H; 
         [0;0] phi];
 gamma_e = [0; 
          gamma]; 
 %LQR
 Q = diag([0.01 1/10 1/10]);
 R = 1/20; 
-k = dlqr(phi_e,gamma_e,Q,R);
+k = dlqr(phi_e,gamma_e,Q,R)
 
 
 %Observer 
