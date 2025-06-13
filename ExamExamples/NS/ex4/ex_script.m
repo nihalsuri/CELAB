@@ -1,0 +1,52 @@
+clear; 
+
+A = [0 1; 0 -20]; 
+B = [0; 60]; 
+C = [1 0]; 
+D = 0; 
+
+sin_w = 6; 
+ts = 0.2;
+% Taken by me 
+mp = 0.15; 
+
+w_filt = 2*pi*20; 
+zeta_filt = 1/sqrt(2); 
+filt_num = [w_filt 0 0]; 
+filt_den = [1 2*zeta_filt*w_filt w_filt^2];
+
+% error-space matrices 
+A_r = [0 1 0; 
+    0 0 1; 
+    0 -(sin_w)^2 0];
+
+C_r = [1 0 0];
+
+temp = [zeros(2,2); C];
+A_z = [A_r temp; zeros(2,3) A]; 
+B_z = [zeros(3,1); B]; 
+
+d = log(1/mp) / sqrt( pi^2 + (log(1/mp)^2) );
+wn = 3 / (d*ts); 
+
+[x1, y1] = pol2cart( -pi + pi/4 , wn); 
+[x2, y2] = pol2cart( -pi + pi/6 , wn);
+
+eigs = [x1 + 1i*y1, x1 - 1i*y1, x2 + 1i*y2, x2 - 1i*y2, -2*wn]; 
+
+K = place(A_z, B_z, eigs);
+
+% Extended estimator
+Ae = [A_r, zeros(3,2); B*C_r, A];
+Be = B_z;
+Ce = [0,0,0, C];
+
+Le = place(Ae', Ce', eigs)';
+p1 = -wn*d + 1i*wn*sqrt(1 - d^2); 
+K_e = place (A,B, [p1, conj(p1)]); 
+
+Ao = Ae - Le*Ce; 
+Bo = [Be, Le]; 
+Co = eye(5, 5); 
+Do = zeros(5,2);
+
