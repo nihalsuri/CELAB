@@ -6,12 +6,9 @@ clear;
 % Plant 
 ts = 0.001; 
 Ps = tf(90, [1, 60, 3]); 
-%[A, B, C, D] = tf2ss(90, [1, 60, 3]);
-A = [0,1; -3, -60];
-B = [0; 1];
-C = [90, 0];
-D = 0;
+[A, B, C, D] = tf2ss(90, [1, 60, 3]);
 sys = ss(A, B, C, D);
+sys = compreal(sys, 'o'); 
 
 % Discrete Plant
 sysD = c2d(sys, ts, 'tustin'); 
