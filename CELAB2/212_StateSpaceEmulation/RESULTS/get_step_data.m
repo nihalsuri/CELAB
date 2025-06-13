@@ -11,11 +11,10 @@ clear p i j
 
 
 
-p.simout = [nominal_FE_1ms, nominal_FE_10ms, nominal_FE_50ms, ...
-            robust_FE_1ms, robust_FE_10ms, robust_FE_50ms];
+p.simout = [position_1_rob, position_10_rob, position_50_rob];
 p.time_start = 0;
-p.time_stop  = 1;
-p.save_name = "SS_FE_nominalRobust_allSampleTimes_data_motor";
+p.time_stop  = 2;
+p.save_name = "DATA_MOTOR_robust";
 % =========================================================================
 
 % change the timewindow

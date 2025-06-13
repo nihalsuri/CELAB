@@ -11,11 +11,11 @@ clear p i j
 
 
 
-p.simout = [nominal_fe_1ms, nominal_fe_10ms, nominal_fe_50ms, ...
-            robust_fe_1ms, robust_fe_10ms, robust_fe_50ms];
+p.simout = [BE_1ms_nominal_robust_50, BE_10ms_nominal_robust_50, BE_50ms_nominal_robust_50,...
+            Tu_1ms_nominal_robust_50, Tu_10ms_nominal_robust_50, Tu_50ms_nominal_robust_50];
 p.time_start = 0;
-p.time_stop  = 1;
-p.save_name = "SS_FE_nominalRobust_allSampleTimes_data_sim";
+p.time_stop  = 2;
+p.save_name = "DATA_SIM_be_tu";
 % =========================================================================
 
 % change the timewindow
