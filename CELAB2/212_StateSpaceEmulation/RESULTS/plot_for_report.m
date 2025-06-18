@@ -10,11 +10,11 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [direct_nominal];
-p.fname = "simulation_results\";
-p.save_name = "2.2.3";
+p.simout = [position_1_rob, position_10_rob, position_50_rob];
+
+p.save_name = "motor_robust";
 p.time_start = 0;
-p.time_stop  = 1;
+p.time_stop  = 2;
 % =========================================================================
 
 
@@ -31,8 +31,8 @@ end
 
 p.idx = {};
 for i=1:length(p.simout)
-    p.idx{i} = find((p.simout(i).time >= p.time_start & ...
-                  p.simout(i).time < p.time_stop));
+p.idx{i} = find((p.simout(i).time >= p.time_start & ...
+                 p.simout(i).time <= p.time_stop));
     p.simout(i).time = p.simout(i).time - p.time_start;
 end
 
@@ -65,7 +65,7 @@ for i=1:length(p.simout)
         p.plot_count = p.plot_count+1;
 
         % Plot the j-th signal from the i-th structure
-        plot(p.simout(i).time(p.idx{i}), ...
+        stairs(p.simout(i).time(p.idx{i}), ...
              p.simout(i).signals(j).values(p.idx{i}), ...
             "LineWidth", 1.5, ...
             "LineStyle", p.styles{p.plot_count});
@@ -77,7 +77,7 @@ end
 
 
 grid on
-legend(p.legends{:}, 'Location', 'southeast')
+legend(p.legends{:})
 xlabel("Time [s]")
 ylabel(p.ylab)
 ylim("padded")
@@ -87,5 +87,5 @@ ylim("padded")
 set(p.f1,'Position',[300 300 800 400])
 
 %%save figure as a .png file and save the corresponding data
-%saveas(p.f1, fullfile(p.fname, p.save_name) + ".png");
+saveas(p.f1, 'Plots2/'+p.save_name+'.png')
 %save('Data_and_Plots/'+p.save_name+'.mat', "p.simout")

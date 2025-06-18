@@ -1,6 +1,6 @@
 % Matlab script to start the Simulink simulation of the blackbox- and real
-% model of the Quanser SRV-02 + NI DAQ. In both cases state-space feedback
-% is used. 
+% model of the Quanser SRV-02 + NI DAQ. For descrete robust tracking where
+% you can choose 3 different sampling times for the controllers
 clear
 %% Load Predefined Parameters
 load_params_inertial_case
@@ -12,6 +12,8 @@ sIn.T_s2 = 1e-2; %10ms
 sIn.T_s3 = 5e-2; %50ms
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
+
+sIn.simulation_time = 5; 
 
 % Actual Parameters (estimated from Motor 1)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
@@ -69,7 +71,6 @@ plant.sys_c = ss(plant.A, plant.B, plant.C, plant.D);
 function [feedback_out, obs_out] = calculate_controller(T_s, plant_c, eigP)
     % Discretize system
     sys_d = c2d(plant_c, T_s, "zoh");
-
     % Augmented matrices
     phi_e = [1, sys_d.C; 
              zeros(2,1), sys_d.A];
@@ -94,7 +95,7 @@ function [feedback_out, obs_out] = calculate_controller(T_s, plant_c, eigP)
     %% Reduced observer
     %Calculate the eigenvalue for the observer  
     eigs_obs = exp(-eigP.damping * 5 * eigP.wn * T_s);
-    %Calculate the observer gains 
+    %Calculate the observer gain
     obs_out.L = place(sys_d.A(2,2), sys_d.A(1,2), eigs_obs);
     %Calcualte the observer matrices 
     obs_out.phi0  = sys_d.A(2,2) - obs_out.L * sys_d.A(1,2);
