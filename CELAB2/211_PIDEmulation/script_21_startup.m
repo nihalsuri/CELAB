@@ -1,5 +1,5 @@
-% Matlab script to start the Simulink simulation of an accurate model of the 
-% Quanser SRV-02 + NI DAQ with a discrete time PID controller and its 
+% Matlab script to start the Simulink simulation of an accurate model of 
+% the Quanser SRV-02 + NI DAQ with a discrete time PID controller and its 
 % improvements such as feedforward and antiwindup.
 clear
 
@@ -31,15 +31,7 @@ plant.Ps = tf(plant.km, [(gbox.N*plant.Tm) gbox.N 0]);
 PID.Kp = 7.845;
 PID.Ki = 100.8347;
 PID.Kd = 0.0763;
-% unstable for FE 
-% PID.Tl = 9.7252e-04;
-
-% boderline stable for FE, Tustin
-% PID.Tl = 250.7253e-04;
-
-% stable for FE, Tustin
 PID.Tl = 700e-04;
-
 PID.Cs = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl); 
 
 % Anit Windup
@@ -78,8 +70,8 @@ for i = 1:length(specs.Ts)
         label = methodLabels{m};
         
         % Create discrete-time PID controller
-        PID.Discrete.(label).Cz{i} = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl, Ts, ...
-            'IFormula', method, 'DFormula', method);
+        PID.Discrete.(label).Cz{i} = pid(PID.Kp, PID.Ki, PID.Kd, PID.Tl,...
+            Ts, 'IFormula', method, 'DFormula', method);
         
         % Extract numerator and denominator coefficients
         [PID.Discrete.(label).num{i}, PID.Discrete.(label).den{i}] = ...
