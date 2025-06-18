@@ -41,5 +41,3 @@ In Lab
 	Validate
 	1) Discrete nominal SS-controller from 2.2.2
 	2) Discrete SS-controller with integral action from 2.2.4	
-
--3.3 Challanges 

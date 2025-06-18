@@ -10,9 +10,9 @@ clear p i j
 % Supports fixed and variable time (also varying for differnt signals)
 
 
-p.simout = [ScopeData_1ms, ScopeData_10ms, ScopeData_50ms];
+p.simout = [direct_nominal];
 p.fname = "simulation_results\";
-p.save_name = "2.2.5";
+p.save_name = "2.2.3";
 p.time_start = 0;
 p.time_stop  = 1;
 % =========================================================================

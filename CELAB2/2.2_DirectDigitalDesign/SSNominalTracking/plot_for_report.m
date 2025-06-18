@@ -13,8 +13,8 @@ clear p i j
 p.simout = [direct_nominal];
 p.fname = "simulation_results\";
 p.save_name = "2.2.3";
-p.time_start = 0;
-p.time_stop  = 1;
+p.time_start = 0.1;
+p.time_stop  = 1.1;
 % =========================================================================
 
 
