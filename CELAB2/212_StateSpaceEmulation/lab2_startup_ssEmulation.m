@@ -1,23 +1,14 @@
 % Matlab script to start the Simulink simulation an accurate model of the 
 % Quanser SRV-02 + NI DAQ with a discrete time state-space controller and
-% a reduced state observer.
+% a reduced state observer, obtained by emulation.
 clear
-
 
 
 %% Load Predefined Parameters
 load_params_inertial_case
 
-
-
 %% User Inputs
-
 % Motor Parameters
-% Nominal Parameters (estimated from Blackbox)
-%mld.Beq = 1.2224e-6;    % [Nm/(rad/sec)] 
-%mld.tausf = 0.0056;     % [Nm]
-%mld.Jeq = mld.Jeq;      % [kg m^2]
-
 % Actual Parameters (estimated from Motor 1)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
 mld.tausf = 0.013;      % [Nm]
@@ -33,27 +24,25 @@ specs.settling_time = 0.15; %[s]
 
 %% Simulation Parameters 
 % Sampling time
-sIn.Ts =1e-3; %[s]
+sIn.Ts =10e-3; %[s]
 
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
 
 % Integration methos (1:FE,  2:BE,  3:Tustin)
-sIn.integrationMethod = 3;
+sIn.integrationMethod = 2;
 
 % Choice of nominal or robust controller (0:nominal,  1:robust)
 sIn.nominal_robust = 0;
 
 % List of reference positions [s]
-%sIn.position = [40, 0, 70, 0, 120]; 
-sIn.position = 50;
+sIn.position = [50];
 
 % Time the reference positions are held [s]
 sIn.sample_time = 5; 
 
 % Automatic calculation of total simulation time [s]
 sIn.simulation_time = sIn.sample_time*length(sIn.position);
-
 
 
 %% State-Space Model
@@ -101,9 +90,7 @@ feedback.Nu = feedback.gains(3);
 
 
 % Eigenvalues for robust tracking
-eigP.robustValues = [eigP.real + 1i*eigP.img, ...
-                     eigP.real - 1i*eigP.img, ...
-                     eigP.real];
+eigP.robustValues = [eigP.values, eigP.real];
 
 % State feedback matrix frot the robust case
 feedback.robustKe = acker(plant.Ae, plant.Be, eigP.robustValues);
@@ -116,17 +103,14 @@ if sIn.nominal_robust == 1
 end
 
 
-
 %% Reduced Observer Model
 % Observer eigenvalue
 eigO.damping = eigP.damping;
 eigO.wn = 5*eigP.wn;
 eigO.value = -eigO.damping*eigO.wn;
 
-
 % Observer gain
 obs.L = acker(plant.A(2,2), plant.A(1,2), eigO.value);
-
 
 % Observer matrices (simpilifcations applied)
 obs.A0 = plant.A(2,2)-obs.L*plant.A(1,2);
@@ -135,7 +119,6 @@ obs.C0 = [0;
           1];
 obs.D0 = [0,   1;
           0, obs.L];
-
 
 
 %% Discretized Reduced Observer
@@ -160,4 +143,3 @@ obsTu.J0 = obs.D0 + obs.C0/(1-(obs.A0*sIn.Ts)/2) *obs.B0*sIn.Ts/2;
 % Selection
 obs.tmp = [obsFe, obsBe, obsTu];
 obsD = obs.tmp(sIn.integrationMethod);
-
