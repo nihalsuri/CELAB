@@ -1,17 +1,11 @@
 % Matlab script to start the Simulink simulation of the blackbox- and real
-% model of the Quanser SRV-02 + NI DAQ. In both cases state-space feedback
-% is used. 
+% model of the Quanser SRV-02 + NI DAQ. For descrete nominal tracking where
+% you can choose 3 different sampling times for the controllers
 clear
-
-
-
 %% Load Predefined Parameters
 load_params_inertial_case
 
-
-
 %% User Inputs
-
 %Define the sampler times for the controler and observer 
 sIn.T_s = 1e-3; %1ms 
 sIn.T_s2 = 1e-2; %10ms
@@ -20,7 +14,7 @@ sIn.T_s3 = 5e-2; %50ms
 % Solver step time (0.1 ms)
 sIn.step_size = 1e-4;
 
-sIn.sample_time = 5; 
+sIn.simulation_time = 5; 
 
 % Actual Parameters (estimated from Motor 1)
 mld.Beq = 2.5663e-6;    % [Nm/(rad/s)]
@@ -100,8 +94,8 @@ function [feedback_out, obs_out] = calculate_controller(T_s, plant_c, eigP)
     obs_out.gamma0 = [plant.sys_d.B(2)-obs_out.L*plant.sys_d.B(1) ...
              obs_out.phi0*obs_out.L+plant.sys_d.A(2,1)-obs_out.L*plant.sys_d.A(1,1)]; 
     obs_out.H0 = [0 ; 1]; 
-    obs_out.J0 = [0 1
-         0 obs_out.L;];
+    obs_out.J0 = [0     1;
+                  0 obs_out.L];
 end
 
 
